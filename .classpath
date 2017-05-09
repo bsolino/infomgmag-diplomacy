@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="agents/D-Brane-1.1.jar"/>
+	<classpathentry kind="lib" path="agents/D-BraneExampleBot.jar"/>
+	<classpathentry kind="lib" path="agents/DumbBot-1.4.jar"/>
+	<classpathentry kind="lib" path="agents/RandomNegotiator.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/bandana-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/bot-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="lib/dip-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/jac-0.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/NegotiationServer-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/tcpIpComm-0.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/utilities-1.0.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
