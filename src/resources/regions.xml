@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<regions>
+	<region id="66">
+		NAPFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="40">
+		GOBFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="85">
+		SERAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="69">
+		NWYAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="38">
+		GASAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="1">
+		AEGFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="104">
+		TUNAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="70">
+		NWYFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="39">
+		GASFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="118">
+		YORAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="20">
+		BUDAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="32">
+		ECHFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="105">
+		TUNFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="10">
+		BALFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="119">
+		YORFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="88">
+		SILAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="86">
+		SEVAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="95">
+		STPAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="87">
+		SEVFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="78">
+		PRUAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="67">
+		NTHFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="106">
+		TUSAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="110">
+		UKRAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="79">
+		PRUFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="107">
+		TUSFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="60">
+		MOSAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="97">
+		STPSCS
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="35">
+		FINAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="41">
+		GOLFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="114">
+		WALAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="100">
+		SYRAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="11">
+		BARFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="36">
+		FINFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="115">
+		WALFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="101">
+		SYRFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="44">
+		HELFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="98">
+		SWEAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="21">
+		BULAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="71">
+		PARAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="12">
+		BELAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="6">
+		APUAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="99">
+		SWEFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="17">
+		BOHAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="13">
+		BELFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="7">
+		APUFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="45">
+		HOLAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="22">
+		BULSCS
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="111">
+		VENAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="96">
+		STPNCS
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="113">
+		VIEAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="46">
+		HOLFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="116">
+		WARAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="72">
+		PICAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="108">
+		TYRAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="112">
+		VENFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="4">
+		ANKAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="73">
+		PICFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="24">
+		BURAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="74">
+		PIEAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="42">
+		GREAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="5">
+		ANKFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="109">
+		TYSFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="14">
+		BERAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="89">
+		SKAFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="75">
+		PIEFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="25">
+		CLYAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="102">
+		TRIAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="43">
+		GREFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="47">
+		IONFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="15">
+		BERFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="92">
+		SPAAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="26">
+		CLYFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="103">
+		TRIFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="0">
+		ADRFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="2">
+		ALBAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="82">
+		RUHAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="68">
+		NWGFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="94">
+		SPASCS
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="3">
+		ALBFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="53">
+		LVNAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="27">
+		CONAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="54">
+		LVNFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="76">
+		PORAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="55">
+		LVPAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="28">
+		CONFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="49">
+		KIEAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="29">
+		DENAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="62">
+		NAFAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="18">
+		BREAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="90">
+		SMYAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="77">
+		PORFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="56">
+		LVPFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="50">
+		KIEFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="117">
+		WESFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="30">
+		DENFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="63">
+		NAFFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="19">
+		BREFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="83">
+		RUMAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="91">
+		SMYFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="8">
+		ARMAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="16">
+		BLAFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="93">
+		SPANCS
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="84">
+		RUMFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="31">
+		EASFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="9">
+		ARMFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="57">
+		MAOFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="48">
+		IRIFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="23">
+		BULECS
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="58">
+		MARAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="80">
+		ROMAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="37">
+		GALAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="59">
+		MARFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="81">
+		ROMFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="33">
+		EDIAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="34">
+		EDIFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="51">
+		LONAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="65">
+		NAPAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="64">
+		NAOFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="61">
+		MUNAMY
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+	<region id="52">
+		LONFLT
+		<location>
+			<X>0</X>
+			<Y>0</Y>
+		</location>
+	</region>
+</regions>

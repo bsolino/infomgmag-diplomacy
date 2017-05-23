@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<powers>
+	<power id="6">
+		RUS
+		<color>218:255:255</color>
+	</power>
+	<power id="5">
+		AUS
+		<color>207:56:41</color>
+	</power>
+	<power id="0">
+		GER
+		<color>138:114:103</color>
+	</power>
+	<power id="3">
+		TUR
+		<color>255:209:000</color>
+	</power>
+	<power id="1">
+		FRA
+		<color>0:142:132</color>
+	</power>
+	<power id="2">
+		ENG
+		<color>164:23:232</color>
+	</power>
+	<power id="4">
+		ITA
+		<color>178:91:000</color>
+	</power>
+</powers>

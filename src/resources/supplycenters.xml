@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<supplycenters>
+	<supplycenter id="31">
+		SPA
+		<location>
+			<X>158</X>
+			<Y>525</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="17">
+		VIE
+		<location>
+			<X>419</X>
+			<Y>431</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="25">
+		GRE
+		<location>
+			<X>512</X>
+			<Y>607</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="33">
+		TUN
+		<location>
+			<X>319</X>
+			<Y>633</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="13">
+		ROM
+		<location>
+			<X>370</X>
+			<Y>536</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="29">
+		RUM
+		<location>
+			<X>556</X>
+			<Y>491</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="8">
+		LVP
+		<location>
+			<X>230</X>
+			<Y>301</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="28">
+		POR
+		<location>
+			<X>75</X>
+			<Y>522</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="3">
+		BRE
+		<location>
+			<X>193</X>
+			<Y>385</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="24">
+		DEN
+		<location>
+			<X>382</X>
+			<Y>292</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="21">
+		WAR
+		<location>
+			<X>477</X>
+			<Y>361</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="0">
+		BER
+		<location>
+			<X>392</X>
+			<Y>350</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="18">
+		MOS
+		<location>
+			<X>644</X>
+			<Y>282</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="22">
+		BEL
+		<location>
+			<X>269</X>
+			<Y>360</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="20">
+		STP
+		<location>
+			<X>563</X>
+			<Y>209</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="2">
+		MUN
+		<location>
+			<X>365</X>
+			<Y>420</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="7">
+		LON
+		<location>
+			<X>249</X>
+			<Y>342</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="6">
+		EDI
+		<location>
+			<X>241</X>
+			<Y>258</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="11">
+		SMY
+		<location>
+			<X>572</X>
+			<Y>601</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="1">
+		KIE
+		<location>
+			<X>364</X>
+			<Y>334</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="5">
+		PAR
+		<location>
+			<X>258</X>
+			<Y>395</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="26">
+		HOL
+		<location>
+			<X>307</X>
+			<Y>337</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="12">
+		NAP
+		<location>
+			<X>396</X>
+			<Y>556</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="4">
+		MAR
+		<location>
+			<X>279</X>
+			<Y>492</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="10">
+		CON
+		<location>
+			<X>582</X>
+			<Y>549</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="16">
+		TRI
+		<location>
+			<X>408</X>
+			<Y>471</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="14">
+		VEN
+		<location>
+			<X>376</X>
+			<Y>467</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="23">
+		BUL
+		<location>
+			<X>512</X>
+			<Y>529</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="19">
+		SEV
+		<location>
+			<X>643</X>
+			<Y>474</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="30">
+		SER
+		<location>
+			<X>472</X>
+			<Y>497</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="15">
+		BUD
+		<location>
+			<X>458</X>
+			<Y>447</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="9">
+		ANK
+		<location>
+			<X>647</X>
+			<Y>559</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="32">
+		SWE
+		<location>
+			<X>419</X>
+			<Y>254</Y>
+		</location>
+	</supplycenter>
+	<supplycenter id="27">
+		NWY
+		<location>
+			<X>384</X>
+			<Y>209</Y>
+		</location>
+	</supplycenter>
+</supplycenters>

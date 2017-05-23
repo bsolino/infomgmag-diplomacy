@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import GAA.OurCode.TournamentObserverMapWindow;
 import ddejonge.bandana.tools.DiplomacyMonitor;
 import ddejonge.bandana.tools.FileIO;
 import es.csic.iiia.fabregues.dip.Observer;
@@ -41,6 +42,11 @@ public class TournamentObserver extends Observer implements Runnable{
 	 * The window that displays the progress of the game.
 	 */
 	DiplomacyMonitor diplomacyMonitor;
+	
+	/**
+	 * The window that displays our map.
+	 */
+	TournamentObserverMapWindow mapMonitor;
 	
 	
 	/**The number of games in this tournament.*/
@@ -81,6 +87,8 @@ public class TournamentObserver extends Observer implements Runnable{
 		this.tournamentResult = new TournamentResult(numParticipants, scoreCalculators);
 		
 		this.diplomacyMonitor = new DiplomacyMonitor("TournamentObserver", numParticipants, scoreCalculators);
+		
+		this.mapMonitor = new TournamentObserverMapWindow();
 		
 	}
 	
@@ -130,6 +138,10 @@ public class TournamentObserver extends Observer implements Runnable{
 		diplomacyMonitor.setCurrentGameNumber(gameNumber);
 		diplomacyMonitor.setNumGames(numGames);
 		diplomacyMonitor.setPhase(game.getPhase(), game.getYear());
+		
+		// Implement pulling provinces here, pass to own object.
+		
+		this.mapMonitor.updateMap(game);
 		
 		
 		for(Power power : game.getPowers()){
@@ -210,7 +222,9 @@ public class TournamentObserver extends Observer implements Runnable{
 	public void exit(){
 		this.comm.stop();
 		super.exit();
+		// close diplomacy monitor.
 		this.diplomacyMonitor.dispose();
+		this.mapMonitor.dispose();
 	}
 	
 	/**
@@ -235,6 +249,7 @@ public class TournamentObserver extends Observer implements Runnable{
 
 		displayInfo();
 		
+		this.mapMonitor.endGameMapCall();
 		
 		super.handleSMR(message);
 	}
