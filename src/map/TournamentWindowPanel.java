@@ -1,16 +1,11 @@
 package map;
 
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import com.sun.org.apache.xerces.internal.util.XMLResourceIdentifierImpl;
 
 import map.TournamentObserverMapWindow.XMLResource;
 import es.csic.iiia.fabregues.dip.board.Game;
@@ -65,8 +60,10 @@ public class TournamentWindowPanel extends JPanel {
 	
 	public void updateUnits(Game gamestate){
 		
+		// Updaate visibility and coloring based upon the current gamestate.
+		
 		// Hide regions;
-		for (Unit u : regionList) u.visible = false;
+		for (Unit u : regionList) u.setVisibility(false);
 		// Gray out supply centers
 		for (SupplyCenter sc : scList) sc.color = Color.GRAY;
 		
@@ -77,8 +74,8 @@ public class TournamentWindowPanel extends JPanel {
 				// Slow linear comparison search; finds corresponding region in regionList.
 				for (Unit u : regionList){
 					// If a region is controlled by this power; make it visible and color it appropriately.
-					if (r.getName() == u.label){
-						u.visible = true;
+					if (u.label.equals(r.getName())){
+						u.setVisibility(true);
 						u.setColor(p.getColor());
 					}
 				}
@@ -96,6 +93,16 @@ public class TournamentWindowPanel extends JPanel {
 		
 		this.repaint();
 	}
+
+	public void showAllUnits(){
+		// Used to display all regions, so we can debug their locations.
+		
+		for (int i=0; i< regionList.size(); i++){
+			regionList.get(i).setVisibility(true);
+			regionList.get(i).setColor(Color.GRAY);
+		}
+		
+	}
 	
 	public void paintComponent(Graphics g){
 		
@@ -106,7 +113,8 @@ public class TournamentWindowPanel extends JPanel {
 		g.drawImage(background, 0, 0, this);
 		
 		// Draw units
-		for (int i=0; i< scList.size(); i++) ((Unit) scList.get(i)).drawUnit(g);
+		for (int i=0; i< scList.size(); i++) scList.get(i).drawUnit(g);
+		for (int i=0; i< regionList.size(); i++) if (regionList.get(i).getVisibility()) regionList.get(i).drawUnit(g);
 	}
 	
 	public abstract class Unit {
@@ -179,18 +187,18 @@ public class TournamentWindowPanel extends JPanel {
 	public class Fleet extends Unit {
 		
 		public Fleet (int x, int y, String label){
-			super(x, y, Color.RED);
+			super(x, y);
 			icontext = "F";
-			this.label = "";
+			this.label = label;
 		}
 	}
 	
 	public class Army extends Unit {
 		
 		public Army (int x, int y, String label){
-			super(x, y, Color.RED);
+			super(x, y);
 			icontext = "A";
-			this.label = "";
+			this.label = label;
 		}
 		
 	}

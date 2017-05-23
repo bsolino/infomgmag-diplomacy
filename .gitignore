@@ -2,3 +2,5 @@
 /log/*
 /.classpath
 /.project
+src/ddejonge/bandana/tournament/TournamentRunner.java
+src/ddejonge/bandana/tournament/ParlanceRunner.java

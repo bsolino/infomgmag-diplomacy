@@ -65,6 +65,8 @@ public class TournamentObserverMapWindow extends JFrame {
 			}
 		});
 		
+		panel.showAllUnits();
+		
 	}
 
 	private static TournamentWindowPanel panel;
@@ -178,7 +180,7 @@ public class TournamentObserverMapWindow extends JFrame {
 					X = Integer.parseInt(elementcontents[2]);
 					Y = Integer.parseInt(elementcontents[3]);
 					
-					if (label.endsWith("FLT"))
+					if (label.endsWith("FLT") || label.endsWith("ECS") || label.endsWith("SCS") || label.endsWith("NCS"))
 						output.add(panel.new Fleet(X,Y,label));
 					else
 						output.add(panel.new Army(X,Y,label));
@@ -188,8 +190,6 @@ public class TournamentObserverMapWindow extends JFrame {
 			return output;
 		}
 	}
-	
-
 	
 	public void writeOutGameState(){
 		

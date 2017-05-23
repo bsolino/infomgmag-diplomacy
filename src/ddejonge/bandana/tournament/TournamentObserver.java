@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import GAA.OurCode.TournamentObserverMapWindow;
+import map.TournamentObserverMapWindow;
 import ddejonge.bandana.tools.DiplomacyMonitor;
 import ddejonge.bandana.tools.FileIO;
 import es.csic.iiia.fabregues.dip.Observer;

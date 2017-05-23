@@ -3,841 +3,841 @@
 	<region id="66">
 		NAPFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>414</X>
+			<Y>587</Y>
 		</location>
 	</region>
 	<region id="40">
 		GOBFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>470</X>
+			<Y>241</Y>
 		</location>
 	</region>
 	<region id="85">
 		SERAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>481</X>
+			<Y>519</Y>
 		</location>
 	</region>
 	<region id="69">
 		NWYAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>366</X>
+			<Y>206</Y>
 		</location>
 	</region>
 	<region id="38">
 		GASAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>225</X>
+			<Y>447</Y>
 		</location>
 	</region>
 	<region id="1">
 		AEGFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>538</X>
+			<Y>595</Y>
 		</location>
 	</region>
 	<region id="104">
 		TUNAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>309</X>
+			<Y>657</Y>
 		</location>
 	</region>
 	<region id="70">
 		NWYFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>343</X>
+			<Y>173</Y>
 		</location>
 	</region>
 	<region id="39">
 		GASFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>203</X>
+			<Y>453</Y>
 		</location>
 	</region>
 	<region id="118">
 		YORAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>245</X>
+			<Y>305</Y>
 		</location>
 	</region>
 	<region id="20">
 		BUDAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>481</X>
+			<Y>433</Y>
 		</location>
 	</region>
 	<region id="32">
 		ECHFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>237</X>
+			<Y>361</Y>
 		</location>
 	</region>
 	<region id="105">
 		TUNFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>338</X>
+			<Y>627</Y>
 		</location>
 	</region>
 	<region id="10">
 		BALFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>448</X>
+			<Y>284</Y>
 		</location>
 	</region>
 	<region id="119">
 		YORFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>254</X>
+			<Y>281</Y>
 		</location>
 	</region>
 	<region id="88">
 		SILAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>434</X>
+			<Y>379</Y>
 		</location>
 	</region>
 	<region id="86">
 		SEVAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>673</X>
+			<Y>358</Y>
 		</location>
 	</region>
 	<region id="95">
 		STPAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>638</X>
+			<Y>163</Y>
 		</location>
 	</region>
 	<region id="87">
 		SEVFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>618</X>
+			<Y>452</Y>
 		</location>
 	</region>
 	<region id="78">
 		PRUAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>430</X>
+			<Y>345</Y>
 		</location>
 	</region>
 	<region id="67">
 		NTHFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>286</X>
+			<Y>270</Y>
 		</location>
 	</region>
 	<region id="106">
 		TUSAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>356</X>
+			<Y>512</Y>
 		</location>
 	</region>
 	<region id="110">
 		UKRAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>572</X>
+			<Y>406</Y>
 		</location>
 	</region>
 	<region id="79">
 		PRUFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>443</X>
+			<Y>312</Y>
 		</location>
 	</region>
 	<region id="107">
 		TUSFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>342</X>
+			<Y>510</Y>
 		</location>
 	</region>
 	<region id="60">
 		MOSAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>637</X>
+			<Y>301</Y>
 		</location>
 	</region>
 	<region id="97">
 		STPSCS
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>538</X>
+			<Y>222</Y>
 		</location>
 	</region>
 	<region id="35">
 		FINAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>522</X>
+			<Y>149</Y>
 		</location>
 	</region>
 	<region id="41">
 		GOLFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>275</X>
+			<Y>546</Y>
 		</location>
 	</region>
 	<region id="114">
 		WALAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>216</X>
+			<Y>336</Y>
 		</location>
 	</region>
 	<region id="100">
 		SYRAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>751</X>
+			<Y>602</Y>
 		</location>
 	</region>
 	<region id="11">
 		BARFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>598</X>
+			<Y>34</Y>
 		</location>
 	</region>
 	<region id="36">
 		FINFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>479</X>
+			<Y>174</Y>
 		</location>
 	</region>
 	<region id="115">
 		WALFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>183</X>
+			<Y>343</Y>
 		</location>
 	</region>
 	<region id="101">
 		SYRFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>699</X>
+			<Y>641</Y>
 		</location>
 	</region>
 	<region id="44">
 		HELFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>324</X>
+			<Y>304</Y>
 		</location>
 	</region>
 	<region id="98">
 		SWEAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>415</X>
+			<Y>206</Y>
 		</location>
 	</region>
 	<region id="21">
 		BULAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>536</X>
+			<Y>535</Y>
 		</location>
 	</region>
 	<region id="71">
 		PARAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>244</X>
+			<Y>413</Y>
 		</location>
 	</region>
 	<region id="12">
 		BELAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>293</X>
+			<Y>373</Y>
 		</location>
 	</region>
 	<region id="6">
 		APUAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>424</X>
+			<Y>563</Y>
 		</location>
 	</region>
 	<region id="99">
 		SWEFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>432</X>
+			<Y>264</Y>
 		</location>
 	</region>
 	<region id="17">
 		BOHAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>404</X>
+			<Y>398</Y>
 		</location>
 	</region>
 	<region id="13">
 		BELFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>277</X>
+			<Y>352</Y>
 		</location>
 	</region>
 	<region id="7">
 		APUFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>413</X>
+			<Y>550</Y>
 		</location>
 	</region>
 	<region id="45">
 		HOLAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>303</X>
+			<Y>349</Y>
 		</location>
 	</region>
 	<region id="22">
 		BULSCS
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>541</X>
+			<Y>555</Y>
 		</location>
 	</region>
 	<region id="111">
 		VENAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>353</X>
+			<Y>480</Y>
 		</location>
 	</region>
 	<region id="96">
 		STPNCS
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>586</X>
+			<Y>51</Y>
 		</location>
 	</region>
 	<region id="113">
 		VIEAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>430</X>
+			<Y>430</Y>
 		</location>
 	</region>
 	<region id="46">
 		HOLFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>312</X>
+			<Y>323</Y>
 		</location>
 	</region>
 	<region id="116">
 		WARAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>496</X>
+			<Y>362</Y>
 		</location>
 	</region>
 	<region id="72">
 		PICAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>266</X>
+			<Y>378</Y>
 		</location>
 	</region>
 	<region id="108">
 		TYRAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>372</X>
+			<Y>444</Y>
 		</location>
 	</region>
 	<region id="112">
 		VENFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>380</X>
+			<Y>507</Y>
 		</location>
 	</region>
 	<region id="4">
 		ANKAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>669</X>
+			<Y>552</Y>
 		</location>
 	</region>
 	<region id="73">
 		PICFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>245</X>
+			<Y>371</Y>
 		</location>
 	</region>
 	<region id="24">
 		BURAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>274</X>
+			<Y>435</Y>
 		</location>
 	</region>
 	<region id="74">
 		PIEAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>324</X>
+			<Y>468</Y>
 		</location>
 	</region>
 	<region id="42">
 		GREAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>492</X>
+			<Y>580</Y>
 		</location>
 	</region>
 	<region id="5">
 		ANKFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>661</X>
+			<Y>523</Y>
 		</location>
 	</region>
 	<region id="109">
 		TYSFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>351</X>
+			<Y>575</Y>
 		</location>
 	</region>
 	<region id="14">
 		BERAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>386</X>
+			<Y>333</Y>
 		</location>
 	</region>
 	<region id="89">
 		SKAFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>370</X>
+			<Y>245</Y>
 		</location>
 	</region>
 	<region id="75">
 		PIEFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>322</X>
+			<Y>486</Y>
 		</location>
 	</region>
 	<region id="25">
 		CLYAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>218</X>
+			<Y>232</Y>
 		</location>
 	</region>
 	<region id="102">
 		TRIAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>428</X>
+			<Y>482</Y>
 		</location>
 	</region>
 	<region id="43">
 		GREFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>505</X>
+			<Y>624</Y>
 		</location>
 	</region>
 	<region id="47">
 		IONFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>445</X>
+			<Y>625</Y>
 		</location>
 	</region>
 	<region id="15">
 		BERFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>395</X>
+			<Y>319</Y>
 		</location>
 	</region>
 	<region id="92">
 		SPAAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>135</X>
+			<Y>546</Y>
 		</location>
 	</region>
 	<region id="26">
 		CLYFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>214</X>
+			<Y>214</Y>
 		</location>
 	</region>
 	<region id="103">
 		TRIFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>414</X>
+			<Y>504</Y>
 		</location>
 	</region>
 	<region id="0">
 		ADRFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>439</X>
+			<Y>548</Y>
 		</location>
 	</region>
 	<region id="2">
 		ALBAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>466</X>
+			<Y>558</Y>
 		</location>
 	</region>
 	<region id="82">
 		RUHAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>324</X>
+			<Y>376</Y>
 		</location>
 	</region>
 	<region id="68">
 		NWGFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>328</X>
+			<Y>83</Y>
 		</location>
 	</region>
 	<region id="94">
 		SPASCS
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>156</X>
+			<Y>585</Y>
 		</location>
 	</region>
 	<region id="3">
 		ALBFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>461</X>
+			<Y>551</Y>
 		</location>
 	</region>
 	<region id="53">
 		LVNAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>521</X>
+			<Y>286</Y>
 		</location>
 	</region>
 	<region id="27">
 		CONAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>589</X>
+			<Y>572</Y>
 		</location>
 	</region>
 	<region id="54">
 		LVNFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>480</X>
+			<Y>267</Y>
 		</location>
 	</region>
 	<region id="76">
 		PORAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>103</X>
+			<Y>490</Y>
 		</location>
 	</region>
 	<region id="55">
 		LVPAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>227</X>
+			<Y>279</Y>
 		</location>
 	</region>
 	<region id="28">
 		CONFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>570</X>
+			<Y>565</Y>
 		</location>
 	</region>
 	<region id="49">
 		KIEAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>354</X>
+			<Y>362</Y>
 		</location>
 	</region>
 	<region id="29">
 		DENAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>360</X>
+			<Y>282</Y>
 		</location>
 	</region>
 	<region id="62">
 		NAFAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>112</X>
+			<Y>643</Y>
 		</location>
 	</region>
 	<region id="18">
 		BREAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>217</X>
+			<Y>409</Y>
 		</location>
 	</region>
 	<region id="90">
 		SMYAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>609</X>
+			<Y>603</Y>
 		</location>
 	</region>
 	<region id="77">
 		PORFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>85</X>
+			<Y>489</Y>
 		</location>
 	</region>
 	<region id="56">
 		LVPFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>228</X>
+			<Y>278</Y>
 		</location>
 	</region>
 	<region id="50">
 		KIEFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>345</X>
+			<Y>323</Y>
 		</location>
 	</region>
 	<region id="117">
 		WESFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>265</X>
+			<Y>592</Y>
 		</location>
 	</region>
 	<region id="30">
 		DENFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>350</X>
+			<Y>273</Y>
 		</location>
 	</region>
 	<region id="63">
 		NAFFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>186</X>
+			<Y>610</Y>
 		</location>
 	</region>
 	<region id="19">
 		BREFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>203</X>
+			<Y>408</Y>
 		</location>
 	</region>
 	<region id="83">
 		RUMAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>557</X>
+			<Y>466</Y>
 		</location>
 	</region>
 	<region id="91">
 		SMYFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>591</X>
+			<Y>625</Y>
 		</location>
 	</region>
 	<region id="8">
 		ARMAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>752</X>
+			<Y>545</Y>
 		</location>
 	</region>
 	<region id="16">
 		BLAFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>683</X>
+			<Y>499</Y>
 		</location>
 	</region>
 	<region id="93">
 		SPANCS
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>151</X>
+			<Y>460</Y>
 		</location>
 	</region>
 	<region id="84">
 		RUMFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>576</X>
+			<Y>488</Y>
 		</location>
 	</region>
 	<region id="31">
 		EASFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>615</X>
+			<Y>653</Y>
 		</location>
 	</region>
 	<region id="9">
 		ARMFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>738</X>
+			<Y>521</Y>
 		</location>
 	</region>
 	<region id="57">
 		MAOFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>71</X>
+			<Y>430</Y>
 		</location>
 	</region>
 	<region id="48">
 		IRIFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>176</X>
+			<Y>325</Y>
 		</location>
 	</region>
 	<region id="23">
 		BULECS
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>569</X>
+			<Y>517</Y>
 		</location>
 	</region>
 	<region id="58">
 		MARAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>282</X>
+			<Y>473</Y>
 		</location>
 	</region>
 	<region id="80">
 		ROMAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>378</X>
+			<Y>545</Y>
 		</location>
 	</region>
 	<region id="37">
 		GALAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>485</X>
+			<Y>400</Y>
 		</location>
 	</region>
 	<region id="59">
 		MARFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>256</X>
+			<Y>491</Y>
 		</location>
 	</region>
 	<region id="81">
 		ROMFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>374</X>
+			<Y>548</Y>
 		</location>
 	</region>
 	<region id="33">
 		EDIAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>240</X>
+			<Y>228</Y>
 		</location>
 	</region>
 	<region id="34">
 		EDIFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>258</X>
+			<Y>228</Y>
 		</location>
 	</region>
 	<region id="51">
 		LONAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>250</X>
+			<Y>327</Y>
 		</location>
 	</region>
 	<region id="65">
 		NAPAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>414</X>
+			<Y>587</Y>
 		</location>
 	</region>
 	<region id="64">
 		NAOFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>96</X>
+			<Y>187</Y>
 		</location>
 	</region>
 	<region id="61">
 		MUNAMY
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>352</X>
+			<Y>398</Y>
 		</location>
 	</region>
 	<region id="52">
 		LONFLT
 		<location>
-			<X>0</X>
-			<Y>0</Y>
+			<X>269</X>
+			<Y>325</Y>
 		</location>
 	</region>
 </regions>
