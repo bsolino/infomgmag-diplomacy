@@ -13,7 +13,7 @@ public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	final static String lastyear = "1930";
+	final static String lastyear = "1908";
 	
 	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", lastyear};
 	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", lastyear};
