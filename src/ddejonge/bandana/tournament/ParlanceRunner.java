@@ -16,7 +16,7 @@ public class ParlanceRunner {
 	
 	//Set this path to your home folder.
 	//If set incorrectly Parlance will still work but you won't be able to change the deadlines.
-	private static String HOME_FOLDER = "C:\\Users\\30044279";
+	private static String HOME_FOLDER = "C:\\Users\\yoric";
 	
 	//you can also try the following, but it does not seem to be working properly.
 	/*private static String HOME_FOLDER =  System.getProperty("user.home");*/  
