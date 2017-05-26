@@ -67,6 +67,7 @@ public class PersonalityBot extends Player{
 	
 	//The time in milliseconds this agent takes to negotiate each round.
 	public final int NEGOTIATION_LENGTH = 3000; 
+	private ArrayList<Order> submittedOrders;
 	
 	
 	/**
@@ -126,9 +127,10 @@ public class PersonalityBot extends Player{
 					System.out.println("main() The port number argument is not a valid integer: " + args[i+1]);
 					return;
 				}
-			}if(PersonalityType.valueOf(args[i])!=null){			//BROR thinks this works. .... we'll see,,,,,
-				ps = PersonalityType.valueOf(args[i]);
 			}
+			//if(PersonalityType.valueOf(args[i])!=null){			//BROR thinks this works. .... we'll see,,,,,
+			//	ps = PersonalityType.valueOf(args[i]);
+			//}
 			
 		}
 		
@@ -434,7 +436,7 @@ public class PersonalityBot extends Player{
 	 */
 	@Override
 	public void receivedOrder(Order order) {
-		decisionMaker.update(order);
+		submittedOrders.add(order);
 	}
 	
 	
@@ -536,6 +538,8 @@ public class PersonalityBot extends Player{
 	 */
 	@Override
 	public void phaseEnd(GameState gameState) {
+		
+		decisionMaker.update(submittedOrders);
 		
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.
