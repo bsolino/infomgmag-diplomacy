@@ -434,8 +434,7 @@ public class PersonalityBot extends Player{
 	 */
 	@Override
 	public void receivedOrder(Order order) {
-		
-		
+		decisionMaker.update(order);
 	}
 	
 	

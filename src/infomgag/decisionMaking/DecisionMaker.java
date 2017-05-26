@@ -1,7 +1,12 @@
 package infomgag.decisionMaking;
 import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Phase;
+import es.csic.iiia.fabregues.dip.board.Province;
+import es.csic.iiia.fabregues.dip.board.Region;
+import es.csic.iiia.fabregues.dip.orders.MTOOrder;
 import es.csic.iiia.fabregues.dip.orders.Order;
+import es.csic.iiia.fabregues.dip.orders.SUPMTOOrder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,10 +36,39 @@ public class DecisionMaker{
 	}
 	
 	//This is gonna get called every time recievedOrder is called. 6 players * the number of is issued by each player. 
-	public void update(Order order){
-	//IMPLEMENT THE FUNCTION BELOW. 
-	DealEffect tempEffect = calculateDealEffect(order); 
-	personality.updateTrust(order.getPower().getName(), tempEffect);		//Updates the personality dependant on if you were screwed over or not in the last round. 
+	public void update(ArrayList<Order> submittedOrders){
+		//DealEffect tempEffect = DealEffect.NEUTRAL; // = calculateDealEffect(order); 
+		
+		for(BasicDeal confirmedDeal : confirmedDeals){
+			for(OrderCommitment orderCommitment : confirmedDeal.getOrderCommitments()){
+				if(orderCommitment.getPhase().equals(game.getPhase()) && orderCommitment.getYear() == game.getYear()){
+					for(Order order : submittedOrders){
+						if (orderCommitment.getOrder().equals(order)){
+							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), DealEffect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
+							break;
+						}		
+					}
+					personality.updateTrust(orderCommitment.getOrder().getPower().getName(), DealEffect.NEGATIVE);
+				}
+			}
+			
+			
+			for(DMZ dmz : confirmedDeal.getDemilitarizedZones()){	
+				if(dmz.getPhase().equals(game.getPhase()) && dmz.getYear() == game.getYear()){
+					for(Order order : submittedOrders){
+						if(order instanceof MTOOrder){
+							MTOOrder tempOrder = (MTOOrder) order;
+							for(Province province : dmz.getProvinces()){
+								for(Region region : province.getRegions())
+									if (tempOrder.getDestination().equals(region)){
+										personality.updateTrust(order.getPower().getName(), DealEffect.NEGATIVE);
+									}
+								}	
+						}
+					}
+				}
+			}
+		} 
 	}
 
 	//Checks if someone has screwed you over or not. 
