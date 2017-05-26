@@ -5,28 +5,72 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddejonge.bandana.tools.ProcessRunner;
 import ddejonge.bandana.tools.Logger;
+import ddejonge.bandana.tools.ProcessRunner;
+import es.csic.iiia.fabregues.dip.Player;
 
 
 public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	final static String lastyear = "1908";
+	private final static String DEFAULT_LAST_YEAR = "1908";
 	
-	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", lastyear};
-	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", lastyear};
-	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", lastyear};
-	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", lastyear};
+	private final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", DEFAULT_LAST_YEAR};
+	private final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", DEFAULT_LAST_YEAR};
+	private final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", DEFAULT_LAST_YEAR};
+	private final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR};
 
-	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/AnacExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", lastyear};
+	private final static String[] anacExampleBotCommand = {"java", "-jar", "agents/AnacExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", DEFAULT_LAST_YEAR};
 
+	// Modify this list to change the order in which players are loaded
+	// It's not foolproof: it has to be at least 7 players, and only the 7 first players will be used
+	private final static TournamentPlayer[] TOURNAMENT_PLAYERS = {
+//			TournamentPlayer.DBRANE_1_1,
+//			TournamentPlayer.DBRANE_1_1,
+//			TournamentPlayer.DBRANE_EXAMPLE,
+//			TournamentPlayer.DBRANE_EXAMPLE,
+//			TournamentPlayer.RANDOM_NEGOTIATOR,
+//			TournamentPlayer.RANDOM_NEGOTIATOR,
+//			TournamentPlayer.DUMB_BOT_1_4
+			TournamentPlayer.PERSONALITY,
+			TournamentPlayer.PERSONALITY,
+			TournamentPlayer.PERSONALITY,
+			TournamentPlayer.PERSONALITY,
+			TournamentPlayer.PERSONALITY,
+			TournamentPlayer.PERSONALITY,
+			TournamentPlayer.PERSONALITY
+	};
 	
 	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
 	// where the results of the tournament will be logged.
 	final static String LOG_FOLDER = "log";
 	
+	private enum TournamentPlayer{
+		
+		RANDOM_NEGOTIATOR("RandomNegotiator", randomNegotiatorCommand),
+		DUMB_BOT_1_4("DumbBot", dumbBot_1_4_Command),
+		DBRANE_1_1("D-Brane", dbrane_1_1_Command),
+		DBRANE_EXAMPLE("D-BraneExampleBot", dbraneExampleBotCommand),
+		ANAC_EXAMPLE("AnacExampleBot", anacExampleBotCommand),
+		PERSONALITY("Personality", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR});
+
+		private String name;
+		private String[] command;
+		
+		private TournamentPlayer(String name, String[] command){
+			this.name = name;
+			this.command = command;
+		}
+		
+		private String getName(){
+			return this.name;
+		}
+		
+		private String[] getCommand(){
+			return this.command;
+		}
+	}
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -36,7 +80,7 @@ public class TournamentRunner {
 		int deadlineForRetreatPhases = 10;  //30 seconds for each SUM and AUT phases
 		int deadlineForBuildPhases = 10;  	//30 seconds for each WIN phase
 		
-		int finalYear = Integer.parseInt(lastyear); 	//The year after which the agents in each game are supposed to propose a draw to each other. 
+		int finalYear = Integer.parseInt(DEFAULT_LAST_YEAR); 	//The year after which the agents in each game are supposed to propose a draw to each other. 
 		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 
 		
 		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear);
@@ -98,31 +142,11 @@ public class TournamentRunner {
 			//4. Start the players:
 			for(int i=0; i<7; i++){
 				
-				String name;
-				String[] command;
-				
-				//make sure that each player has a different name.
-				if(i<2){
-					
-					name = "D-Brane " + i;
-					command = dbrane_1_1_Command; 
+				TournamentPlayer tournamentPlayer = TOURNAMENT_PLAYERS[i];
 
-				}else if(i<4){
-					
-					name = "D-BraneExampleBot " + i;
-					command = dbraneExampleBotCommand;
-					
-				}else if(i<6){
-				
-					name = "RandomNegotiator " + i;
-					command = randomNegotiatorCommand;
-					
-				}else{
-					
-					name = "DumbBot " + i;
-					command = dumbBot_1_4_Command;
-				}
-				
+				//make sure that each player has a different name
+				String name = tournamentPlayer.getName() + " " + i;
+				String[] command = tournamentPlayer.getCommand();
 				//set the log folder for this agent to be a subfolder of the tournament log folder.
 				command[4] = tournamentLogFolderPath + File.separator + name + File.separator + "Game " + gameNumber + File.separator; 
 				
@@ -189,4 +213,5 @@ public class TournamentRunner {
 		ParlanceRunner.stop();
 		NegoServerRunner.stop();
 	}
+	
 }
