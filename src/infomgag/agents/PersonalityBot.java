@@ -1,4 +1,4 @@
-package ddejonge.bandana.exampleAgents;
+package infomgag.agents;
 
 import java.io.File;
 import java.io.IOException;
