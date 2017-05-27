@@ -1,11 +1,13 @@
 package infomgag.decisionMaking;
 import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Phase;
+import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
 import es.csic.iiia.fabregues.dip.orders.MTOOrder;
 import es.csic.iiia.fabregues.dip.orders.Order;
 import es.csic.iiia.fabregues.dip.orders.SUPMTOOrder;
+import es.csic.iiia.fabregues.dip.orders.SUPOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,60 +21,88 @@ import ddejonge.bandana.negoProtocol.OrderCommitment;
 import ddejonge.bandana.tools.Utilities;
 import ddejonge.negoServer.Message;
 import infomgag.personality.*;
-import infomgag.personality.Personality.DealEffect;
+import infomgag.personality.Personality.Effect;
 public class DecisionMaker{
 	
 	Personality personality; 
 	ArrayList<BasicDeal> confirmedDeals; 
 	Game game; 
 	Random random;
+	Power me;
 	
 	//Constructor: Takes in a personality and a game object. 
-	public DecisionMaker(Personality personality, Game game){
+	public DecisionMaker(Personality personality, Game game, Power me){
 		random = new Random();
 		this.game = game;
 		this.personality = personality;
 		this.confirmedDeals = new ArrayList<BasicDeal>();
+		this.me = me;
 	}
 	
-	//This is gonna get called every time recievedOrder is called. 6 players * the number of is issued by each player. 
+	
 	public void update(ArrayList<Order> submittedOrders){
-		//DealEffect tempEffect = DealEffect.NEUTRAL; // = calculateDealEffect(order); 
+		//However, if the order
+		//is a HLDOrder, then the corresponding power is still allowed to submit a
+		//SUPOrder or SUPMTOOrder for that unit instead of the HLDOrder.
 		
-		for(BasicDeal confirmedDeal : confirmedDeals){
-			for(OrderCommitment orderCommitment : confirmedDeal.getOrderCommitments()){
-				if(orderCommitment.getPhase().equals(game.getPhase()) && orderCommitment.getYear() == game.getYear()){
-					for(Order order : submittedOrders){
-						if (orderCommitment.getOrder().equals(order)){
-							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), DealEffect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
-							break;
-						}		
+		if (submittedOrders.size() > 0){
+			for(Order order : submittedOrders){
+				if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
+					SUPOrder supOrder = (SUPOrder) order; // we might have to cast separately 
+					if (me.equals(supOrder.getSupportedOrder().getPower())){
+						personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
 					}
-					personality.updateTrust(orderCommitment.getOrder().getPower().getName(), DealEffect.NEGATIVE);
 				}
+				
+				if (order instanceof MTOOrder){
+					// check whether the move order causes us to lose territory
+					personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+				}
+				
 			}
-			
-			
-			for(DMZ dmz : confirmedDeal.getDemilitarizedZones()){	
-				if(dmz.getPhase().equals(game.getPhase()) && dmz.getYear() == game.getYear()){
-					for(Order order : submittedOrders){
-						if(order instanceof MTOOrder){
-							MTOOrder tempOrder = (MTOOrder) order;
-							for(Province province : dmz.getProvinces()){
-								for(Region region : province.getRegions())
-									if (tempOrder.getDestination().equals(region)){
-										personality.updateTrust(order.getPower().getName(), DealEffect.NEGATIVE);
-									}
-								}	
+		}
+		
+		
+		if (submittedOrders.size() > 0 & this.confirmedDeals.size() > 0){
+			for(BasicDeal confirmedDeal : confirmedDeals){
+				if (confirmedDeal.getOrderCommitments().size() > 0){
+					for(OrderCommitment orderCommitment : confirmedDeal.getOrderCommitments()){
+						if(orderCommitment.getPhase().equals(game.getPhase()) && orderCommitment.getYear() == game.getYear()){
+							for(Order order : submittedOrders){
+								if (orderCommitment.getOrder().equals(order)){
+									personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
+									break;
+								}		
+							}
+							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 						}
 					}
 				}
-			}
-		} 
+				
+				if (confirmedDeal.getDemilitarizedZones().size() > 0){
+					for(DMZ dmz : confirmedDeal.getDemilitarizedZones()){	
+						if(dmz.getPhase().equals(game.getPhase()) && dmz.getYear() == game.getYear()){
+							for(Order order : submittedOrders){
+								if(order instanceof MTOOrder){
+									MTOOrder tempOrder = (MTOOrder) order;
+									for(Province province : dmz.getProvinces()){
+										for(Region region : province.getRegions()){
+											if (tempOrder.getDestination().equals(region)){
+												personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+											}
+										}
+									}	
+								}
+							}
+						}
+					}
+				}
+			} 
+		}
 	}
 
 	//Checks if someone has screwed you over or not. 
-	private DealEffect calculateDealEffect(Order order) {
+	private Effect calculateDealEffect(Order order) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -103,6 +133,8 @@ public class DecisionMaker{
 			
 			
 			break;
+		default:
+			return "UNKOWN INCOMING MESSAGE";
 		}
 		
 		return "UNKOWN INCOMING MESSAGE";
@@ -122,6 +154,8 @@ public class DecisionMaker{
 	//Handles a proposal message that is sent to the agent. 
 	private boolean handleProposal(BasicDeal deal) {
 		boolean outDated = false;
+		boolean trustIssues = false;
+		
 		for(DMZ dmz : deal.getDemilitarizedZones()){
 			
 			// Sometimes we may receive messages too late, so we check if the proposal does not
@@ -149,7 +183,10 @@ public class DecisionMaker{
 			}
 			
 			//TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
-			/*Order order = orderCommitment.getOrder();*/
+			Order order = orderCommitment.getOrder();
+			if (personality.getTrustVal(order.getPower().getName()) > personality.trustThreshold){
+				trustIssues = true;
+			}
 		}
 		
 		//If the deal is not outdated, then check that it is consistent with the deals we are already committed to.
@@ -163,8 +200,8 @@ public class DecisionMaker{
 			
 			
 		}
-		
-		if(!outDated && consistencyReport == null){
+		// Maybe check whether or not we trust the MAJORITY of powers involved in the deal
+		if(!outDated && consistencyReport == null && !trustIssues){
 			
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
 			if(random.nextInt(2) == 0){ // accept with 50% probability.
@@ -187,11 +224,12 @@ public class DecisionMaker{
 	//Montecarlo stuff to search for a deal to propose. 
 	public BasicDeal searchForADealToPropose(){
 		//THIS WILL NOT WORK. ADD THE MONTECARLO STUFF
-		BasicDeal proposedDeal = new BasicDeal(null, null);
+		//BasicDeal proposedDeal = new BasicDeal(null, null);
 		
 		//GET STUFF FROM MONTECARLO AND PUT THEM INTO proposedDeal
 	
-		return proposedDeal;
+		//return proposedDeal;
+		return null;
 	}
 	
 	//Checks to see if the propsal made is outdated or not. 

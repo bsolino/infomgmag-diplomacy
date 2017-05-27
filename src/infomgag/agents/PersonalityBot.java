@@ -201,7 +201,7 @@ public class PersonalityBot extends Player{
 		
 		this.name = name;
 		this.finalYear = finalYear;
-		this.decisionMaker = new DecisionMaker(new Personality(ps), game);
+		this.decisionMaker = new DecisionMaker(new Personality(ps), game, this.me);
 		
 		//Initialize the clients
 		try {

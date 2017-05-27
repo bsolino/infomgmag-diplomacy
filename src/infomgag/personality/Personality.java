@@ -11,10 +11,15 @@ public class Personality {
 	private int naiveness;
 	private int pessimism;	
 	private int impulsiveness;
+	private boolean trustworthiness;
 	private int[] trust_array = new int[6];
 	private Map<String, Float> trust_dict = new HashMap<String, Float>();
+	private Map<String, Float> likeability_dict = new HashMap<String, Float>();
 	private float trustIncreaseFactor;
 	private float trustDecreaseFactor;
+	public float trustThreshold = 1;
+	private float likeabilityIncreaseFactor;
+	private float likeabilityDecreaseFactor;
 
 	public enum PersonalityType{
 		CHOLERIC,
@@ -23,7 +28,7 @@ public class Personality {
 		PHLEGMATIC
 	}
 	
-	public enum DealEffect{
+	public enum Effect{
 		NEUTRAL,
 		POSITIVE,
 		NEGATIVE
@@ -32,7 +37,7 @@ public class Personality {
 	public Personality(PersonalityType personalityType){
 		switch(personalityType){
 			case CHOLERIC:
-				this.trust_array = new int[]{2,2,2,2,2,2};
+				
 				this.trustIncreaseFactor = (float) 0.5;
 				this.trustDecreaseFactor = (float) 0.9;
 				break;
@@ -59,11 +64,11 @@ public class Personality {
 		
 	}
 	
-	public int updateTrust(String powerName, DealEffect dealEffect){
+	public int updateTrust(String powerName, Effect effect){
 		float newVal = 0;
 		float oldVal = this.trust_dict.get(powerName);
 		
-		switch(dealEffect){
+		switch(effect){
 		case NEUTRAL:
 			newVal = oldVal;
 			break;
@@ -82,8 +87,35 @@ public class Personality {
 		return 0;
 	}
 	
+	public int updateLikeability(String powerName, Effect effect){
+		float newVal = 0;
+		float oldVal = this.likeability_dict.get(powerName);
+		
+		switch(effect){
+		case NEUTRAL:
+			newVal = oldVal;
+			break;
+		case POSITIVE:
+			newVal = oldVal + this.likeabilityIncreaseFactor * (2 - oldVal);
+			break;
+		case NEGATIVE:
+			newVal = oldVal + this.likeabilityDecreaseFactor * (0 - oldVal);
+			break;
+		default:
+			break;
+		}
+		
+		this.likeability_dict.put(powerName, newVal);
+		
+		return 0;
+	}
+	
 	public float getTrustVal(String powerName){
 		return this.trust_dict.get(powerName);
+	}
+	
+	public float getLikeabilityVal(String powerName){
+		return this.likeability_dict.get(powerName);
 	}
 	
 }
