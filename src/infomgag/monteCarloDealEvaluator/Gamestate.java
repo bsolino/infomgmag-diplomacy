@@ -47,5 +47,12 @@ public class Gamestate {
 			gameBuilder.placeUnit(unit.getKey(), unit.getValue());
 		return gameBuilder.createMyGame();
 	}
+	
+	//This should return the number of possible moves in this state
+	//it is used to know if nodes are fully expanded
+	public int possibleMoves(){
+		//TODO
+		return 2;
+	}
 
 }
