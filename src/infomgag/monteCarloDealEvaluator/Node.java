@@ -35,4 +35,10 @@ public class Node {
 		return false;
 	}
 	
+	public String toString(){
+		return "Node:" + this.state.hashCode() + " Parent:" + 
+				this.parent.state.hashCode() + " Visits:" + 
+				this.visits + " Reward:" + this.reward + 
+				" Children:" + children.size();
+	}
 }

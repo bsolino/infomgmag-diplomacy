@@ -54,5 +54,10 @@ public class Gamestate {
 		//TODO
 		return 2;
 	}
+	
+	public String toString(){
+		return "State:" + this.hashCode() + " Year:" + this.year + 
+				" Phase:" + this.phase + " Units:" + units.toString();
+	}
 
 }
