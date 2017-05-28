@@ -90,7 +90,7 @@ public class DecisionMaker{
 									break;
 								}		
 							}
-							//personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 						}
 					}
 				}
@@ -104,7 +104,7 @@ public class DecisionMaker{
 									for(Province province : dmz.getProvinces()){
 										for(Region region : province.getRegions()){
 											if (tempOrder.getDestination().equals(region)){
-												//personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+												personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
 											}
 										}
 									}	
