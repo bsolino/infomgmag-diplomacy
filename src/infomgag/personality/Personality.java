@@ -27,11 +27,11 @@ public class Personality {
 		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8),
 		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2);
 		
-		private double trustIncreaseFactor;
-		private double trustDecreaseFactor;
+		private final double trustIncreaseFactor;
+		private final double trustDecreaseFactor;
 		
-		private double likeabilityIncreaseFactor;
-		private double likeabilityDecreaseFactor;
+		private final double likeabilityIncreaseFactor;
+		private final double likeabilityDecreaseFactor;
 
 		private PersonalityType(
 				double trustIncreaseFactor,
@@ -119,17 +119,25 @@ public class Personality {
 		
 		return 0;
 	}
-	
-	public double getTrustVal(String powerName){
-		return this.trustDict.get(powerName);
-	}
-	
-	public double getLikeabilityVal(String powerName){
-		return this.likeabilityDict.get(powerName);
-	}
 
-	public double getTrustThreshold() {
-		return trustThreshold;
+	public boolean hasTrustIssues(Power power) {
+		if (this.trustDict.get(power.getName()) > this.trustThreshold){
+			return true;
+		} else {
+			return false;
+		}
 	}
+	
+//	public double getTrustVal(String powerName){
+//		return this.trustDict.get(powerName);
+//	}
+	
+//	public double getLikeabilityVal(String powerName){
+//		return this.likeabilityDict.get(powerName);
+//	}
+
+//	public double getTrustThreshold() {
+//		return trustThreshold;
+//	}
 	
 }
