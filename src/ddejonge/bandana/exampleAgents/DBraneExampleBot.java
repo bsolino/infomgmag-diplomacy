@@ -406,11 +406,6 @@ public class DBraneExampleBot extends Player{
 			logger.writeToFile();
 			return dbraneTactics.getWinterOrders(game, me, myAllies);
 		}
-		
-		
-		
-		
-		
 	}
 
 	
@@ -474,7 +469,6 @@ public class DBraneExampleBot extends Player{
 	public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 		
 		BasicDeal newDealToPropose = null;
-		
 		
 		//This loop repeats 2 steps. The first step is to handle any incoming messages, 
 		// while the second step tries to find deals to propose to the other negotiators.
