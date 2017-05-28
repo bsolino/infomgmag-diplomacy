@@ -197,8 +197,8 @@ public class DecisionMaker{
 			
 			//TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
 			Order order = orderCommitment.getOrder();
-			if (personality.getTrustVal(order.getPower().getName()) > personality.getTrustThreshold()){
-				trustIssues = true;
+			if (personality.hasTrustIssues(order.getPower())){
+				trustIssues = true; 
 			}
 		}
 		
