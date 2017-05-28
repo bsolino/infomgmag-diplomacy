@@ -30,6 +30,7 @@ public class DecisionMaker{
 	Random random;
 	Power me;
 	
+	
 	//Constructor: Takes in a personality and a game object. 
 	public DecisionMaker(Personality personality, Game game, Power me){
 		random = new Random();
@@ -42,6 +43,9 @@ public class DecisionMaker{
 		
 	}
 	
+	public String getPersonalityValues(){
+		return personality.getTrustValues();
+	}
 	
 	public void update(ArrayList<Order> submittedOrders){
 		//However, if the order

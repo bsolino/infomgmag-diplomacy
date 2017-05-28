@@ -551,7 +551,8 @@ public class PersonalityBot extends Player{
 	public void phaseEnd(GameState gameState) {
 		
 		decisionMaker.update(this.submittedOrders);
-		
+		List<Power> recievers = game.getPowers();
+		this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.
 		if((game.getYear() == finalYear && game.getPhase() == Phase.FAL) || game.getYear() > finalYear){

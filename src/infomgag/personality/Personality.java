@@ -186,6 +186,23 @@ public class Personality {
 		
 	}
 
+
+
+	public String getTrustValues() {
+		
+		String retString = "\n ---------------------------------------------";
+		retString += "\n" + myPower.getName() + "\n";
+		for(Power power : this.allPowers){
+			if (!(power.equals(this.myPower))){
+					retString += power.getName() + " trust: " + trustDict.get(power.getName());
+					retString += "\n";
+					retString += power.getName() + " like: " + likeabilityDict.get(power.getName());
+					retString += "\n";
+			}
+		}
+		return retString;
+	}
+
 	
 	
 //	public double getTrustVal(String powerName){
