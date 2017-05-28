@@ -145,7 +145,7 @@ public class Personality {
 		return 0;
 	}
 
-	public boolean hasTrustIssues(Power power) {
+	public boolean hasTrustIssuesWith(Power power) {
 //		try{
 		if (!(power.equals(this.myPower)) && this.trustDict.get(power.getName()) > this.trustThreshold){
 			return true;
