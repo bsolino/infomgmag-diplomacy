@@ -8,7 +8,6 @@ import es.csic.iiia.fabregues.dip.board.Phase;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
-import es.csic.iiia.fabregues.dip.comm.GameBuilder;
 import javafx.util.Pair;
 
 public class Gamestate {
