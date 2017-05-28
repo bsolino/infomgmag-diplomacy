@@ -202,7 +202,7 @@ public class PersonalityBot extends Player{
 		this.name = name;
 		this.finalYear = finalYear;
 		this.decisionMaker = new DecisionMaker(new Personality(ps), game, this.me);
-		
+		this.submittedOrders = new ArrayList<Order>();
 		//Initialize the clients
 		try {
 			InetAddress gameServerIp = InetAddress.getLocalHost();
