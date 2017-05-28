@@ -58,13 +58,13 @@ public class DecisionMaker{
 					if (order instanceof SUPOrder){
 						SUPOrder supOrder = (SUPOrder) order;
 						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
 						}
 					}
 					if (order instanceof SUPMTOOrder){
 						SUPMTOOrder supOrder = (SUPMTOOrder) order;
 						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
 						}
 					}
 					
