@@ -1,14 +1,21 @@
 package infomgag.monteCarloDealEvaluator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeSet;
 import java.util.Vector;
 
+import ddejonge.bandana.exampleAgents.RandomBot;
 import ddejonge.bandana.gameBuilder.DiplomacyGameBuilder;
+import es.csic.iiia.fabregues.dip.board.Dislodgement;
 import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Phase;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
 import es.csic.iiia.fabregues.dip.comm.GameBuilder;
+import es.csic.iiia.fabregues.dip.orders.Order;
 import javafx.util.Pair;
 
 public class Gamestate {
@@ -16,6 +23,7 @@ public class Gamestate {
 	String phase;
 	Vector<Pair<String, String>> units = new Vector<Pair<String, String>>(),
 			regions = new Vector<Pair<String, String>>();
+	Vector<Pair<Pair<String,String>,Vector<String>>> dislodgements = new Vector<Pair<Pair<String,String>,Vector<String>>>();
 	
 	@SuppressWarnings("unchecked")
 	public Gamestate(Game game)
@@ -35,6 +43,15 @@ public class Gamestate {
 			for(Region r : p.getControlledRegions())
 			regions.add( new Pair(pname, r.getName()));
 		}
+		
+		for(Dislodgement d : game.getDislodgedRegions().values())
+		{
+			Pair<String, String> dislodgement = new Pair(d.getPower().getName(),d.getRegion().getName());
+			Vector<String> options = new Vector<String>();
+			for(Region r : d.getRetreateTo())
+				options.add(r.getName());
+			dislodgements.add(new Pair(dislodgement, options));
+		}
 	}
 	
 	public Game buildGameFromGamestate()
@@ -45,7 +62,31 @@ public class Gamestate {
 			gameBuilder.setOwner(region.getKey(), region.getValue());
 		for(Pair<String, String> unit : units)
 			gameBuilder.placeUnit(unit.getKey(), unit.getValue());
-		return gameBuilder.createMyGame();
+		Game mygame = gameBuilder.createMyGame();
+		
+		for(Pair<Pair<String,String>,Vector<String>> dislodgement : dislodgements)
+		{
+			Power p = mygame.getPower(dislodgement.getKey().getKey());
+			Region r = mygame.getRegion(dislodgement.getKey().getValue());
+			Dislodgement d = new Dislodgement(p,r);
+			for(String s : dislodgement.getValue())
+				d.addRetreateToRegion(mygame.getRegion(s));
+			mygame.addDislodgedRegion(r, d);
+		}
+		
+		return mygame;
+	}
+	
+	public Pair<TreeSet<String>, Gamestate> randomMove()
+	{
+		Game g = buildGameFromGamestate();
+		RandomBot bot = new RandomBot(g);
+		List<Order> orders = bot.getRandomMovesForEachPower();
+		
+		TreeSet<String> morders = new TreeSet<String>();
+		for(Order o : orders) morders.add(o.toString());
+		
+		return new Pair(morders, this); // TODO: generate new gamestate from orders
 	}
 	
 	//This should return the number of possible moves in this state

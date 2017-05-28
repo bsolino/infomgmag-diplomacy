@@ -11,8 +11,10 @@ import java.util.Random;
 import ddejonge.bandana.negoProtocol.DiplomacyNegoClient;
 import es.csic.iiia.fabregues.dip.Player;
 import es.csic.iiia.fabregues.dip.board.Dislodgement;
+import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.GameState;
 import es.csic.iiia.fabregues.dip.board.Phase;
+import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
 import es.csic.iiia.fabregues.dip.comm.CommException;
@@ -98,6 +100,23 @@ public class RandomBot extends Player{
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public RandomBot(Game game)
+	{
+		this.name = "RandomBot";
+		this.finalYear = 2000;
+		this.setGame(game);
+	}
+	public List<Order> getRandomMovesForEachPower()
+	{
+		ArrayList<Order> allOrders = new ArrayList<Order>();
+		for(Power p : game.getNonDeadPowers())
+		{
+			this.setMe(p.getName());
+			allOrders.addAll(play());
+		}
+		return allOrders;
 	}
 	
 	/**
