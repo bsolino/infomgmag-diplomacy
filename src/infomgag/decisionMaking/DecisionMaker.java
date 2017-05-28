@@ -231,11 +231,11 @@ public class DecisionMaker{
 		}
 		// Maybe check whether or not we trust the MAJORITY of powers involved in the deal
 		if(!outDated && consistencyReport == null && !trustIssues){
-			
+			return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
-			if(random.nextInt(2) == 0){ // accept with 50% probability.
-				return true;
-			}
+			//if(random.nextInt(2) == 0){ // accept with 50% probability.
+			//	return true;
+			//}
 		}
 		return false;
 	}
