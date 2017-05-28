@@ -94,7 +94,9 @@ public class DecisionMaker{
 									}
 								}
 							}
-							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+							if (!(orderCommitment.getOrder().getPower().equals(me))){
+								personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+							}
 						}
 					}
 				}
