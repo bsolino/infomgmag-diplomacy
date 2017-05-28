@@ -201,7 +201,7 @@ public class PersonalityBot extends Player{
 		
 		this.name = name;
 		this.finalYear = finalYear;
-		this.decisionMaker = new DecisionMaker(new Personality(ps), game, this.me);
+		
 		
 		//Initialize the clients
 		try {
@@ -251,6 +251,7 @@ public class PersonalityBot extends Player{
 			logger.logln(this.getClass().getSimpleName() + ".init() " + this.me.getName() + " connection failed! " + this.negoClient.getStatus(), true);
 		}
 		logger.writeToFile();
+		this.decisionMaker = new DecisionMaker(new Personality(PersonalityType.CHOLERIC), game, this.me);
 	
 	}
 	
