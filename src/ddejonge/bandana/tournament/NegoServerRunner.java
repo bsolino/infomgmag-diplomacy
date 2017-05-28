@@ -18,6 +18,7 @@ public class NegoServerRunner {
 	
 	/**If set to true the ProtocolManager will only confirm proposals if they are consistent with all proposals that have been confirmed earlier.*/
 	public static boolean ENABLE_CONSISTENCY_CHECKING = true;
+	// This turns of the Notary's consistency checking.
 	
 	private static NegotiationServer negoServer = null;
 	
