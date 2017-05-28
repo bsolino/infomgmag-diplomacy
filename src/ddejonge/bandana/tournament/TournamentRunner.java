@@ -53,7 +53,7 @@ public class TournamentRunner {
 		DBRANE_1_1("D-Brane", dbrane_1_1_Command),
 		DBRANE_EXAMPLE("D-BraneExampleBot", dbraneExampleBotCommand),
 		ANAC_EXAMPLE("AnacExampleBot", anacExampleBotCommand),
-		PERSONALITY("Personality", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
+		PERSONALITY("Personality0", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
 		PERSONALITY1("Personality1", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE"}),
 		PERSONALITY2("Personality2", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC"}),
 		PERSONALITY3("Personality3", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC"});

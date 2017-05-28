@@ -87,13 +87,13 @@ public class Personality {
 	}
 	
 	public Personality(PersonalityType personalityType){
+		
 		this.trustIncreaseFactor = personalityType.getTrustIncreaseFactor();
 		this.trustDecreaseFactor = personalityType.getTrustDecreaseFactor();
 		this.likeabilityIncreaseFactor = personalityType.getLikeabilityIncreaseFactor();
 		this.likeabilityDecreaseFactor = personalityType.getLikeabilityDecreaseFactor();
 		this.likeInitValue = personalityType.getLikeInitValue();
 		this.trustInitValue = personalityType.getTrustInitValue();
-		
 		
 	}
 	
@@ -146,15 +146,24 @@ public class Personality {
 	}
 
 	public boolean hasTrustIssues(Power power) {
-		if (this.trustDict.get(power.getName()) > this.trustThreshold){
+//		try{
+		if (!(power.equals(this.myPower)) && this.trustDict.get(power.getName()) > this.trustThreshold){
 			return true;
 		} else {
 			return false;
 		}
+//		}}catch(NullPointerException e){
+//			for (String key : trustDict.keySet()) {
+//			    System.out.println(key + " : " + trustDict.get(key));
+//			}
+//			System.out.println("SOMETHING WENT WRONG 1 " + trustDict.get(power.getName()));
+//			System.out.println("SOMETHING WENT WRONG 2 " + power.getName());
+//			System.out.println("SOMETHING WENT WRONG 3 " + this.trustThreshold);
+//		}
 	}
 	
 	public boolean hasLikeIssues(Power power) {
-		if (this.likeabilityDict.get(power.getName()) > this.likeThreshold){
+		if (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) > this.likeThreshold){
 			return true;
 		} else {
 			return false;
