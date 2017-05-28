@@ -37,6 +37,9 @@ public class DecisionMaker{
 		this.personality = personality;
 		this.confirmedDeals = new ArrayList<BasicDeal>();
 		this.me = me;
+		personality.setMyPower(me);
+		personality.setPowers(game.getPowers());
+		
 	}
 	
 	
@@ -51,27 +54,29 @@ public class DecisionMaker{
 		
 		if (submittedOrders != null && submittedOrders.size() > 0){
 			for(Order order : submittedOrders){
-				if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
-					if (order instanceof SUPOrder){
-						SUPOrder supOrder = (SUPOrder) order;
-						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+				if (!(order.getPower().equals(me))){
+				
+					if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
+						if (order instanceof SUPOrder){
+							SUPOrder supOrder = (SUPOrder) order;
+							if (me.equals(supOrder.getSupportedOrder().getPower())){
+								personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							}
 						}
-					}
-					if (order instanceof SUPMTOOrder){
-						SUPMTOOrder supOrder = (SUPMTOOrder) order;
-						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+						if (order instanceof SUPMTOOrder){
+							SUPMTOOrder supOrder = (SUPMTOOrder) order;
+							if (me.equals(supOrder.getSupportedOrder().getPower())){
+								personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							}
 						}
+						
 					}
 					
+					if (order instanceof MTOOrder){
+						// check whether the move order causes us to lose territory
+						//personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+					}
 				}
-				
-				if (order instanceof MTOOrder){
-					// check whether the move order causes us to lose territory
-					//personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
-				}
-				
 			}
 		}
 		
@@ -82,12 +87,14 @@ public class DecisionMaker{
 					for(OrderCommitment orderCommitment : confirmedDeal.getOrderCommitments()){
 						if(orderCommitment.getPhase().equals(game.getPhase()) && orderCommitment.getYear() == game.getYear()){
 							for(Order order : submittedOrders){
-								if (orderCommitment.getOrder().equals(order)){
-									personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
-									break;
-								}		
+								if (!(order.getPower().equals(me))){
+									if (orderCommitment.getOrder().equals(order)){
+										personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
+										break;
+									}
+								}
 							}
-							//personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 						}
 					}
 				}
@@ -96,15 +103,17 @@ public class DecisionMaker{
 					for(DMZ dmz : confirmedDeal.getDemilitarizedZones()){	
 						if(dmz.getPhase().equals(game.getPhase()) && dmz.getYear() == game.getYear()){
 							for(Order order : submittedOrders){
-								if(order instanceof MTOOrder){
-									MTOOrder tempOrder = (MTOOrder) order;
-									for(Province province : dmz.getProvinces()){
-										for(Region region : province.getRegions()){
-											if (tempOrder.getDestination().equals(region)){
-												//personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+								if (!(order.getPower().equals(me))){
+									if(order instanceof MTOOrder){
+										MTOOrder tempOrder = (MTOOrder) order;
+										for(Province province : dmz.getProvinces()){
+											for(Region region : province.getRegions()){
+												if (tempOrder.getDestination().equals(region)){
+													personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+												}
 											}
-										}
-									}	
+										}	
+									}
 								}
 							}
 						}
@@ -123,35 +132,34 @@ public class DecisionMaker{
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
 	public String handleIncomingMessages(Message receivedMessage){
 		//Check if deal is outdated
-		DiplomacyProposal proposal = (DiplomacyProposal)receivedMessage.getContent();		
+		DiplomacyProposal proposal;
 		//Then handle the various possible messages: PROPOSE, ACCEPT, REJECT and CONFIRM
 		
 		switch(receivedMessage.getPerformative()){
 		
 		case DiplomacyNegoClient.PROPOSE:			//A player has proposed a deal to you
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			BasicDeal deal = (BasicDeal)proposal.getProposedDeal();
 			if(handleProposal(deal)){		//If you choose to accept the deal. Then handleProposal should be TRUE, else FALSE
-				return "Accepting proposal:" + proposal;
+				return "Accepting proposal:" + receivedMessage.getMessageId();
 			}
 		case DiplomacyNegoClient.ACCEPT:			//A player has accepted a deal you have proposed
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			//Handle the information that another player has accepted a deal you proposed to them
-			return "RandomNegotiator.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + proposal;
-		case DiplomacyNegoClient.REJECT:			//A player has rejected a deal you have proposed
+			return "Recieved acceptence from " + receivedMessage.getSender() + ": " + proposal;
+		case DiplomacyNegoClient.REJECT:
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	//A player has rejected a deal you have proposed
 			//Handled the information that another player has accepted a deal you propoed to them
 			return "Deal rejected: " + proposal;
 		case DiplomacyNegoClient.CONFIRM:			//The negotiation client has confirmed that all players in a deal has accepted the deal. This is now binding. 
-			
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			BasicDeal tempDeal = (BasicDeal)proposal.getProposedDeal();
 			handleConfirmation(tempDeal);
 			
-			
-			break;
+			return "Confirmation of " + proposal;
 		default:
 			return "UNKOWN INCOMING MESSAGE";
 		}
-		
-		return "UNKOWN INCOMING MESSAGE";
-		
 	}	
 	
 	//If a confirmation message is sent to the agent, then it is being handled here. 
@@ -197,8 +205,8 @@ public class DecisionMaker{
 			
 			//TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
 			Order order = orderCommitment.getOrder();
-			if (personality.getTrustVal(order.getPower().getName()) > personality.trustThreshold){
-				trustIssues = true;
+			if (personality.hasTrustIssues(order.getPower())){
+				trustIssues = true; 
 			}
 		}
 		
@@ -221,7 +229,7 @@ public class DecisionMaker{
 				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	//Should you accept a deal or not, returns TRUE if you want to accept this deal. FALSE if not. 

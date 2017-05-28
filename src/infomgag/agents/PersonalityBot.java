@@ -128,9 +128,16 @@ public class PersonalityBot extends Player{
 					return;
 				}
 			}
-			//if(PersonalityType.valueOf(args[i])!=null){			//BROR thinks this works. .... we'll see,,,,,
-			//	ps = PersonalityType.valueOf(args[i]);
-			//}
+			if(args[i].equals("-ps") && args.length > i+1){
+			
+			try {
+				if(PersonalityType.valueOf(args[i+1])!= null){			//BROR thinks this works. .... we'll see,,,,,
+					ps = PersonalityType.valueOf(args[i+1]);
+				}
+				}catch(IllegalArgumentException e){
+					System.out.println("main() The Personality type does not excist") ;
+				}
+			}
 			
 		}
 		
@@ -159,7 +166,7 @@ public class PersonalityBot extends Player{
 	//FIELDS
 	DBraneTactics dbraneTactics = new DBraneTactics();
 	DecisionMaker decisionMaker;
-
+	PersonalityType ps;
 	//Random number generator.
 	private Random random = new Random();
 	
@@ -201,6 +208,8 @@ public class PersonalityBot extends Player{
 		
 		this.name = name;
 		this.finalYear = finalYear;
+		this.ps = ps;
+		
 		
 		
 		//Initialize the clients
@@ -236,7 +245,7 @@ public class PersonalityBot extends Player{
 		logger.enable(logPath, this.me.getName() + ".log");
 		
 		//write our name and the power we are playing to the log file.
-		logger.logln(this.name + " playing as " + this.me.getName(), true);
+		logger.logln(this.name + " playing as " + this.me.getName() +" | PS: " + this.ps, true);
 		logger.writeToFile();
 		
 		//Connect to the negotiation server.
@@ -251,7 +260,8 @@ public class PersonalityBot extends Player{
 			logger.logln(this.getClass().getSimpleName() + ".init() " + this.me.getName() + " connection failed! " + this.negoClient.getStatus(), true);
 		}
 		logger.writeToFile();
-		this.decisionMaker = new DecisionMaker(new Personality(PersonalityType.CHOLERIC), game, this.me);
+		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me);
+		
 	
 	}
 	
@@ -499,11 +509,11 @@ public class PersonalityBot extends Player{
 				String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage);
 				
 				//THIS IS A COMPLETELY STUPID WAY TO HANDLE IT, BUT IT SHOULD WORK. MAYBE FIX THIS IN A LATER UPDATE. 
-				if(handledMessageString.equals("Accepting proposal:" +(DiplomacyProposal)receivedMessage.getContent())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
-					this.negoClient.acceptProposal(((DiplomacyProposal) receivedMessage.getContent()).getId());
+				if(handledMessageString.equals("Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
+					this.negoClient.acceptProposal( ((DiplomacyProposal) receivedMessage.getContent()).getId());
 				} //There is going to be needed a consisty check here if the notary consistancy check will be turned off. 
-				this.logger.logln(handledMessageString); 	//Logs the results of the handling of the message. 
-			
+				
+				this.logger.logln("Message handles by PS: "+handledMessageString); 	//Logs the results of the handling of the message. 
 			}
 			//STEP 2:  try to find a proposal to make, and if we do find one, propose it.
 			BasicDeal newDealToPropose = null;
