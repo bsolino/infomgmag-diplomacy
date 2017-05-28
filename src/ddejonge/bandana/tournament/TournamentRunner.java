@@ -33,13 +33,13 @@ public class TournamentRunner {
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.DUMB_BOT_1_4
-//			TournamentPlayer.PERSONALITY,
-			TournamentPlayer.PERSONALITY,
-			TournamentPlayer.PERSONALITY1,
-			TournamentPlayer.PERSONALITY2,
-			TournamentPlayer.PERSONALITY3,
-			TournamentPlayer.PERSONALITY1,
-			TournamentPlayer.PERSONALITY2
+//			TournamentPlayer.PERSONALITY_MELANCHOLIC,
+			TournamentPlayer.PERSONALITY_MELANCHOLIC,
+			TournamentPlayer.PERSONALITY_SANGUINE,
+			TournamentPlayer.PERSONALITY_PHLEGMATIC,
+			TournamentPlayer.PERSONALITY_CHOLERIC,
+			TournamentPlayer.PERSONALITY_SANGUINE,
+			TournamentPlayer.PERSONALITY_PHLEGMATIC
 	};
 	
 	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
@@ -53,10 +53,10 @@ public class TournamentRunner {
 		DBRANE_1_1("D-Brane", dbrane_1_1_Command),
 		DBRANE_EXAMPLE("D-BraneExampleBot", dbraneExampleBotCommand),
 		ANAC_EXAMPLE("AnacExampleBot", anacExampleBotCommand),
-		PERSONALITY("Personality0", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
-		PERSONALITY1("Personality1", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE"}),
-		PERSONALITY2("Personality2", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC"}),
-		PERSONALITY3("Personality3", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC"});
+		PERSONALITY_MELANCHOLIC("Personality MELANCHOLIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
+		PERSONALITY_SANGUINE("Personality SANGUINE", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE"}),
+		PERSONALITY_PHLEGMATIC("Personality PHLEGMATIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC"}),
+		PERSONALITY_CHOLERIC("Personality CHOLERIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC"});
 		
 
 		private String name;
