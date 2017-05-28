@@ -67,7 +67,7 @@ public class PersonalityBot extends Player{
 	
 	//The time in milliseconds this agent takes to negotiate each round.
 	public final int NEGOTIATION_LENGTH = 3000; 
-	private ArrayList<Order> submittedOrders;
+	private ArrayList<Order> submittedOrders = new ArrayList<Order>();;
 	
 	
 	/**
@@ -202,7 +202,7 @@ public class PersonalityBot extends Player{
 		this.name = name;
 		this.finalYear = finalYear;
 		this.decisionMaker = new DecisionMaker(new Personality(ps), game, this.me);
-		this.submittedOrders = new ArrayList<Order>();
+		
 		//Initialize the clients
 		try {
 			InetAddress gameServerIp = InetAddress.getLocalHost();
@@ -436,7 +436,7 @@ public class PersonalityBot extends Player{
 	 */
 	@Override
 	public void receivedOrder(Order order) {
-		submittedOrders.add(order);
+		this.submittedOrders.add(order);
 	}
 	
 	
@@ -539,7 +539,7 @@ public class PersonalityBot extends Player{
 	@Override
 	public void phaseEnd(GameState gameState) {
 		
-		decisionMaker.update(submittedOrders);
+		decisionMaker.update(this.submittedOrders);
 		
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.
