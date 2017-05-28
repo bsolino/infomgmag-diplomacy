@@ -260,7 +260,7 @@ public class PersonalityBot extends Player{
 			logger.logln(this.getClass().getSimpleName() + ".init() " + this.me.getName() + " connection failed! " + this.negoClient.getStatus(), true);
 		}
 		logger.writeToFile();
-		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me);
+		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me, this.confirmedDeals);
 		
 	
 	}
@@ -762,7 +762,7 @@ public BasicDeal generateRandomDeal(){
 		
 		decisionMaker.update(this.submittedOrders);
 		List<Power> recievers = game.getPowers();
-		//logger.logln(decisionMaker.getPersonalityValues(), true);
+		logger.logln(decisionMaker.getPersonalityValues(), true);
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.

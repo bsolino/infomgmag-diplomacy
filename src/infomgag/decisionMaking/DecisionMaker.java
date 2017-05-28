@@ -32,11 +32,12 @@ public class DecisionMaker{
 	
 	
 	//Constructor: Takes in a personality and a game object. 
-	public DecisionMaker(Personality personality, Game game, Power me){
+	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals){
 		random = new Random();
 		this.game = game;
 		this.personality = personality;
-		this.confirmedDeals = new ArrayList<BasicDeal>();
+		this.confirmedDeals = confirmedDeals;
+		//this.confirmedDeals = new ArrayList<BasicDeal>();
 		this.me = me;
 		personality.setMyPower(me);
 		personality.setPowers(game.getPowers());
@@ -226,7 +227,7 @@ public class DecisionMaker{
 			
 		}
 		// Maybe check whether or not we trust the MAJORITY of powers involved in the deal
-		if(!outDated && consistencyReport == null){// && !trustIssues){
+		if((!outDated) && (consistencyReport == null) && (!(trustIssues))){
 			//return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
 			if(random.nextInt(2) == 0){ // accept with 50% probability.
