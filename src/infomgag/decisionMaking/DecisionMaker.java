@@ -45,7 +45,11 @@ public class DecisionMaker{
 		//is a HLDOrder, then the corresponding power is still allowed to submit a
 		//SUPOrder or SUPMTOOrder for that unit instead of the HLDOrder.
 		
-		if (submittedOrders.size() > 0){
+		if (submittedOrders == null){
+			return;
+		}
+		
+		if (submittedOrders != null && submittedOrders.size() > 0){
 			for(Order order : submittedOrders){
 				if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
 					SUPOrder supOrder = (SUPOrder) order; // we might have to cast separately 
