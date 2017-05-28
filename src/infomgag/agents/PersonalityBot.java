@@ -349,6 +349,8 @@ public class PersonalityBot extends Player{
 			
 				//Now let the D-Brane Tactics module determine a plan of action that is consistent with the agreement.
 				Plan plan = dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
+				//ArrayList <BasicDeal> confirmedDealss = new ArrayList<BasicDeal>();
+				//Plan plan = dbraneTactics.determineBestPlan(game, me, confirmedDealss, myAllies);
 			
 	
 				if(plan == null){
