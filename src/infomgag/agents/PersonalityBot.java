@@ -509,11 +509,11 @@ public class PersonalityBot extends Player{
 				String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage);
 				
 				//THIS IS A COMPLETELY STUPID WAY TO HANDLE IT, BUT IT SHOULD WORK. MAYBE FIX THIS IN A LATER UPDATE. 
-				if(handledMessageString.equals("Accepting proposal:" +(DiplomacyProposal)receivedMessage.getContent())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
-					this.negoClient.acceptProposal(((DiplomacyProposal) receivedMessage.getContent()).getId());
+				if(handledMessageString.equals("Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
+					this.negoClient.acceptProposal( ((DiplomacyProposal) receivedMessage.getContent()).getId());
 				} //There is going to be needed a consisty check here if the notary consistancy check will be turned off. 
-				this.logger.logln(handledMessageString); 	//Logs the results of the handling of the message. 
-			
+				
+				this.logger.logln("Message handles by PS: "+handledMessageString); 	//Logs the results of the handling of the message. 
 			}
 			//STEP 2:  try to find a proposal to make, and if we do find one, propose it.
 			BasicDeal newDealToPropose = null;

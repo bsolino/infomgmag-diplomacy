@@ -58,13 +58,13 @@ public class DecisionMaker{
 					if (order instanceof SUPOrder){
 						SUPOrder supOrder = (SUPOrder) order;
 						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
 						}
 					}
 					if (order instanceof SUPMTOOrder){
 						SUPMTOOrder supOrder = (SUPMTOOrder) order;
 						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
 						}
 					}
 					
@@ -90,7 +90,7 @@ public class DecisionMaker{
 									break;
 								}		
 							}
-							//personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 						}
 					}
 				}
@@ -104,7 +104,7 @@ public class DecisionMaker{
 									for(Province province : dmz.getProvinces()){
 										for(Region region : province.getRegions()){
 											if (tempOrder.getDestination().equals(region)){
-												//personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+												personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
 											}
 										}
 									}	
@@ -126,35 +126,34 @@ public class DecisionMaker{
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
 	public String handleIncomingMessages(Message receivedMessage){
 		//Check if deal is outdated
-		DiplomacyProposal proposal = (DiplomacyProposal)receivedMessage.getContent();		
+		DiplomacyProposal proposal;
 		//Then handle the various possible messages: PROPOSE, ACCEPT, REJECT and CONFIRM
 		
 		switch(receivedMessage.getPerformative()){
 		
 		case DiplomacyNegoClient.PROPOSE:			//A player has proposed a deal to you
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			BasicDeal deal = (BasicDeal)proposal.getProposedDeal();
 			if(handleProposal(deal)){		//If you choose to accept the deal. Then handleProposal should be TRUE, else FALSE
-				return "Accepting proposal:" + proposal;
+				return "Accepting proposal:" + receivedMessage.getMessageId();
 			}
 		case DiplomacyNegoClient.ACCEPT:			//A player has accepted a deal you have proposed
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			//Handle the information that another player has accepted a deal you proposed to them
-			return "RandomNegotiator.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + proposal;
-		case DiplomacyNegoClient.REJECT:			//A player has rejected a deal you have proposed
+			return "Recieved acceptence from " + receivedMessage.getSender() + ": " + proposal;
+		case DiplomacyNegoClient.REJECT:
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	//A player has rejected a deal you have proposed
 			//Handled the information that another player has accepted a deal you propoed to them
 			return "Deal rejected: " + proposal;
 		case DiplomacyNegoClient.CONFIRM:			//The negotiation client has confirmed that all players in a deal has accepted the deal. This is now binding. 
-			
+			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			BasicDeal tempDeal = (BasicDeal)proposal.getProposedDeal();
 			handleConfirmation(tempDeal);
 			
-			
-			break;
+			return "Confirmation of " + proposal;
 		default:
 			return "UNKOWN INCOMING MESSAGE";
 		}
-		
-		return "UNKOWN INCOMING MESSAGE";
-		
 	}	
 	
 	//If a confirmation message is sent to the agent, then it is being handled here. 
@@ -224,7 +223,7 @@ public class DecisionMaker{
 				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	//Should you accept a deal or not, returns TRUE if you want to accept this deal. FALSE if not. 
