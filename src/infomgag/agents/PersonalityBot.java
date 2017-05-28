@@ -245,7 +245,7 @@ public class PersonalityBot extends Player{
 		logger.enable(logPath, this.me.getName() + ".log");
 		
 		//write our name and the power we are playing to the log file.
-		logger.logln(this.name + " playing as " + this.me.getName() +"PS: " + this.ps, true);
+		logger.logln(this.name + " playing as " + this.me.getName() +" | PS: " + this.ps, true);
 		logger.writeToFile();
 		
 		//Connect to the negotiation server.
