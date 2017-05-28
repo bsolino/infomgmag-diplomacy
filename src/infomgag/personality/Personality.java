@@ -16,16 +16,16 @@ public class Personality {
 	private Map<String, Double> likeabilityDict = new HashMap<>();
 	private double trustIncreaseFactor;
 	private double trustDecreaseFactor;
-	public double trustThreshold = 1;
+	private double trustThreshold = 1;
 	private double likeabilityIncreaseFactor;
 	private double likeabilityDecreaseFactor;
 
 	public enum PersonalityType{
 		
-		CHOLERIC	(0.5,	0.9),
-		SANGUINE	(0.9,	0.05),
-		MELANCHOLIC	(0.05,	0.8),
-		PHLEGMATIC	(0.3,	0.5);
+		CHOLERIC	(0.5,	0.9,	0.9,	0.9),
+		SANGUINE	(0.9,	0.05,	0.9,	0.1),
+		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8),
+		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2);
 		
 		private double trustIncreaseFactor;
 		private double trustDecreaseFactor;
@@ -35,21 +35,30 @@ public class Personality {
 
 		private PersonalityType(
 				double trustIncreaseFactor,
-				double trustDecreaseFactor){
+				double trustDecreaseFactor,
+				double likeabilityIncreaseFactor,
+				double likeabilityDecreaseFactor){
 			this.trustIncreaseFactor = trustIncreaseFactor;
 			this.trustDecreaseFactor = trustDecreaseFactor;
 			this.likeabilityIncreaseFactor = likeabilityIncreaseFactor;
 			this.likeabilityDecreaseFactor = likeabilityDecreaseFactor;
 		}
 
-		public double getTrustIncreaseFactor() {
+		private double getTrustIncreaseFactor() {
 			return trustIncreaseFactor;
 		}
 
-		public double getTrustDecreaseFactor() {
+		private double getTrustDecreaseFactor() {
 			return trustDecreaseFactor;
 		}
 		
+		private double getLikeabilityIncreaseFactor() {
+			return likeabilityIncreaseFactor;
+		}
+
+		private double getLikeabilityDecreaseFactor() {
+			return likeabilityDecreaseFactor;
+		}
 	}
 	
 	public enum Effect{
@@ -61,7 +70,8 @@ public class Personality {
 	public Personality(PersonalityType personalityType){
 		this.trustIncreaseFactor = personalityType.getTrustIncreaseFactor();
 		this.trustDecreaseFactor = personalityType.getTrustDecreaseFactor();
-		
+		this.likeabilityIncreaseFactor = personalityType.getLikeabilityIncreaseFactor();
+		this.likeabilityDecreaseFactor = personalityType.getLikeabilityDecreaseFactor();
 	}
 	
 	public int updateTrust(String powerName, Effect effect){
@@ -116,6 +126,10 @@ public class Personality {
 	
 	public double getLikeabilityVal(String powerName){
 		return this.likeabilityDict.get(powerName);
+	}
+
+	public double getTrustThreshold() {
+		return trustThreshold;
 	}
 	
 }
