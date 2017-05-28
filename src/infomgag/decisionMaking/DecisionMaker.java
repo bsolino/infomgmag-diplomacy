@@ -54,13 +54,13 @@ public class DecisionMaker{
 				if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
 					SUPOrder supOrder = (SUPOrder) order; // we might have to cast separately 
 					if (me.equals(supOrder.getSupportedOrder().getPower())){
-						personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+						//personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
 					}
 				}
 				
 				if (order instanceof MTOOrder){
 					// check whether the move order causes us to lose territory
-					personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+					//personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
 				}
 				
 			}
@@ -78,7 +78,7 @@ public class DecisionMaker{
 									break;
 								}		
 							}
-							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+							//personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 						}
 					}
 				}
@@ -92,7 +92,7 @@ public class DecisionMaker{
 									for(Province province : dmz.getProvinces()){
 										for(Region region : province.getRegions()){
 											if (tempOrder.getDestination().equals(region)){
-												personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+												//personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
 											}
 										}
 									}	
