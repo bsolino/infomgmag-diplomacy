@@ -54,27 +54,29 @@ public class DecisionMaker{
 		
 		if (submittedOrders != null && submittedOrders.size() > 0){
 			for(Order order : submittedOrders){
-				if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
-					if (order instanceof SUPOrder){
-						SUPOrder supOrder = (SUPOrder) order;
-						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+				if (!(order.getPower().equals(me))){
+				
+					if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
+						if (order instanceof SUPOrder){
+							SUPOrder supOrder = (SUPOrder) order;
+							if (me.equals(supOrder.getSupportedOrder().getPower())){
+								personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							}
 						}
-					}
-					if (order instanceof SUPMTOOrder){
-						SUPMTOOrder supOrder = (SUPMTOOrder) order;
-						if (me.equals(supOrder.getSupportedOrder().getPower())){
-							personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+						if (order instanceof SUPMTOOrder){
+							SUPMTOOrder supOrder = (SUPMTOOrder) order;
+							if (me.equals(supOrder.getSupportedOrder().getPower())){
+								personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+							}
 						}
+						
 					}
 					
+					if (order instanceof MTOOrder){
+						// check whether the move order causes us to lose territory
+						//personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+					}
 				}
-				
-				if (order instanceof MTOOrder){
-					// check whether the move order causes us to lose territory
-					//personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
-				}
-				
 			}
 		}
 		
@@ -85,10 +87,12 @@ public class DecisionMaker{
 					for(OrderCommitment orderCommitment : confirmedDeal.getOrderCommitments()){
 						if(orderCommitment.getPhase().equals(game.getPhase()) && orderCommitment.getYear() == game.getYear()){
 							for(Order order : submittedOrders){
-								if (orderCommitment.getOrder().equals(order)){
-									personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
-									break;
-								}		
+								if (!(order.getPower().equals(me))){
+									if (orderCommitment.getOrder().equals(order)){
+										personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
+										break;
+									}
+								}
 							}
 							personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 						}
@@ -99,15 +103,17 @@ public class DecisionMaker{
 					for(DMZ dmz : confirmedDeal.getDemilitarizedZones()){	
 						if(dmz.getPhase().equals(game.getPhase()) && dmz.getYear() == game.getYear()){
 							for(Order order : submittedOrders){
-								if(order instanceof MTOOrder){
-									MTOOrder tempOrder = (MTOOrder) order;
-									for(Province province : dmz.getProvinces()){
-										for(Region region : province.getRegions()){
-											if (tempOrder.getDestination().equals(region)){
-												personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+								if (!(order.getPower().equals(me))){
+									if(order instanceof MTOOrder){
+										MTOOrder tempOrder = (MTOOrder) order;
+										for(Province province : dmz.getProvinces()){
+											for(Region region : province.getRegions()){
+												if (tempOrder.getDestination().equals(region)){
+													personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+												}
 											}
-										}
-									}	
+										}	
+									}
 								}
 							}
 						}
