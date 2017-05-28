@@ -37,6 +37,9 @@ public class DecisionMaker{
 		this.personality = personality;
 		this.confirmedDeals = new ArrayList<BasicDeal>();
 		this.me = me;
+		personality.setMyPower(me);
+		personality.setPowers(game.getPowers());
+		
 	}
 	
 	
