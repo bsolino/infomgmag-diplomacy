@@ -17,6 +17,7 @@ public class Personality {
 	private double trustIncreaseFactor;
 	private double trustDecreaseFactor;
 	private double trustThreshold = 1;
+	private double likeThreshold = 1;
 	private double likeabilityIncreaseFactor;
 	private double likeabilityDecreaseFactor;
 
@@ -122,6 +123,14 @@ public class Personality {
 
 	public boolean hasTrustIssues(Power power) {
 		if (this.trustDict.get(power.getName()) > this.trustThreshold){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean hasLikeIssues(Power power) {
+		if (this.likeabilityDict.get(power.getName()) > this.likeThreshold){
 			return true;
 		} else {
 			return false;
