@@ -3,12 +3,16 @@ package infomgag.monteCarloDealEvaluator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Node {
 	private int visits;
 	private float reward;
 	private Gamestate state;
 	private Map<Gamestate, Node> children;
+	
+	//private TreeMap<TreeSet<String>, Node> children2; // The set of strings represents the orders.
+	
 	private Node parent;
 	
 	public Node(Node parent, Gamestate state){
@@ -27,12 +31,6 @@ public class Node {
 	public void update(float iteration){
 		this.reward += iteration;
 		this.visits +=1;
-	}
-	
-	public boolean fullyExpanded(){
-		if(this.children.size() == this.state.possibleMoves())
-			return true;
-		return false;
 	}
 	
 	public String toString(){

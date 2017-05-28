@@ -1,20 +1,18 @@
 package infomgag.monteCarloDealEvaluator;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.TreeSet;
 import java.util.Vector;
 
 import ddejonge.bandana.exampleAgents.RandomBot;
 import ddejonge.bandana.gameBuilder.DiplomacyGameBuilder;
+import ddejonge.bandana.internalAdjudicator.InternalAdjudicator;
 import es.csic.iiia.fabregues.dip.board.Dislodgement;
 import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Phase;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
-import es.csic.iiia.fabregues.dip.comm.GameBuilder;
 import es.csic.iiia.fabregues.dip.orders.Order;
 import javafx.util.Pair;
 
@@ -77,7 +75,7 @@ public class Gamestate {
 		return mygame;
 	}
 	
-	public Pair<TreeSet<String>, Gamestate> randomMove()
+	public Pair<TreeSet<String>, Gamestate> randomMove(InternalAdjudicator adjudicator)
 	{
 		Game g = buildGameFromGamestate();
 		RandomBot bot = new RandomBot(g);
@@ -86,15 +84,12 @@ public class Gamestate {
 		TreeSet<String> morders = new TreeSet<String>();
 		for(Order o : orders) morders.add(o.toString());
 		
+		adjudicator.clear();
+		adjudicator.resolve(g, orders);
+		
 		return new Pair(morders, this); // TODO: generate new gamestate from orders
 	}
 	
-	//This should return the number of possible moves in this state
-	//it is used to know if nodes are fully expanded
-	public int possibleMoves(){
-		//TODO
-		return 2;
-	}
 	
 	public String toString(){
 		return "State:" + this.hashCode() + " Year:" + this.year + 
