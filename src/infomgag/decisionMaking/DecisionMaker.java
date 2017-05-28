@@ -129,11 +129,7 @@ public class DecisionMaker{
 		}
 	}
 
-	//Checks if someone has screwed you over or not. 
-	private Effect calculateDealEffect(Order order) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
 	public String handleIncomingMessages(Message receivedMessage){
