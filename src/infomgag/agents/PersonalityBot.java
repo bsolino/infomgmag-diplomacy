@@ -50,11 +50,11 @@ import ddejonge.negoServer.NegotiationClient.STATUS;
 
 
 /**
- * This agent is an example that shows how you can implement a negotiating agent
- * on top of the strategic module of D-Brane.
+ * This code is heavily based in {@link ddejonge.bandana.exampleAgents.DBraneExampleBot},
+ * and it is used as a base upon which we could write our own agent.
  * 
- * 
- * @author Dave de Jonge
+ * The description of this class and the authorship are still a work in progress,
+ * and we expect to have a more thorough version at the end of the project. 
  *
  */
 public class PersonalityBot extends Player{
@@ -764,7 +764,7 @@ public BasicDeal generateRandomDeal(){
 		
 		decisionMaker.update(this.submittedOrders);
 		//List<Power> recievers = game.getPowers();
-		//logger.logln(decisionMaker.getPersonalityValues(), true);
+		logger.logln(decisionMaker.getPersonalityValues(), true);
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.
