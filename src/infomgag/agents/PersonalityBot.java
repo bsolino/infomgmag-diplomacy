@@ -729,8 +729,8 @@ public BasicDeal generateRandomDeal(){
 			//STEP 2:  try to find a proposal to make, and if we do find one, propose it.
 			BasicDeal newDealToPropose = null;
 			if(newDealToPropose == null){ //we only make one proposal per round, so we skip this if we have already proposed something.
-				//newDealToPropose = decisionMaker.searchForADealToPropose();
-				newDealToPropose = searchForNewDealToPropose(myAllies);
+				newDealToPropose = decisionMaker.searchForADealToPropose();
+				//newDealToPropose = searchForNewDealToPropose(myAllies);
 				if(newDealToPropose != null){
 					
 					try {
@@ -763,8 +763,8 @@ public BasicDeal generateRandomDeal(){
 	public void phaseEnd(GameState gameState) {
 		
 		decisionMaker.update(this.submittedOrders);
-		List<Power> recievers = game.getPowers();
-		logger.logln(decisionMaker.getPersonalityValues(), true);
+		//List<Power> recievers = game.getPowers();
+		//logger.logln(decisionMaker.getPersonalityValues(), true);
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.
