@@ -764,7 +764,7 @@ public BasicDeal generateRandomDeal(){
 		
 		decisionMaker.update(this.submittedOrders);
 		//List<Power> recievers = game.getPowers();
-		//logger.logln(decisionMaker.getPersonalityValues(), true);
+		logger.logln(decisionMaker.getPersonalityValues(), true);
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.
