@@ -14,7 +14,7 @@ public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	private final static String DEFAULT_LAST_YEAR = "1908";
+	private final static String DEFAULT_LAST_YEAR = "1925";
 	
 	private final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", DEFAULT_LAST_YEAR};
 	private final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", DEFAULT_LAST_YEAR};
@@ -29,11 +29,11 @@ public class TournamentRunner {
 //			TournamentPlayer.DBRANE_1_1,
 //			TournamentPlayer.DBRANE_1_1,
 //			TournamentPlayer.DBRANE_EXAMPLE,
-			TournamentPlayer.DBRANE_EXAMPLE,
+//			TournamentPlayer.DBRANE_EXAMPLE,
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.DUMB_BOT_1_4
-//			TournamentPlayer.PERSONALITY_MELANCHOLIC,
+			TournamentPlayer.PERSONALITY_MELANCHOLIC,
 			TournamentPlayer.PERSONALITY_MELANCHOLIC,
 			TournamentPlayer.PERSONALITY_SANGUINE,
 			TournamentPlayer.PERSONALITY_PHLEGMATIC,
@@ -78,7 +78,7 @@ public class TournamentRunner {
 	
 	public static void main(String[] args) throws IOException {
 		
-		int numberOfGames = 1;				//The number of games this tournament consists of.
+		int numberOfGames = 2;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 30; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 10;  //30 seconds for each SUM and AUT phases
@@ -211,7 +211,9 @@ public class TournamentRunner {
 		// However, you may want to do your own processing of the results, for which
 		// you can use this list.
 		ArrayList<GameResult> results = tournamentObserver.getGameResults();
-		
+		for(GameResult result : results){
+		System.out.println(result.toString());	
+		}
 		
 		tournamentObserver.exit();
 		ParlanceRunner.stop();
