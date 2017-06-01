@@ -50,7 +50,7 @@ public class PersonalityBot extends Player{
 	//The time in milliseconds this agent takes to negotiate each round.
 	public final int NEGOTIATION_LENGTH = 3000; 
 	private ArrayList<Order> submittedOrders = new ArrayList<Order>();
-	private List<Region> myControlledRegions = new ArrayList<Region>();
+	
 	
 	
 	
@@ -242,7 +242,7 @@ public class PersonalityBot extends Player{
 		}
 		logger.writeToFile();
 		List<String> negotiatingPowers = negoClient.getRegisteredNames();
-		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me, this.confirmedDeals,negotiatingPowers);
+		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me, this.confirmedDeals, negotiatingPowers, logger);
 		
 	
 	}
@@ -430,7 +430,7 @@ public class PersonalityBot extends Player{
 				//removes the message from the message que
 				Message receivedMessage = negoClient.removeMessageFromQueue();
 				//Asks for a string back for logging. 
-				String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage);
+				String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage, myAllies);
 				
 				//THIS IS A COMPLETELY STUPID WAY TO HANDLE IT, BUT IT SHOULD WORK. MAYBE FIX THIS IN A LATER UPDATE. 
 				if(handledMessageString.equals("Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
@@ -475,19 +475,10 @@ public class PersonalityBot extends Player{
 	@Override
 	public void phaseEnd(GameState gameState) {
 		
-		this.myControlledRegions = me.getControlledRegions();
-		
-//		Vector<Region> oldRegions = super.game.getRegions();
-//		for(Region region : oldRegions){
-//			if (super.game.getController(region) != null && super.game.getController(region).equals(me)){
-//				logger.logln(super.game.getController(region).getName(), true);
-//			}
-//		}
-		
 		decisionMaker.update(this.submittedOrders);
 		
-		//List<Power> recievers = game.getPowers();
 		logger.logln(decisionMaker.getPersonalityValues(), true);
+		//List<Power> recievers = game.getPowers();
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.

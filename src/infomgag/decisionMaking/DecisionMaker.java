@@ -16,6 +16,7 @@ import es.csic.iiia.fabregues.dip.orders.SUPOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import ddejonge.bandana.dbraneTactics.DBraneTactics;
@@ -25,6 +26,7 @@ import ddejonge.bandana.negoProtocol.DMZ;
 import ddejonge.bandana.negoProtocol.DiplomacyNegoClient;
 import ddejonge.bandana.negoProtocol.DiplomacyProposal;
 import ddejonge.bandana.negoProtocol.OrderCommitment;
+import ddejonge.bandana.tools.Logger;
 import ddejonge.bandana.tools.Utilities;
 import ddejonge.negoServer.Message;
 import infomgag.personality.*;
@@ -38,9 +40,10 @@ public class DecisionMaker{
 	Random random;
 	Power me;
 	List<String> negotiatingPowers;
+	Logger logger;
 	
 	//Constructor: Takes in a personality and a game object. 
-	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers){
+	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger){
 		random = new Random();
 		this.game = game;
 		this.personality = personality;
@@ -50,11 +53,12 @@ public class DecisionMaker{
 		this.me = me;
 		personality.setMyPower(me);
 		personality.setPowers(game.getPowers());
+		this.logger = logger;
 		
 	}
 	
 	public String getPersonalityValues(){
-		return personality.getTrustValues();
+		return personality.getPersonalityValuesString();
 	}
 	
 	public void update(ArrayList<Order> submittedOrders){
@@ -162,7 +166,7 @@ public class DecisionMaker{
 
 		
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
-	public String handleIncomingMessages(Message receivedMessage){
+	public String handleIncomingMessages(Message receivedMessage, List<Power> myAllies){
 		//Check if deal is outdated
 		DiplomacyProposal proposal;
 		//Then handle the various possible messages: PROPOSE, ACCEPT, REJECT and CONFIRM
@@ -172,7 +176,7 @@ public class DecisionMaker{
 		case DiplomacyNegoClient.PROPOSE:			//A player has proposed a deal to you
 			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			BasicDeal deal = (BasicDeal)proposal.getProposedDeal();
-			if(handleProposal(deal)){		//If you choose to accept the deal. Then handleProposal should be TRUE, else FALSE
+			if(handleProposal(deal, myAllies)){		//If you choose to accept the deal. Then handleProposal should be TRUE, else FALSE
 				return "Accepting proposal:" + receivedMessage.getMessageId();
 			}
 		case DiplomacyNegoClient.ACCEPT:			//A player has accepted a deal you have proposed
@@ -203,9 +207,11 @@ public class DecisionMaker{
 	}
 
 	//Handles a proposal message that is sent to the agent. 
-	private boolean handleProposal(BasicDeal deal) {
+	private boolean handleProposal(BasicDeal deal, List<Power> myAllies) {
 		boolean outDated = false;
 		boolean trustIssues = false;
+		Map<String, Integer> dealPowerCountDict = new HashMap<>();
+		
 		
 		for(DMZ dmz : deal.getDemilitarizedZones()){
 			
@@ -236,11 +242,18 @@ public class DecisionMaker{
 			//TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
 			Order order = orderCommitment.getOrder();
 			if (!(order.getPower().equals(me))){
+				if (dealPowerCountDict.get(order.getPower().getName()) == null){
+					dealPowerCountDict.put(order.getPower().getName(), 1);
+				}
+				else{
+					dealPowerCountDict.put(order.getPower().getName(), dealPowerCountDict.get(order.getPower().getName()) + 1);
+				}
 				if (personality.hasTrustIssuesWith(order.getPower())){
 					trustIssues = true; 
 				}
 			}
 		}
+		
 		
 		//If the deal is not outdated, then check that it is consistent with the deals we are already committed to.
 		String consistencyReport = null;
@@ -253,7 +266,29 @@ public class DecisionMaker{
 			
 			
 		}
-		// Maybe check whether or not we trust the MAJORITY of powers involved in the deal
+		
+		// CHECK ALL PROPOSALS
+		ArrayList<BasicDeal> commitments_temp = new ArrayList<BasicDeal>(this.confirmedDeals);
+		commitments_temp.add(deal);
+		Plan plan = this.dbraneTactics.determineBestPlan(game, me, commitments_temp , myAllies);
+		
+		double planVal = 0; // Negative? 
+		
+		//Check if the returned plan is better than the best plan found so far.
+		if(plan != null){
+			planVal = (double) plan.getValue();
+		}
+		
+		double meanTrustVal = getMeanDealTrustVal(deal, dealPowerCountDict);
+		double meanLikeVal = getMeanDealLikeVal(deal, dealPowerCountDict);
+		
+		double weight = 1.0; // TO BE CHANGED
+		
+		// GIVE more weight to proposer?
+		//double dealVal = (planVal + (weight * meanLikeVal)) * meanTrustVal; 
+		//this.logger.logln(String.valueOf(dealVal), true); // CHECK WHY NaN is returned!!
+		
+		
 		if((!outDated) && (consistencyReport == null)){// && (!(trustIssues))){
 			//return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
@@ -262,6 +297,28 @@ public class DecisionMaker{
 			}
 		}
 		return false;
+	}
+
+	private double getMeanDealLikeVal(BasicDeal deal, Map<String, Integer> dealPowerCountDict) {
+		double weightedAverage = 0;
+		double sumOfCounts = 0;
+		for (String powerName : dealPowerCountDict.keySet()){
+			weightedAverage += dealPowerCountDict.get(powerName) * personality.getLikeabilityVal(powerName);
+			sumOfCounts += dealPowerCountDict.get(powerName);
+		}
+		weightedAverage = weightedAverage / sumOfCounts;
+		return weightedAverage;
+	}
+
+	private double getMeanDealTrustVal(BasicDeal deal, Map<String, Integer> dealPowerCountDict) {
+		double weightedAverage = 0;
+		double sumOfCounts = 0;
+		for (String powerName : dealPowerCountDict.keySet()){
+			weightedAverage += dealPowerCountDict.get(powerName) * personality.getTrustVal(powerName);
+			sumOfCounts += dealPowerCountDict.get(powerName);
+		}
+		weightedAverage = weightedAverage / sumOfCounts;
+		return weightedAverage;
 	}
 
 	public ArrayList<String> checkAndRemoveInvalidDeals(){

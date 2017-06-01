@@ -147,7 +147,7 @@ public class Personality {
 
 	public boolean hasTrustIssuesWith(Power power) {
 //		try{
-		if ((!(power.equals(this.myPower))) && (this.trustDict.get(power.getName()) > this.trustThreshold)){
+		if ((!(power.equals(this.myPower))) && (this.trustDict.get(power.getName()) < this.trustThreshold)){
 			return true;
 		} else {
 			return false;
@@ -188,7 +188,7 @@ public class Personality {
 
 
 
-	public String getTrustValues() {
+	public String getPersonalityValuesString() {
 		
 		String retString = "\n ---------------------------------------------";
 		retString += "\n" + myPower.getName() + "\n";
@@ -205,13 +205,13 @@ public class Personality {
 
 	
 	
-//	public double getTrustVal(String powerName){
-//		return this.trustDict.get(powerName);
-//	}
+	public double getTrustVal(String powerName){
+		return this.trustDict.get(powerName);
+	}
 	
-//	public double getLikeabilityVal(String powerName){
-//		return this.likeabilityDict.get(powerName);
-//	}
+	public double getLikeabilityVal(String powerName){
+		return this.likeabilityDict.get(powerName);
+	}
 
 //	public double getTrustThreshold() {
 //		return trustThreshold;
