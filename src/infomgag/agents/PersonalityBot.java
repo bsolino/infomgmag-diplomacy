@@ -67,7 +67,9 @@ public class PersonalityBot extends Player{
 	
 	//The time in milliseconds this agent takes to negotiate each round.
 	public final int NEGOTIATION_LENGTH = 3000; 
-	private ArrayList<Order> submittedOrders = new ArrayList<Order>();;
+	private ArrayList<Order> submittedOrders = new ArrayList<Order>();
+	private List<Region> myControlledRegions = new ArrayList<Region>();
+	
 	
 	
 	/**
@@ -762,9 +764,19 @@ public BasicDeal generateRandomDeal(){
 	@Override
 	public void phaseEnd(GameState gameState) {
 		
+		this.myControlledRegions = me.getControlledRegions();
+		
+//		Vector<Region> oldRegions = super.game.getRegions();
+//		for(Region region : oldRegions){
+//			if (super.game.getController(region) != null && super.game.getController(region).equals(me)){
+//				logger.logln(super.game.getController(region).getName(), true);
+//			}
+//		}
+		
 		decisionMaker.update(this.submittedOrders);
+		
 		//List<Power> recievers = game.getPowers();
-		logger.logln(decisionMaker.getPersonalityValues(), true);
+		//logger.logln(decisionMaker.getPersonalityValues(), true);
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after
 		// the FAL phase of the final year.

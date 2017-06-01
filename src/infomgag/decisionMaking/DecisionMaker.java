@@ -53,14 +53,30 @@ public class DecisionMaker{
 		//is a HLDOrder, then the corresponding power is still allowed to submit a
 		//SUPOrder or SUPMTOOrder for that unit instead of the HLDOrder.
 		
+		ArrayList<Region> regionsILeft = new ArrayList<Region>();
+		
 		if (submittedOrders == null){
 			return;
 		}
 		
 		if (submittedOrders != null && submittedOrders.size() > 0){
 			for(Order order : submittedOrders){
+				if (order.getPower().equals(me)){
+					if (order instanceof MTOOrder){
+						MTOOrder moveOrder = (MTOOrder) order;
+						for (Region region : this.me.getControlledRegions()){
+							if (moveOrder.getLocation().equals(region)){
+								regionsILeft.add(region);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (submittedOrders != null && submittedOrders.size() > 0){
+			for(Order order : submittedOrders){
 				if (!(order.getPower().equals(me))){
-				
 					if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
 						if (order instanceof SUPOrder){
 							SUPOrder supOrder = (SUPOrder) order;
@@ -78,8 +94,13 @@ public class DecisionMaker{
 					}
 					
 					if (order instanceof MTOOrder){
+						MTOOrder moveOrder = (MTOOrder) order;
 						// check whether the move order causes us to lose territory
-						//personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+						for (Region region : this.me.getControlledRegions()){
+							if (moveOrder.getDestination().equals(region) && !(regionsILeft.contains(region))){
+								personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+							}
+						}
 					}
 				}
 			}
