@@ -449,11 +449,12 @@ public class DecisionMaker{
 	}
 	
 	public Plan determineBestPlan(List<Power> myAllies){
-//		if (!personality.getTrustworthiness()){
-//			if(random.nextInt(2) == 0){ // accept with 50% probability.
-//				return generateRandomMove();
-//			}
-//		}
+		if (!personality.getTrustworthiness()){
+			if(random.nextInt(2) == 0){ // accept with 50% probability.
+				ArrayList<BasicDeal> emptyConfirmedDeals = new ArrayList<BasicDeal>(); 
+				return dbraneTactics.determineBestPlan(game, me, emptyConfirmedDeals, myAllies);
+			}
+		}
 		// Once MC is implemented, we will call its engine here, passing our personality type
 		return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
 	}
