@@ -285,7 +285,7 @@ public class DecisionMaker{
 		double weight = 1.0; // TO BE CHANGED
 		
 		// GIVE more weight to proposer?
-		//double dealVal = (planVal + (weight * meanLikeVal)) * meanTrustVal; 
+		double dealVal = (planVal + (weight * meanLikeVal)) * meanTrustVal; 
 		//this.logger.logln(String.valueOf(dealVal), true); // CHECK WHY NaN is returned!!
 		
 		
@@ -449,6 +449,12 @@ public class DecisionMaker{
 	}
 	
 	public Plan determineBestPlan(List<Power> myAllies){
+//		if (!personality.getTrustworthiness()){
+//			if(random.nextInt(2) == 0){ // accept with 50% probability.
+//				return generateRandomMove();
+//			}
+//		}
+		// Once MC is implemented, we will call its engine here, passing our personality type
 		return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
 	}
 	

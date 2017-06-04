@@ -8,7 +8,7 @@ import es.csic.iiia.fabregues.dip.board.Power;
 
 public class Personality {
 	
-	private int aggression;
+	private boolean aggressiveness;
 	private int naiveness;
 	private int pessimism;	
 	private int impulsiveness;
@@ -28,10 +28,10 @@ public class Personality {
 
 	public enum PersonalityType{
 		
-		CHOLERIC	(0.5,	0.9,	0.9,	0.9, 2, 2),
-		SANGUINE	(0.9,	0.05,	0.9,	0.1, 2, 2),
-		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 0, 0),
-		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2, 1, 1);
+		CHOLERIC	(0.5,	0.9,	0.9,	0.9, 2, 2, true, false),
+		SANGUINE	(0.9,	0.05,	0.9,	0.1, 2, 2, false, true),
+		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 0, 0, false, false),
+		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2, 1, 1, false, true);
 		
 		private final double trustIncreaseFactor;
 		private final double trustDecreaseFactor;
@@ -40,6 +40,8 @@ public class Personality {
 		private final double likeabilityDecreaseFactor;
 		double trustInitValue;
 		double likeInitValue;
+		private boolean aggressiveness;
+		private boolean trustworthiness;
 		
 
 		private PersonalityType(
@@ -48,13 +50,17 @@ public class Personality {
 				double likeabilityIncreaseFactor,
 				double likeabilityDecreaseFactor,
 				double trustInitValue,
-				double likeInitValue){
+				double likeInitValue,
+				boolean aggressiveness,
+				boolean trustworthiness){
 			this.trustIncreaseFactor = trustIncreaseFactor;
 			this.trustDecreaseFactor = trustDecreaseFactor;
 			this.likeabilityIncreaseFactor = likeabilityIncreaseFactor;
 			this.likeabilityDecreaseFactor = likeabilityDecreaseFactor;
 			this.trustInitValue = trustInitValue;
 			this.likeInitValue = likeInitValue;
+			this.aggressiveness = aggressiveness;
+			this.trustworthiness = trustworthiness;
 		}
 
 		private double getTrustIncreaseFactor() {
@@ -78,6 +84,12 @@ public class Personality {
 		private double getLikeInitValue() {
 			return likeInitValue;
 		}
+		private boolean getAggressiveness(){
+			return aggressiveness;
+		}
+		private boolean getTrustworthiness(){
+			return trustworthiness;
+		}
 	}
 	
 	public enum Effect{
@@ -94,6 +106,8 @@ public class Personality {
 		this.likeabilityDecreaseFactor = personalityType.getLikeabilityDecreaseFactor();
 		this.likeInitValue = personalityType.getLikeInitValue();
 		this.trustInitValue = personalityType.getTrustInitValue();
+		this.aggressiveness = personalityType.getAggressiveness();
+		this.trustworthiness = personalityType.getTrustworthiness();
 		
 	}
 	
@@ -211,6 +225,14 @@ public class Personality {
 	
 	public double getLikeabilityVal(String powerName){
 		return this.likeabilityDict.get(powerName);
+	}
+	
+	public boolean getTrustworthiness(){
+		return this.trustworthiness;
+	}
+	
+	public boolean getAggressiveness(){
+		return this.aggressiveness;
 	}
 
 //	public double getTrustThreshold() {
