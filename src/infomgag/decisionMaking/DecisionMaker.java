@@ -305,7 +305,7 @@ public class DecisionMaker{
 		double dealVal = (planVal + (weight * meanLikeVal)) * meanTrustVal; 
 		
 		if (this.firstIncomingDeal){
-			if (Double.isNaN(dealVal)){
+			if (!(Double.isNaN(dealVal))){
 				this.dealAcceptanceThreshold = dealVal * 1.25;
 				this.firstIncomingDeal = false;
 			}
@@ -318,7 +318,7 @@ public class DecisionMaker{
 		
 		if((!outDated) && (consistencyReport == null) && (dealVal > this.dealAcceptanceThreshold)){
 			this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * 1.1;
-			this.logger.logln("THRESHOLD: " + String.valueOf(this.dealAcceptanceThreshold));
+			this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
 			return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
 			//if(random.nextInt(2) == 0){ // accept with 50% probability.
