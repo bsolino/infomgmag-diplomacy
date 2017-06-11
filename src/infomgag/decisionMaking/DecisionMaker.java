@@ -41,6 +41,8 @@ public class DecisionMaker{
 	Power me;
 	List<String> negotiatingPowers;
 	Logger logger;
+	private boolean firstIncomingDeal;
+	private double dealAcceptanceThreshold;
 	
 	//Constructor: Takes in a personality and a game object. 
 	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger){
@@ -54,6 +56,7 @@ public class DecisionMaker{
 		personality.setMyPower(me);
 		personality.setPowers(game.getPowers());
 		this.logger = logger;
+		this.firstIncomingDeal = true;
 		
 	}
 	
@@ -213,6 +216,8 @@ public class DecisionMaker{
 		Map<String, Integer> dealPowerCountDict = new HashMap<>();
 		
 		
+			
+		
 		for(DMZ dmz : deal.getDemilitarizedZones()){
 			
 			// Sometimes we may receive messages too late, so we check if the proposal does not
@@ -220,6 +225,17 @@ public class DecisionMaker{
 			if( isHistory(dmz.getPhase(), dmz.getYear())){
 				outDated = true;
 				break;
+			}
+			
+			List<Power> tempPowers = dmz.getPowers();
+			tempPowers.remove(me);
+			for (Power power : tempPowers){
+				if (dealPowerCountDict.get(power.getName()) == null){
+					dealPowerCountDict.put(power.getName(), 1);
+				}
+				else{
+					dealPowerCountDict.put(power.getName(), dealPowerCountDict.get(power.getName()) + 1);
+				}
 			}
 			
 			//TODO: decide whether this DMZ is acceptable or not (in combination with the rest of the proposed deal).
@@ -284,18 +300,33 @@ public class DecisionMaker{
 		
 		double weight = 1.0; // TO BE CHANGED
 		
-		// GIVE more weight to proposer?
+		// GIVE more weight to proposer?   
+		// Compute average throughout game and if more less 25% under, reject
 		double dealVal = (planVal + (weight * meanLikeVal)) * meanTrustVal; 
-		//this.logger.logln(String.valueOf(dealVal), true); // CHECK WHY NaN is returned!!
 		
-		
-		if((!outDated) && (consistencyReport == null)){// && (!(trustIssues))){
-			//return true;
-			// This agent simply flips a coin to determine whether to accept the proposal or not.
-			if(random.nextInt(2) == 0){ // accept with 50% probability.
-				return true;
+		if (this.firstIncomingDeal){
+			if (Double.isNaN(dealVal)){
+				this.dealAcceptanceThreshold = dealVal * 1.25;
+				this.firstIncomingDeal = false;
 			}
+			else{
+				this.dealAcceptanceThreshold = 0;
+			}
+			return false;
 		}
+		
+		
+		if((!outDated) && (consistencyReport == null) && (dealVal > this.dealAcceptanceThreshold)){
+			this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * 1.1;
+			this.logger.logln("THRESHOLD: " + String.valueOf(this.dealAcceptanceThreshold));
+			return true;
+			// This agent simply flips a coin to determine whether to accept the proposal or not.
+			//if(random.nextInt(2) == 0){ // accept with 50% probability.
+			//	return true;
+			//}
+		}
+		this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * 0.9;
+		this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
 		return false;
 	}
 
@@ -381,6 +412,15 @@ public class DecisionMaker{
 			
 			//generate a random deal.
 			BasicDeal randomDeal = generateRandomDeal();
+			
+			// NEGATIVE
+			// Friend losing SC - Enemy gaining SC - Someone supporting enemy
+			// POSTIVE
+			// Friend gaining SC - Enemy losing SC - Someone supporting friend
+			// Super positive 
+			// We gain something
+			// SUper negative
+			// We lose something
 			
 			if(randomDeal == null){
 				continue;
@@ -668,5 +708,12 @@ public List<Order> generateRandomRetreats() {
 		
 	return orders;
 }
+
+//public ArrayList<Power> getAllies() {
+//	ArrayList<Power> allies = new ArrayList<Power>();
+	
+	
+//	return allies;
+//}
 	
 }
