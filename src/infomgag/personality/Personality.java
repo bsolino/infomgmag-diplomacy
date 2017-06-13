@@ -30,7 +30,7 @@ public class Personality {
 		
 		CHOLERIC	(0.5,	0.9,	0.9,	0.9, 2, 2, true, false),
 		SANGUINE	(0.9,	0.05,	0.9,	0.1, 2, 2, false, true),
-		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 0, 0, false, false),
+		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 0.3, 0.3, false, false),
 		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2, 1, 1, false, true);
 		
 		private final double trustIncreaseFactor;
@@ -122,10 +122,10 @@ public class Personality {
 			newVal = oldVal;
 			break;
 		case POSITIVE:
-			newVal = oldVal + this.trustIncreaseFactor * (2 - oldVal);
+			newVal = oldVal + 0.8 * (this.trustIncreaseFactor * (2 - oldVal));
 			break;
 		case NEGATIVE:
-			newVal = oldVal + this.trustDecreaseFactor * (0 - oldVal);
+			newVal = oldVal + 0.8 * (this.trustDecreaseFactor * (0 - oldVal));
 			break;
 		default:
 			break;
@@ -145,10 +145,10 @@ public class Personality {
 			newVal = oldVal;
 			break;
 		case POSITIVE:
-			newVal = oldVal + this.likeabilityIncreaseFactor * (2 - oldVal);
+			newVal = oldVal + 0.8 * (this.likeabilityIncreaseFactor * (2 - oldVal));
 			break;
 		case NEGATIVE:
-			newVal = oldVal + this.likeabilityDecreaseFactor * (0 - oldVal);
+			newVal = oldVal + 0.8 * (this.likeabilityDecreaseFactor * (0 - oldVal));
 			break;
 		default:
 			break;

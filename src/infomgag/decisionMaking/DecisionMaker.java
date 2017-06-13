@@ -43,6 +43,8 @@ public class DecisionMaker{
 	Logger logger;
 	private boolean firstIncomingDeal;
 	private double dealAcceptanceThreshold;
+	private double dealAcceptanceModifier = 1.1;
+	private double dealRejectionModifier = 0.9;
 	
 	//Constructor: Takes in a personality and a game object. 
 	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger){
@@ -317,7 +319,7 @@ public class DecisionMaker{
 		
 		
 		if((!outDated) && (consistencyReport == null) && (dealVal > this.dealAcceptanceThreshold)){
-			this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * 1.1;
+			this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * this.dealAcceptanceModifier;
 			this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
 			return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
@@ -325,7 +327,7 @@ public class DecisionMaker{
 			//	return true;
 			//}
 		}
-		this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * 0.9;
+		this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * this.dealRejectionModifier;
 		this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
 		return false;
 	}
@@ -413,6 +415,8 @@ public class DecisionMaker{
 			//generate a random deal.
 			BasicDeal randomDeal = generateRandomDeal();
 			
+			//TODO
+			// FRIEND is someone with > 1 attitude
 			// NEGATIVE
 			// Friend losing SC - Enemy gaining SC - Someone supporting enemy
 			// POSTIVE
