@@ -23,15 +23,22 @@ public class Personality {
 	private double likeabilityDecreaseFactor;
 	private double trustInitValue;
 	private double likeInitValue;
+	
+	private double learningRate = 0.2;
+	
 	private Power myPower;
 	private List<Power> allPowers;
+	/** Max proposals are 0-inclusive, bound-exclusive. So '3' will result in (0, 1, 2), ergo 1 proposal on average.*/
+	private int maxNumProposals;
+	private final PersonalityType type;
 
 	public enum PersonalityType{
 		
-		CHOLERIC	(0.5,	0.9,	0.9,	0.9, 2, 2, true, false),
-		SANGUINE	(0.9,	0.05,	0.9,	0.1, 2, 2, false, true),
-		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 0.3, 0.3, false, false),
-		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2, 1, 1, false, true);
+		CHOLERIC	(0.5,	0.9,	0.9,	0.9, 	2, 		2, 		true, 	false, 	5),
+		SANGUINE	(0.9,	0.05,	0.9,	0.1, 	2, 		2, 		false, 	true,	6),
+		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 	0.3,	0.3, 	false, 	false, 	1),
+		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2, 	1, 		1, 		false, 	true,  	2),
+		NEUTRAL		(0,		0,		0,		0, 		1, 		1, 		true, 	true,	0);
 		
 		private final double trustIncreaseFactor;
 		private final double trustDecreaseFactor;
@@ -42,6 +49,8 @@ public class Personality {
 		double likeInitValue;
 		private boolean aggressiveness;
 		private boolean trustworthiness;
+		/** Max proposals are 0-inclusive, bound-exclusive. So '3' will result in (0, 1, 2), ergo 1 proposal on average.*/
+		private final int maxNumProposals;
 		
 
 		private PersonalityType(
@@ -52,7 +61,8 @@ public class Personality {
 				double trustInitValue,
 				double likeInitValue,
 				boolean aggressiveness,
-				boolean trustworthiness){
+				boolean trustworthiness,
+				int maxNumProposals){
 			this.trustIncreaseFactor = trustIncreaseFactor;
 			this.trustDecreaseFactor = trustDecreaseFactor;
 			this.likeabilityIncreaseFactor = likeabilityIncreaseFactor;
@@ -61,31 +71,36 @@ public class Personality {
 			this.likeInitValue = likeInitValue;
 			this.aggressiveness = aggressiveness;
 			this.trustworthiness = trustworthiness;
+			this.maxNumProposals = maxNumProposals;
 		}
-
+		
+		private int getMaxNumProposals(){
+			return this.maxNumProposals;
+		}
+		
 		private double getTrustIncreaseFactor() {
-			return trustIncreaseFactor;
+			return this.trustIncreaseFactor;
 		}
 
 		private double getTrustDecreaseFactor() {
-			return trustDecreaseFactor;
+			return this.trustDecreaseFactor;
 		}
 		
 		private double getLikeabilityIncreaseFactor() {
-			return likeabilityIncreaseFactor;
+			return this.likeabilityIncreaseFactor;
 		}
 
 		private double getLikeabilityDecreaseFactor() {
-			return likeabilityDecreaseFactor;
+			return this.likeabilityDecreaseFactor;
 		}
 		private double getTrustInitValue() {
-			return trustInitValue;
+			return this.trustInitValue;
 		}
 		private double getLikeInitValue() {
-			return likeInitValue;
+			return this.likeInitValue;
 		}
 		private boolean getAggressiveness(){
-			return aggressiveness;
+			return this.aggressiveness;
 		}
 		private boolean getTrustworthiness(){
 			return trustworthiness;
@@ -100,6 +115,7 @@ public class Personality {
 	
 	public Personality(PersonalityType personalityType){
 		
+		this.type = personalityType;
 		this.trustIncreaseFactor = personalityType.getTrustIncreaseFactor();
 		this.trustDecreaseFactor = personalityType.getTrustDecreaseFactor();
 		this.likeabilityIncreaseFactor = personalityType.getLikeabilityIncreaseFactor();
@@ -108,6 +124,7 @@ public class Personality {
 		this.trustInitValue = personalityType.getTrustInitValue();
 		this.aggressiveness = personalityType.getAggressiveness();
 		this.trustworthiness = personalityType.getTrustworthiness();
+		this.maxNumProposals = personalityType.getMaxNumProposals();
 		
 	}
 	
@@ -122,10 +139,10 @@ public class Personality {
 			newVal = oldVal;
 			break;
 		case POSITIVE:
-			newVal = oldVal + 0.8 * (this.trustIncreaseFactor * (2 - oldVal));
+			newVal = oldVal + this.learningRate * (this.trustIncreaseFactor * (2 - oldVal));
 			break;
 		case NEGATIVE:
-			newVal = oldVal + 0.8 * (this.trustDecreaseFactor * (0 - oldVal));
+			newVal = oldVal + this.learningRate * (this.trustDecreaseFactor * (0 - oldVal));
 			break;
 		default:
 			break;
@@ -145,10 +162,10 @@ public class Personality {
 			newVal = oldVal;
 			break;
 		case POSITIVE:
-			newVal = oldVal + 0.8 * (this.likeabilityIncreaseFactor * (2 - oldVal));
+			newVal = oldVal + this.learningRate * (this.likeabilityIncreaseFactor * (2 - oldVal));
 			break;
 		case NEGATIVE:
-			newVal = oldVal + 0.8 * (this.likeabilityDecreaseFactor * (0 - oldVal));
+			newVal = oldVal + this.learningRate * (this.likeabilityDecreaseFactor * (0 - oldVal));
 			break;
 		default:
 			break;
@@ -216,8 +233,14 @@ public class Personality {
 		}
 		return retString;
 	}
-
 	
+	public boolean isType(PersonalityType personalityType){
+		return this.type == personalityType;
+	}
+	
+	public int getMaxProposals(){
+		return this.maxNumProposals;
+	}
 	
 	public double getTrustVal(String powerName){
 		return this.trustDict.get(powerName);

@@ -33,7 +33,7 @@ public class TournamentRunner {
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.DUMB_BOT_1_4
-			TournamentPlayer.PERSONALITY_MELANCHOLIC,
+			TournamentPlayer.PERSONALITY_NEUTRAL,
 			TournamentPlayer.PERSONALITY_MELANCHOLIC,
 			TournamentPlayer.PERSONALITY_SANGUINE,
 			TournamentPlayer.PERSONALITY_PHLEGMATIC,
@@ -53,11 +53,11 @@ public class TournamentRunner {
 		DBRANE_1_1("D-Brane", dbrane_1_1_Command),
 		DBRANE_EXAMPLE("D-BraneExampleBot", dbraneExampleBotCommand),
 		ANAC_EXAMPLE("AnacExampleBot", anacExampleBotCommand),
-		PERSONALITY_MELANCHOLIC("Personality MELANCHOLIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
-		PERSONALITY_SANGUINE("Personality SANGUINE", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE"}),
-		PERSONALITY_PHLEGMATIC("Personality PHLEGMATIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC"}),
-		PERSONALITY_CHOLERIC("Personality CHOLERIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC"});
-		
+		PERSONALITY_MELANCHOLIC("Personality MELANCHOLIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "MELANCHOLICPersonalityBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
+		PERSONALITY_SANGUINE("Personality SANGUINE", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "SANGUINEPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE"}),
+		PERSONALITY_PHLEGMATIC("Personality PHLEGMATIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "PHLEGMATICPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC"}),
+		PERSONALITY_CHOLERIC("Personality CHOLERIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "CHOLERICPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC"}),
+		PERSONALITY_NEUTRAL("Personality NEUTRAL", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "NEUTRALPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "NEUTRAL"});
 
 		private String name;
 		private String[] command;

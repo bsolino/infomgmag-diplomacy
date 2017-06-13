@@ -216,7 +216,7 @@ public class TournamentObserverMapWindow extends JFrame {
 				item = doc.createElement("region");
 				root.appendChild(item);
 				// Set ID in region-tag.
-				item.setAttribute("id", Integer.toString(r.getId()));
+				item.setAttribute("id", Integer.toString(0));
 				// Create children:
 				item.appendChild(doc.createElement("name").appendChild(doc.createTextNode(r.getName())));
 				
@@ -250,7 +250,7 @@ public class TournamentObserverMapWindow extends JFrame {
 				item = doc.createElement("province");
 				root.appendChild(item);
 				// Set ID in region-tag.
-				item.setAttribute("id", Integer.toString(p.getId()));
+				item.setAttribute("id", Integer.toString(0));
 				// Create children:
 				item.appendChild(doc.createElement("name").appendChild(doc.createTextNode(p.getName())));
 				
@@ -281,7 +281,7 @@ public class TournamentObserverMapWindow extends JFrame {
 				item = doc.createElement("power");
 				root.appendChild(item);
 				// Set ID in region-tag.
-				item.setAttribute("id", Integer.toString(p.getId()));
+				item.setAttribute("id", Integer.toString(0));
 				// Create children:
 				item.appendChild(doc.createElement("name").appendChild(doc.createTextNode(p.getName())));
 				location = doc.createElement("color");
@@ -305,7 +305,7 @@ public class TournamentObserverMapWindow extends JFrame {
 					item = doc.createElement("supplycenters");
 					root.appendChild(item);
 					// Set ID in region-tag.
-					item.setAttribute("id", Integer.toString(p.getId()));
+					item.setAttribute("id", Integer.toString(0));
 					// Create children:
 					item.appendChild(doc.createElement("name").appendChild(doc.createTextNode(p.getName())));
 					

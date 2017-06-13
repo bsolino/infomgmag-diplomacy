@@ -31,6 +31,7 @@ import ddejonge.bandana.tools.Utilities;
 import ddejonge.negoServer.Message;
 import infomgag.personality.*;
 import infomgag.personality.Personality.Effect;
+import infomgag.personality.Personality.PersonalityType;
 public class DecisionMaker{
 	
 	Personality personality; 
@@ -285,7 +286,7 @@ public class DecisionMaker{
 			
 		}
 		
-		// CHECK ALL PROPOSALS
+		// CHECK ALL PROPOSALS`
 		ArrayList<BasicDeal> commitments_temp = new ArrayList<BasicDeal>(this.confirmedDeals);
 		commitments_temp.add(deal);
 		Plan plan = this.dbraneTactics.determineBestPlan(game, me, commitments_temp , myAllies);
@@ -352,6 +353,13 @@ public class DecisionMaker{
 		}
 		weightedAverage = weightedAverage / sumOfCounts;
 		return weightedAverage;
+	}
+	
+	public int getNumProposals(){
+		
+		if (this.personality.isType(PersonalityType.NEUTRAL)) return 1;
+		else return random.nextInt(personality.getMaxProposals());
+
 	}
 
 	public ArrayList<String> checkAndRemoveInvalidDeals(){

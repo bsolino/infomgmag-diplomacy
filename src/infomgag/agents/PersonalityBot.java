@@ -67,7 +67,7 @@ public class PersonalityBot extends Player{
 		int gameServerPort = DEFAULT_GAME_SERVER_PORT;
 		int negoPort = DEFAULT_NEGO_SERVER_PORT;
 		int finalYear = DEFAULT_FINAL_YEAR;
-		PersonalityType ps = PersonalityType.CHOLERIC; 		//Need to instatiate this variable, therefore CHOLERIC is now the default personality type. 
+		PersonalityType ps = PersonalityType.NEUTRAL; 		//Need to instatiate this variable, therefore NEUTRAL is now the default personality type. 
 		//Overwrite these values if specified by the arguments.
 		for(int i=0; i<args.length; i++){
 			
@@ -150,6 +150,12 @@ public class PersonalityBot extends Player{
 	//FIELDS
 	DecisionMaker decisionMaker;
 	PersonalityType ps;
+	/** If needed, we will force the thread to sleep during the negotiation phase to yield CPU time to other bots. */
+	private boolean forceNegoSleep;
+	/** This value determines when the forced sleep kicks in. It is assigned to in the constructor, we may want to add a command line argument at some point.*/
+	private int minNegoCycle;
+	/** This saves the timestamp of the last negotiation cycle start. */
+	private long lastNegoCycle;
 	
 	/**Client to connect with the game server.*/
 	private IComm comm;
@@ -191,7 +197,8 @@ public class PersonalityBot extends Player{
 		this.finalYear = finalYear;
 		this.ps = ps;
 		
-		
+		// Will force thread sleep if negotiation calculation was faster than minNegoSleep milliseconds, will then force wait for 2 * minNegoCycle.
+		this.minNegoCycle = 500;
 		
 		//Initialize the clients
 		try {
@@ -415,16 +422,27 @@ public class PersonalityBot extends Player{
 	
 
 
-
+	/**
+	 * This loop runs the entire duration of the negotiation phase. It is where negotiation happens in all its glory (or lack thereof).
+	 * Recoded the below, because there is a risk of being slow on either step 1 or step 2 - or on both - when we implement MCTS.
+	 * So, we need to check the deadline after every step, not after both. If we don't, there is a risk that we exceed the order phase deadline.
+	 * If that were to happen we are marked AFK and all our units receive hold orders this turn.
+	 * 
+	 * @param myAllies
+	 * List<Power> containing the powers that we are allied with.
+	 * 
+	 * @param negotiationDeadline
+	 * A future discrete point in time in milliseconds. (It is phase start + phase duration, not just duration).
+	 */
 	public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 		
-		//This loop repeats 2 steps. The first step is to handle any incoming messages, 
-		// while the second step tries to find deals to propose to the other negotiators.
-		while(System.currentTimeMillis() < negotiationDeadline){
-			
-			//STEP 1: Handle incoming messages.
-			//See if we have received any message from any of the other negotiators.
-			// e.g. a new proposal or an acceptance of a proposal made earlier.
+		// How many proposals our agents make per turn is determined by its personality.
+		int maxNumProposals = decisionMaker.getNumProposals();
+		
+		// 
+		while(this.checkNegotiationDeadline(negotiationDeadline)){
+
+			// First performa cycle handling all messages.
 			while(negoClient.hasMessage()){
 				
 				//removes the message from the message que
@@ -433,36 +451,81 @@ public class PersonalityBot extends Player{
 				String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage, myAllies);
 				
 				//THIS IS A COMPLETELY STUPID WAY TO HANDLE IT, BUT IT SHOULD WORK. MAYBE FIX THIS IN A LATER UPDATE. 
-				if(handledMessageString.equals("Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
+				if(handledMessageString.equals("Personalitybot.negotiate() Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
 					this.negoClient.acceptProposal( ((DiplomacyProposal) receivedMessage.getContent()).getId());
 				} //There is going to be needed a consisty check here if the notary consistancy check will be turned off. 
 				
-				this.logger.logln("Message handles by PS: "+handledMessageString); 	//Logs the results of the handling of the message. 
+				this.logger.logln("Personalitybot.negotiate() Message handled by DecisionMaker: "+handledMessageString); 	//Logs the results of the handling of the message. 
 			}
-			//STEP 2:  try to find a proposal to make, and if we do find one, propose it.
-			BasicDeal newDealToPropose = null;
-			if(newDealToPropose == null){ //we only make one proposal per round, so we skip this if we have already proposed something.
-				newDealToPropose = decisionMaker.searchForADealToPropose(myAllies);
+			
+			// Deadline was checked before we handle incoming messages by the encapsulating while statement.
+			// Check deadline again before we calculate a proposal.
+			if (this.checkNegotiationDeadline(negotiationDeadline)) break;
+			
+			// Contrary to the original implementation in the D-Brane-examplebot, we allow for multiple deals to be made.
+			// This is dependent on the value of maxNumProposals.
+			if (maxNumProposals > 0){
+				
+				BasicDeal newDealToPropose = decisionMaker.searchForADealToPropose(myAllies);
 				//newDealToPropose = searchForNewDealToPropose(myAllies);
 				if(newDealToPropose != null){
 					
 					try {
-						this.logger.logln("RandomNegotiator.negotiate() Proposing: " + newDealToPropose);
+						this.logger.logln("Personalitybot.negotiate() Proposing: " + newDealToPropose);
 						this.negoClient.proposeDeal(newDealToPropose);
 	
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}else{
-				this.logger.logln("No deals to propose");	
+				this.logger.logln("Personalitybot.negotiate() No deals to propose");	
 				}
+				
+				maxNumProposals--;
 			}
 			
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-			}
 		}
+	}
+	
+	
+	/**
+	 * This method is used to determine whether the negotiation deadline has been passed. It also ensures that we yield sufficient cpu time to other bots.
+	 * 
+	 * If the previous cycle took some time (because we actually did serious computation) we will allow at least one more cycle and then force a thread sleep after the next cycle.
+	 * This means that bots will run a max of two concurrent cycles and then yield to other processes. This preempts two problems:
+	 * 		- If a proposal-generating cycle takes very long, we will always check for received messages before yielding.
+	 * 		- If a message-handling cycle takes very long, we will always try to generate a proposal immediately after.
+	 * 
+	 * If the deadline has passed we just return false to not allow the start of the next cycle.
+	 * The goal is to cut down on non-productive cycles, while allowing all bots to propose and respond.
+	 * 
+	 * @param negotiationDeadline
+	 * @return True if negotiation deadline has not passed yet
+	 */
+	private boolean checkNegotiationDeadline(long negotiationDeadline){
+		
+		long now = System.currentTimeMillis();
+		
+		if (now < negotiationDeadline){
+			
+			// Sleep if cycles follow each other too quickly, or if we've hogged the cpu for a while...
+			if (now < this.lastNegoCycle + this.minNegoCycle || this.forceNegoSleep){
+				this.forceNegoSleep = false;
+				
+				try {
+					Thread.sleep(this.minNegoCycle * 2);
+				} catch (InterruptedException e) {
+				}
+				
+			}
+			else this.forceNegoSleep = true; // Force sleep after next cycle.
+			
+			// Save current time as last cycle start.
+			this.lastNegoCycle = now;
+			
+			return true;
+		}
+		else return false;
 	}
 	
 	/**
