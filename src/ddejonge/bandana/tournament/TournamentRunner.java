@@ -14,7 +14,7 @@ public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	private final static String DEFAULT_LAST_YEAR = "1925";
+	private final static String DEFAULT_LAST_YEAR = "1903";
 	
 	private final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", DEFAULT_LAST_YEAR};
 	private final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", DEFAULT_LAST_YEAR};
@@ -78,7 +78,10 @@ public class TournamentRunner {
 	
 	public static void main(String[] args) throws IOException {
 		
-		int numberOfGames = 2;				//The number of games this tournament consists of.
+		
+		boolean displayInterface = true;		// if we're sure stuff runs well and just want logs, this will cut down on overhead.
+				
+		int numberOfGames = 5;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 30; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 10;  //30 seconds for each SUM and AUT phases
@@ -87,7 +90,7 @@ public class TournamentRunner {
 		int finalYear = Integer.parseInt(DEFAULT_LAST_YEAR); 	//The year after which the agents in each game are supposed to propose a draw to each other. 
 		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 
 		
-		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear);
+		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear, displayInterface);
 		
 		
 		
@@ -110,7 +113,7 @@ public class TournamentRunner {
 	
 	static List<Process> players = new ArrayList<Process>();
 	
-	public static void run(int numberOfGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit, int finalYear) throws IOException{
+	public static void run(int numberOfGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit, int finalYear, boolean displayInterface) throws IOException{
 		
 		//Create a folder to store all the results of the tournament. 
 		// This folder will be placed inside the LOG_FOLDER and will have the current date and time as its name.
@@ -131,7 +134,7 @@ public class TournamentRunner {
 		scoreCalculators.add(new RankCalculator());
 		
 		//2. Create a TournamentObserver to monitor the games and accumulate the results.
-		TournamentObserver tournamentObserver = new TournamentObserver(tournamentLogFolderPath, scoreCalculators, numberOfGames, 7);
+		TournamentObserver tournamentObserver = new TournamentObserver(tournamentLogFolderPath, scoreCalculators, numberOfGames, 7, displayInterface);
 		
 		//3. Run the Negotiation Server.
 		NegoServerRunner.run(tournamentObserver, tournamentLogFolderPath, numberOfGames);

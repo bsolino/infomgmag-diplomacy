@@ -48,6 +48,11 @@ public class TournamentObserver extends Observer implements Runnable{
 	 */
 	TournamentObserverMapWindow mapMonitor;
 	
+	/**
+	 * Interface visibile?
+	 */
+	boolean isInterfaceVisible = false;
+	
 	
 	/**The number of games in this tournament.*/
 	int numGames;
@@ -62,7 +67,7 @@ public class TournamentObserver extends Observer implements Runnable{
 	
 
 	
-	public TournamentObserver(String tournamentLogFolderPath, ArrayList<ScoreCalculator> scoreCalculators, int numGames, int numParticipants) throws IOException {
+	public TournamentObserver(String tournamentLogFolderPath, ArrayList<ScoreCalculator> scoreCalculators, int numGames, int numParticipants, boolean displayInterface) throws IOException {
 		super(tournamentLogFolderPath);
 		
 		if(numGames <=0){
@@ -86,10 +91,16 @@ public class TournamentObserver extends Observer implements Runnable{
 		
 		this.tournamentResult = new TournamentResult(numParticipants, scoreCalculators);
 		
-		this.diplomacyMonitor = new DiplomacyMonitor("TournamentObserver", numParticipants, scoreCalculators);
-		
-		this.mapMonitor = new TournamentObserverMapWindow();
-		
+		// Thijs - I added this so we can kill the graphical display if we want to.
+		if (displayInterface){
+			
+			this.isInterfaceVisible = true;
+			
+			this.diplomacyMonitor = new DiplomacyMonitor("TournamentObserver", numParticipants, scoreCalculators);
+			
+			this.mapMonitor = new TournamentObserverMapWindow();
+		}
+
 	}
 	
 	
@@ -106,7 +117,7 @@ public class TournamentObserver extends Observer implements Runnable{
 		this.game = null;
 		this.ccd = false;
 		
-		diplomacyMonitor.setStatus("making connection.");
+		if (this.isInterfaceVisible) diplomacyMonitor.setStatus("making connection.");
 		
 		//Create the connection with the game server
 		InetAddress dipServerIp;
@@ -123,17 +134,20 @@ public class TournamentObserver extends Observer implements Runnable{
 			
 		} catch (Exception e) {
 			this.gameStatus = NO_GAME_ACTIVE;
-			diplomacyMonitor.setStatus("connection failed " + e);
+			if (this.isInterfaceVisible) diplomacyMonitor.setStatus("connection failed " + e);
 			e.printStackTrace();
 		}	
 		
-		diplomacyMonitor.setStatus("waiting to start.");
+		if (this.isInterfaceVisible) diplomacyMonitor.setStatus("waiting to start.");
 	}
 	
 	/**
 	 * Is called from beforeNewPhase(), afterOldPhase(), handleSlo() and handleSMR().
 	 */
 	void displayInfo(){
+		
+		// Exit if interface is surpessed.
+		if (!this.isInterfaceVisible) return;
 		
 		diplomacyMonitor.setCurrentGameNumber(gameNumber);
 		diplomacyMonitor.setNumGames(numGames);
@@ -172,7 +186,7 @@ public class TournamentObserver extends Observer implements Runnable{
 		gameNumber++;
 		this.gameStatus = GAME_ACTIVE;
 		
-		diplomacyMonitor.notifyNewGame();
+		if (this.isInterfaceVisible)diplomacyMonitor.notifyNewGame();
 	}
 	
 	
@@ -220,11 +234,15 @@ public class TournamentObserver extends Observer implements Runnable{
 	
 	@Override
 	public void exit(){
+		
+		if (this.isInterfaceVisible){
+			// close diplomacy monitor.
+			this.diplomacyMonitor.dispose();
+			this.mapMonitor.dispose();
+		}
+		
 		this.comm.stop();
 		super.exit();
-		// close diplomacy monitor.
-		this.diplomacyMonitor.dispose();
-		this.mapMonitor.dispose();
 	}
 	
 	/**
@@ -245,11 +263,13 @@ public class TournamentObserver extends Observer implements Runnable{
 		
 		FileIO.overwriteFile(this.tournamentResultsFile, this.tournamentResult.toString());
 		
-		diplomacyMonitor.setTournamentResult(this.tournamentResult);
+		if (this.isInterfaceVisible){
+			this.diplomacyMonitor.setTournamentResult(this.tournamentResult);
 
-		displayInfo();
-		
-		this.mapMonitor.endGameMapCall();
+			displayInfo();
+			
+			this.mapMonitor.endGameMapCall();
+		}
 		
 		super.handleSMR(message);
 	}
@@ -272,7 +292,7 @@ public class TournamentObserver extends Observer implements Runnable{
 	}
 	
 	public void setAgentName(String powerName, String agentName){
-		this.diplomacyMonitor.setAgentName(powerName, agentName);
+		if(this.isInterfaceVisible) this.diplomacyMonitor.setAgentName(powerName, agentName);
 	}
 	
 }
