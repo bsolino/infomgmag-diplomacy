@@ -48,6 +48,8 @@ public class DecisionMaker{
 	private double dealAcceptanceModifier = 1.1;
 	private double dealRejectionModifier = 0.9;
 	private boolean useMCTS;
+	List<Power> listOfFriends;
+	List<Power> listOfFoes;
 	
 	//Constructor: Takes in a personality and a game object. 
 	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger, Logger personalityLogger, boolean useMCTS){
@@ -58,6 +60,8 @@ public class DecisionMaker{
 		this.personality = personality;
 		this.confirmedDeals = confirmedDeals;
 		this.negotiatingPowers = negotiatingPowers;
+		this.listOfFoes = new ArrayList<Power>();
+		this.listOfFriends = new ArrayList<Power>();
 		//this.confirmedDeals = new ArrayList<BasicDeal>();
 		this.me = me;
 		personality.setMyPower(me);
@@ -74,15 +78,22 @@ public class DecisionMaker{
 	}
 	
 	public void update(ArrayList<Order> submittedOrders){
-		//However, if the order
-		//is a HLDOrder, then the corresponding power is still allowed to submit a
-		//SUPOrder or SUPMTOOrder for that unit instead of the HLDOrder.
-		
-		ArrayList<Region> regionsILeft = new ArrayList<Region>();
+		// At the end of the phase, we check the submitted orders by all powers and determine whether 
+		// we should update the trust and like values 
+		// We only update like/trust values ONCE for each power, per phase
+		// That means that even if a power did not honor multiple deals with us, we only decrease their trust value once in that phase
 		
 		if (submittedOrders == null){
 			return;
 		}
+		
+		
+		// We maintain a list of regions that the player has left on its own accord
+		// meaning, we check whether the player issued an order to move from that region, rather 
+		// than another player forcing it out of that region
+		ArrayList<Region> regionsILeft = new ArrayList<Region>();
+		ArrayList<Power> alreadyUpdatedPowersTrust = new ArrayList<Power>();
+		ArrayList<Power> alreadyUpdatedPowersLike = new ArrayList<Power>();
 		
 		if (submittedOrders != null && submittedOrders.size() > 0){
 			for(Order order : submittedOrders){
@@ -99,31 +110,39 @@ public class DecisionMaker{
 			}
 		}
 		
+		
+		// We go over all of the submitted orders
 		if (submittedOrders != null && submittedOrders.size() > 0){
 			for(Order order : submittedOrders){
 				if (!(order.getPower().equals(me))){
+					// If it is a SUPPORT order AND someone is supporting us, we like them more (i.e. POSITIVE like update)
 					if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
 						if (order instanceof SUPOrder){
 							SUPOrder supOrder = (SUPOrder) order;
-							if (me.equals(supOrder.getSupportedOrder().getPower())){
+							if (me.equals(supOrder.getSupportedOrder().getPower()) &&  !(alreadyUpdatedPowersLike.contains(supOrder.getSupportedOrder().getPower()))){
 								personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+								alreadyUpdatedPowersLike.add(supOrder.getSupportedOrder().getPower());
 							}
 						}
 						if (order instanceof SUPMTOOrder){
 							SUPMTOOrder supOrder = (SUPMTOOrder) order;
-							if (me.equals(supOrder.getSupportedOrder().getPower())){
+							if (me.equals(supOrder.getSupportedOrder().getPower()) &&  !(alreadyUpdatedPowersLike.contains(supOrder.getSupportedOrder().getPower()))){
 								personality.updateLikeability(order.getPower().getName(), Effect.POSITIVE);
+								alreadyUpdatedPowersLike.add(supOrder.getSupportedOrder().getPower());
 							}
 						}
 						
 					}
 					
+					// If someone forced us out of a region (we check whether the player has left the region on its own accord using regionsILeft)
+					// Then we like them less (i.e. NEGATIVE like update)
 					if (order instanceof MTOOrder){
 						MTOOrder moveOrder = (MTOOrder) order;
 						// check whether the move order causes us to lose territory
 						for (Region region : this.me.getControlledRegions()){
-							if (moveOrder.getDestination().equals(region) && !(regionsILeft.contains(region))){
+							if (moveOrder.getDestination().equals(region) && !(regionsILeft.contains(region)) && !(alreadyUpdatedPowersLike.contains(order.getPower()))  ){
 								personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
+								alreadyUpdatedPowersLike.add(order.getPower());
 							}
 						}
 					}
@@ -132,37 +151,47 @@ public class DecisionMaker{
 		}
 		
 		
+		// Now we update the trust values by iterating over all confirmed deals
 		if (submittedOrders.size() > 0 & this.confirmedDeals.size() > 0){
 			for(BasicDeal confirmedDeal : confirmedDeals){
 				if (confirmedDeal.getOrderCommitments().size() > 0){
+					// For every confirmed deal, we go over its order commitments
 					for(OrderCommitment orderCommitment : confirmedDeal.getOrderCommitments()){
 						if(orderCommitment.getPhase().equals(game.getPhase()) && orderCommitment.getYear() == game.getYear()){
 							for(Order order : submittedOrders){
 								if (!(order.getPower().equals(me))){
-									if (orderCommitment.getOrder().equals(order)){
+									// If a power complied with their commited order, we trust them more
+									if (orderCommitment.getOrder().equals(order) && !(alreadyUpdatedPowersTrust.contains(orderCommitment.getOrder().getPower()))){
 										personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
+										alreadyUpdatedPowersTrust.add(orderCommitment.getOrder().getPower());
 										break;
 									}
 								}
 							}
-							if (!(orderCommitment.getOrder().getPower().equals(me))){
+							// if the order commitment was not honored by the respective power, we trust it less
+							if (!(orderCommitment.getOrder().getPower().equals(me))  && !(alreadyUpdatedPowersTrust.contains(orderCommitment.getOrder().getPower()))){
 								personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
+								alreadyUpdatedPowersTrust.add(orderCommitment.getOrder().getPower());
 							}
 						}
 					}
 				}
 				
+				// We iterate over the agreed upon DMZs in the deal to check whether they were honored
 				if (confirmedDeal.getDemilitarizedZones().size() > 0){
 					for(DMZ dmz : confirmedDeal.getDemilitarizedZones()){	
 						if(dmz.getPhase().equals(game.getPhase()) && dmz.getYear() == game.getYear()){
 							for(Order order : submittedOrders){
 								if (!(order.getPower().equals(me))){
+									// For every committed order, we check whether it moves a unit into a region specified as a DMZ
 									if(order instanceof MTOOrder){
 										MTOOrder tempOrder = (MTOOrder) order;
 										for(Province province : dmz.getProvinces()){
 											for(Region region : province.getRegions()){
-												if (tempOrder.getDestination().equals(region)){
+												// If a power violated the DMZ and moved a unit into it, we trust it less
+												if (tempOrder.getDestination().equals(region) && !(alreadyUpdatedPowersTrust.contains(order.getPower()))){
 													personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+													alreadyUpdatedPowersTrust.add(order.getPower());
 												}
 											}
 										}	
@@ -174,8 +203,21 @@ public class DecisionMaker{
 				}
 			} 
 		}
-		this.personalityLogger.logln(game.getYear() + "."+ game.getPhase().toString() + ":\t"+ getPersonalityValues() + ":");
+		updateFriendsAndFoes();
+	}
 
+		
+	private void updateFriendsAndFoes() {
+		for (Power power : game.getPowers()){
+			if (! (power.equals(me)) ){
+				if (personality.hasLikeIssues(power)  && personality.hasTrustIssuesWith(power) ){
+					this.listOfFoes.add(power);
+				}
+				if (  !(personality.hasLikeIssues(power)) && !(personality.hasTrustIssuesWith(power))   ){
+					this.listOfFriends.add(power);
+				}
+			}
+		}
 	}
 	
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
@@ -248,11 +290,7 @@ public class DecisionMaker{
 				}
 			}
 			
-			//TODO: decide whether this DMZ is acceptable or not (in combination with the rest of the proposed deal).
-			/*
-			List<Power> powers = dmz.getPowers();
-			List<Province> provinces = dmz.getProvinces();
-			*/
+			
 
 		}
 		for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
@@ -265,7 +303,7 @@ public class DecisionMaker{
 				break;
 			}
 			
-			//TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
+			
 			Order order = orderCommitment.getOrder();
 			if (!(order.getPower().equals(me))){
 				if (dealPowerCountDict.get(order.getPower().getName()) == null){
@@ -410,12 +448,14 @@ public class DecisionMaker{
 		//return proposedDeal;
 		BasicDeal bestDeal = null;
 		Plan bestPlan = null;
+		double bestPlanVal = 0;
+		double planValModifier = 1;
 
 		//Get a copy of our list of current commitments.
 		ArrayList<BasicDeal> commitments = new ArrayList<BasicDeal>(this.confirmedDeals);
 		
 		//First, let's see what happens if we do not make any new commitments.
-		bestPlan = determineBestPlan(game, me, commitments, myAllies);
+		bestPlan = this.dbraneTactics.determineBestPlan(game, me, commitments, myAllies);
 		
 		//If our current commitments are already inconsistent then we certainly
 		// shouldn't make any more commitments.
@@ -423,22 +463,13 @@ public class DecisionMaker{
 			return null;
 		}
 		
+		bestPlanVal = bestPlan.getValue() * planValModifier;
+		
 		//let's generate 10 random deals and pick the best one.
 		for(int i=0; i<10; i++){
 			
 			//generate a random deal.
 			BasicDeal randomDeal = generateRandomDeal();
-			
-			//TODO
-			// FRIEND is someone with > 1 attitude
-			// NEGATIVE
-			// Friend losing SC - Enemy gaining SC - Someone supporting enemy
-			// POSTIVE
-			// Friend gaining SC - Enemy losing SC - Someone supporting friend
-			// Super positive 
-			// We gain something
-			// SUper negative
-			// We lose something
 			
 			if(randomDeal == null){
 				continue;
@@ -448,13 +479,21 @@ public class DecisionMaker{
 			//add it to the list containing our existing commitments so that dBraneTactics can determine a plan.
 			commitments.add(randomDeal);
 
-			
 			//Ask the D-Brane Tactical Module what it would do under these commitments.
-			Plan plan = determineBestPlan(game, me, commitments, myAllies);
+			Plan plan = this.dbraneTactics.determineBestPlan(game, me, commitments, myAllies);
+			
+			
+			//for (Order order : plan.getMyOrders()){
+				// Check whether the orders under this plan are good/bad for me/enemies
+			//}
+			
+			// Analyze deal and check whether it's good/bad for our friends/enemies
+			planValModifier = getDealModifierVal(randomDeal);
 			
 			//Check if the returned plan is better than the best plan found so far.
-			if(plan != null && plan.getValue() > bestPlan.getValue()){
+			if(plan != null && (plan.getValue() * planValModifier) > bestPlanVal){
 				bestPlan = plan;
+				bestPlanVal = plan.getValue() * planValModifier;
 				bestDeal = randomDeal;
 			}
 			
@@ -473,8 +512,92 @@ public class DecisionMaker{
 			
 		}
 		
+		
 		return bestDeal;
 		
+	}
+	
+	
+	double getDealModifierVal(BasicDeal deal) {
+		// FRIEND is someone with > 1 attitude
+		// NEGATIVE
+		// Friend losing SC - Enemy gaining SC - Someone supporting enemy
+		// POSTIVE
+		// Friend gaining SC - Enemy losing SC - Someone supporting friend
+		// Super positive 
+		// We gain something
+		// SUper negative
+		// We lose something
+		// weigh the helping of an enemy more heavily ?
+		
+		double dealModifier = 1;
+		int negativeCount = 0;
+		int positiveCount = 0;
+		
+		for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
+			Order order = orderCommitment.getOrder();
+			
+			if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
+				if (order instanceof SUPOrder){
+					SUPOrder supOrder = (SUPOrder) order;
+					if (me.equals(supOrder.getSupportedOrder().getPower())){
+						positiveCount += 2;
+					}
+					if (this.listOfFriends.contains(supOrder.getSupportedOrder().getPower())){
+						positiveCount += 1;
+					}
+					if (this.listOfFoes.contains(supOrder.getSupportedOrder().getPower())){
+						negativeCount += 1;
+					}
+					
+				}
+				if (order instanceof SUPMTOOrder){
+					SUPMTOOrder supOrder = (SUPMTOOrder) order;
+					if (me.equals(supOrder.getSupportedOrder().getPower())){
+						positiveCount += 2;
+					}
+					if (this.listOfFriends.contains(supOrder.getSupportedOrder().getPower())){
+						positiveCount += 1;
+					}
+					if (this.listOfFoes.contains(supOrder.getSupportedOrder().getPower())){
+						negativeCount += 1;
+					}
+				}
+			}
+			
+			
+			if (order instanceof MTOOrder){
+				MTOOrder moveOrder = (MTOOrder) order;
+				// check whether the move order causes us, a friend, or an enemy to lose territory
+				for (Region region : this.me.getControlledRegions()){
+					if (moveOrder.getDestination().equals(region)  ){
+						negativeCount += 2;
+					}
+				}
+				
+				for (Power power : this.listOfFoes){
+					for (Region region : power.getControlledRegions()){
+						if (moveOrder.getDestination().equals(region)  ){
+							positiveCount += 1;
+						}
+					}
+				}
+				for (Power power : this.listOfFriends){
+					for (Region region : power.getControlledRegions()){
+						if (moveOrder.getDestination().equals(region)  ){
+							negativeCount += 1;
+						}
+					}
+				}
+			
+			
+			}
+			
+		}
+		
+		dealModifier = positiveCount / negativeCount;
+		
+		return dealModifier;
 	}
 	
 	//Checks to see if the propsal made is outdated or not. 
