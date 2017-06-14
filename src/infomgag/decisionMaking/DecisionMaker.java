@@ -42,13 +42,17 @@ public class DecisionMaker{
 	Power me;
 	List<String> negotiatingPowers;
 	Logger logger;
+	private Logger personalityLogger;
 	private boolean firstIncomingDeal;
 	private double dealAcceptanceThreshold;
 	private double dealAcceptanceModifier = 1.1;
 	private double dealRejectionModifier = 0.9;
+	private boolean useMCTS;
 	
 	//Constructor: Takes in a personality and a game object. 
-	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger){
+	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger, Logger personalityLogger, boolean useMCTS){
+		this.useMCTS = useMCTS;
+		this.personalityLogger = personalityLogger;
 		random = new Random();
 		this.game = game;
 		this.personality = personality;
@@ -60,7 +64,9 @@ public class DecisionMaker{
 		personality.setPowers(game.getPowers());
 		this.logger = logger;
 		this.firstIncomingDeal = true;
-		
+		personalityLogger.logln(this.negotiatingPowers.size()+ ":");
+		personalityLogger.logln(this.getAllNegotiatingPowers() + ":");
+		personalityLogger.writeToFile();
 	}
 	
 	public String getPersonalityValues(){
@@ -168,9 +174,10 @@ public class DecisionMaker{
 				}
 			} 
 		}
-	}
+		this.personalityLogger.logln(game.getYear() + "."+ game.getPhase().toString() + ":\t"+ getPersonalityValues() + ":");
 
-		
+	}
+	
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
 	public String handleIncomingMessages(Message receivedMessage, List<Power> myAllies){
 		//Check if deal is outdated
@@ -289,7 +296,7 @@ public class DecisionMaker{
 		// CHECK ALL PROPOSALS`
 		ArrayList<BasicDeal> commitments_temp = new ArrayList<BasicDeal>(this.confirmedDeals);
 		commitments_temp.add(deal);
-		Plan plan = this.dbraneTactics.determineBestPlan(game, me, commitments_temp , myAllies);
+		Plan plan = determineBestPlan(game, me, commitments_temp , myAllies);
 		
 		double planVal = 0; // Negative? 
 		
@@ -376,7 +383,6 @@ public class DecisionMaker{
 	return invalidDealsString;
 	}
 	
-	
 	public boolean testConsistancy(){
 		String report = Utilities.testConsistency(game, confirmedDeals);
 		if (report != null){
@@ -409,7 +415,7 @@ public class DecisionMaker{
 		ArrayList<BasicDeal> commitments = new ArrayList<BasicDeal>(this.confirmedDeals);
 		
 		//First, let's see what happens if we do not make any new commitments.
-		bestPlan = this.dbraneTactics.determineBestPlan(game, me, commitments, myAllies);
+		bestPlan = determineBestPlan(game, me, commitments, myAllies);
 		
 		//If our current commitments are already inconsistent then we certainly
 		// shouldn't make any more commitments.
@@ -444,7 +450,7 @@ public class DecisionMaker{
 
 			
 			//Ask the D-Brane Tactical Module what it would do under these commitments.
-			Plan plan = this.dbraneTactics.determineBestPlan(game, me, commitments, myAllies);
+			Plan plan = determineBestPlan(game, me, commitments, myAllies);
 			
 			//Check if the returned plan is better than the best plan found so far.
 			if(plan != null && plan.getValue() > bestPlan.getValue()){
@@ -466,7 +472,6 @@ public class DecisionMaker{
 			// You can call plan.getMyOrders() to retrieve the complete list of orders that D-Brane has chosen for you under the given commitments. 
 			
 		}
-		
 		
 		return bestDeal;
 		
@@ -503,12 +508,34 @@ public class DecisionMaker{
 	public Plan determineBestPlan(List<Power> myAllies){
 		if (!personality.getTrustworthiness()){
 			if(random.nextInt(2) == 0){ // accept with 50% probability.
-				ArrayList<BasicDeal> emptyConfirmedDeals = new ArrayList<BasicDeal>(); 
-				return dbraneTactics.determineBestPlan(game, me, emptyConfirmedDeals, myAllies);
+				ArrayList<BasicDeal> emptyConfirmedDeals = new ArrayList<BasicDeal>();
+				
+				//If we are using monte-carlo. Then this is switched here. 
+				if(useMCTS){
+					//CHANGE THE CODE BELOW TO USE THE MCTS PLAN CREATOR
+					return dbraneTactics.determineBestPlan(game, me, emptyConfirmedDeals, myAllies);
+				}else{
+					return dbraneTactics.determineBestPlan(game, me, emptyConfirmedDeals, myAllies);
+				}
 			}
 		}
+		if(useMCTS){
+			//CHANGE THE CODE BELOW TO USE THE MCTS PLAN CREATOR
+			return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
+		}else{
+			return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
+		}
 		// Once MC is implemented, we will call its engine here, passing our personality type
-		return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
+	}
+	
+	//Should this method have trustWorthiness stuff in it as well? 
+	public Plan determineBestPlan(Game game, Power me, ArrayList<BasicDeal> confirmedDeals ,List<Power> myAllies){
+				if(useMCTS){
+					//CHANGE THE CODE BELOW TO USE THE MCTS PLAN CREATOR
+					return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
+				}else{
+					return dbraneTactics.determineBestPlan(game, me, confirmedDeals, myAllies);
+				}
 	}
 	
 	public String commitmentDebugger(){
@@ -543,12 +570,18 @@ public class DecisionMaker{
 	}
 	
 	public List<Order> getWinterOrders(List<Power> myAllies){
-		return dbraneTactics.getWinterOrders(game, me, myAllies);
+		if(useMCTS){
+			return dbraneTactics.getWinterOrders(game, me, myAllies);
+		}else{
+			return dbraneTactics.getWinterOrders(game, me, myAllies);
+
+		}
+		
+		
+		
 	}
 	
-	
-
-public BasicDeal generateRandomDeal(){
+	public BasicDeal generateRandomDeal(){
 	
 	
 	//Get the names of all the powers that are connected to the negotiation server (some players may be non-negotiating agents, so they are not connected.)
@@ -694,8 +727,7 @@ public BasicDeal generateRandomDeal(){
 	
 }
 
-
-public List<Order> generateRandomRetreats() {
+	public List<Order> generateRandomRetreats() {
 	
 	List<Order> orders = new ArrayList<Order>(game.getDislodgedRegions().size());
 	int randomInt;
@@ -720,12 +752,18 @@ public List<Order> generateRandomRetreats() {
 		
 	return orders;
 }
-
-//public ArrayList<Power> getAllies() {
-//	ArrayList<Power> allies = new ArrayList<Power>();
 	
-	
-//	return allies;
-//}
+	public String getAllNegotiatingPowers(){
+		String retString = "";
+		int count = 0;
+		for(Power power : this.game.getPowers()){
+			retString += power.getName();
+			count++;
+			if(count != game.getPowers().size()){
+				retString += "\t , \t";
+			}
+		}
+		return retString;
+	}
 	
 }

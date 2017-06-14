@@ -7,10 +7,10 @@ import java.util.Map;
 import es.csic.iiia.fabregues.dip.board.Power;
 
 public class Personality {
-	
+
 	private boolean aggressiveness;
 	private int naiveness;
-	private int pessimism;	
+	private int pessimism;
 	private int impulsiveness;
 	private boolean trustworthiness;
 	private Map<String, Double> trustDict = new HashMap<>();
@@ -23,46 +23,42 @@ public class Personality {
 	private double likeabilityDecreaseFactor;
 	private double trustInitValue;
 	private double likeInitValue;
-	
+
 	private double learningRate = 0.2;
-	
+
 	private Power myPower;
 	private List<Power> allPowers;
-	/** Max proposals are 0-inclusive, bound-exclusive. So '3' will result in (0, 1, 2), ergo 1 proposal on average.*/
+	/**
+	 * Max proposals are 0-inclusive, bound-exclusive. So '3' will result in (0,
+	 * 1, 2), ergo 1 proposal on average.
+	 */
 	private int maxNumProposals;
 	private final PersonalityType type;
 
-	public enum PersonalityType{
-		
-		CHOLERIC	(0.5,	0.9,	0.9,	0.9, 	2, 		2, 		true, 	false, 	5),
-		SANGUINE	(0.9,	0.05,	0.9,	0.1, 	2, 		2, 		false, 	true,	6),
-		MELANCHOLIC	(0.05,	0.8,	0.1,	0.8, 	0.3,	0.3, 	false, 	false, 	1),
-		PHLEGMATIC	(0.3,	0.5,	0.2,	0.2, 	1, 		1, 		false, 	true,  	2),
-		NEUTRAL		(0,		0,		0,		0, 		1, 		1, 		true, 	true,	0);
-		
+	public enum PersonalityType {
+
+		CHOLERIC(0.5, 0.9, 0.9, 0.9, 2, 2, true, false, 5), SANGUINE(0.9, 0.05, 0.9, 0.1, 2, 2, false, true,
+				6), MELANCHOLIC(0.05, 0.8, 0.1, 0.8, 0.3, 0.3, false, false, 1), PHLEGMATIC(0.3, 0.5, 0.2, 0.2, 1, 1,
+						false, true, 2), NEUTRAL(0, 0, 0, 0, 1, 1, true, true, 0);
+
 		private final double trustIncreaseFactor;
 		private final double trustDecreaseFactor;
-		
+
 		private final double likeabilityIncreaseFactor;
 		private final double likeabilityDecreaseFactor;
 		double trustInitValue;
 		double likeInitValue;
 		private boolean aggressiveness;
 		private boolean trustworthiness;
-		/** Max proposals are 0-inclusive, bound-exclusive. So '3' will result in (0, 1, 2), ergo 1 proposal on average.*/
+		/**
+		 * Max proposals are 0-inclusive, bound-exclusive. So '3' will result in
+		 * (0, 1, 2), ergo 1 proposal on average.
+		 */
 		private final int maxNumProposals;
-		
 
-		private PersonalityType(
-				double trustIncreaseFactor,
-				double trustDecreaseFactor,
-				double likeabilityIncreaseFactor,
-				double likeabilityDecreaseFactor,
-				double trustInitValue,
-				double likeInitValue,
-				boolean aggressiveness,
-				boolean trustworthiness,
-				int maxNumProposals){
+		private PersonalityType(double trustIncreaseFactor, double trustDecreaseFactor,
+				double likeabilityIncreaseFactor, double likeabilityDecreaseFactor, double trustInitValue,
+				double likeInitValue, boolean aggressiveness, boolean trustworthiness, int maxNumProposals) {
 			this.trustIncreaseFactor = trustIncreaseFactor;
 			this.trustDecreaseFactor = trustDecreaseFactor;
 			this.likeabilityIncreaseFactor = likeabilityIncreaseFactor;
@@ -73,11 +69,11 @@ public class Personality {
 			this.trustworthiness = trustworthiness;
 			this.maxNumProposals = maxNumProposals;
 		}
-		
-		private int getMaxNumProposals(){
+
+		private int getMaxNumProposals() {
 			return this.maxNumProposals;
 		}
-		
+
 		private double getTrustIncreaseFactor() {
 			return this.trustIncreaseFactor;
 		}
@@ -85,7 +81,7 @@ public class Personality {
 		private double getTrustDecreaseFactor() {
 			return this.trustDecreaseFactor;
 		}
-		
+
 		private double getLikeabilityIncreaseFactor() {
 			return this.likeabilityIncreaseFactor;
 		}
@@ -93,28 +89,30 @@ public class Personality {
 		private double getLikeabilityDecreaseFactor() {
 			return this.likeabilityDecreaseFactor;
 		}
+
 		private double getTrustInitValue() {
 			return this.trustInitValue;
 		}
+
 		private double getLikeInitValue() {
 			return this.likeInitValue;
 		}
-		private boolean getAggressiveness(){
+
+		private boolean getAggressiveness() {
 			return this.aggressiveness;
 		}
-		private boolean getTrustworthiness(){
+
+		private boolean getTrustworthiness() {
 			return trustworthiness;
 		}
 	}
-	
-	public enum Effect{
-		NEUTRAL,
-		POSITIVE,
-		NEGATIVE
+
+	public enum Effect {
+		NEUTRAL, POSITIVE, NEGATIVE
 	}
-	
-	public Personality(PersonalityType personalityType){
-		
+
+	public Personality(PersonalityType personalityType) {
+
 		this.type = personalityType;
 		this.trustIncreaseFactor = personalityType.getTrustIncreaseFactor();
 		this.trustDecreaseFactor = personalityType.getTrustDecreaseFactor();
@@ -125,16 +123,14 @@ public class Personality {
 		this.aggressiveness = personalityType.getAggressiveness();
 		this.trustworthiness = personalityType.getTrustworthiness();
 		this.maxNumProposals = personalityType.getMaxNumProposals();
-		
-	}
-	
-	
 
-	public int updateTrust(String powerName, Effect effect){
+	}
+
+	public int updateTrust(String powerName, Effect effect) {
 		double newVal = 0;
 		double oldVal = this.trustDict.get(powerName);
-		
-		switch(effect){
+
+		switch (effect) {
 		case NEUTRAL:
 			newVal = oldVal;
 			break;
@@ -147,17 +143,17 @@ public class Personality {
 		default:
 			break;
 		}
-		
+
 		this.trustDict.put(powerName, newVal);
-		
+
 		return 0;
 	}
-	
-	public int updateLikeability(String powerName, Effect effect){
+
+	public int updateLikeability(String powerName, Effect effect) {
 		double newVal = 0;
 		double oldVal = this.likeabilityDict.get(powerName);
-		
-		switch(effect){
+
+		switch (effect) {
 		case NEUTRAL:
 			newVal = oldVal;
 			break;
@@ -170,31 +166,32 @@ public class Personality {
 		default:
 			break;
 		}
-		
+
 		this.likeabilityDict.put(powerName, newVal);
-		
+
 		return 0;
 	}
 
 	public boolean hasTrustIssuesWith(Power power) {
-//		try{
-		if ((!(power.equals(this.myPower))) && (this.trustDict.get(power.getName()) < this.trustThreshold)){
+		// try{
+		if ((!(power.equals(this.myPower))) && (this.trustDict.get(power.getName()) < this.trustThreshold)) {
 			return true;
 		} else {
 			return false;
 		}
-//		}}catch(NullPointerException e){
-//			for (String key : trustDict.keySet()) {
-//			    System.out.println(key + " : " + trustDict.get(key));
-//			}
-//			System.out.println("SOMETHING WENT WRONG 1 " + trustDict.get(power.getName()));
-//			System.out.println("SOMETHING WENT WRONG 2 " + power.getName());
-//			System.out.println("SOMETHING WENT WRONG 3 " + this.trustThreshold);
-//		}
+		// }}catch(NullPointerException e){
+		// for (String key : trustDict.keySet()) {
+		// System.out.println(key + " : " + trustDict.get(key));
+		// }
+		// System.out.println("SOMETHING WENT WRONG 1 " +
+		// trustDict.get(power.getName()));
+		// System.out.println("SOMETHING WENT WRONG 2 " + power.getName());
+		// System.out.println("SOMETHING WENT WRONG 3 " + this.trustThreshold);
+		// }
 	}
-	
+
 	public boolean hasLikeIssues(Power power) {
-		if (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) > this.likeThreshold){
+		if (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) > this.likeThreshold) {
 			return true;
 		} else {
 			return false;
@@ -203,63 +200,62 @@ public class Personality {
 
 	public void setMyPower(Power me) {
 		this.myPower = me;
-		
+
 	}
-	
+
 	public void setPowers(List<Power> powers) {
 		this.allPowers = powers;
-		for(Power power : powers){
-			if (!(power.equals(this.myPower))){
+		for (Power power : powers) {
+			if (!(power.equals(this.myPower))) {
 				this.trustDict.put(power.getName(), this.trustInitValue);
 				this.likeabilityDict.put(power.getName(), this.likeInitValue);
 			}
 		}
-		
+
 	}
-
-
 
 	public String getPersonalityValuesString() {
-		
-		String retString = "\n ---------------------------------------------";
-		retString += "\n" + myPower.getName() + "\n";
-		for(Power power : this.allPowers){
-			if (!(power.equals(this.myPower))){
-					retString += power.getName() + " trust: " + trustDict.get(power.getName());
-					retString += "\n";
-					retString += power.getName() + " like: " + likeabilityDict.get(power.getName());
-					retString += "\n";
+		String retStringValueLike = "";
+		String retStringValueTrust = "";
+		int count = 0;
+		for (Power power : this.allPowers) {
+			retStringValueLike += likeabilityDict.get(power.getName());
+			retStringValueTrust += trustDict.get(power.getName());
+			count++;
+			if (count != allPowers.size()) {
+				retStringValueTrust += "\t , \t";
+				retStringValueLike += "\t , \t";
 			}
 		}
-		return retString;
+		return retStringValueLike + "\t : " + retStringValueTrust;
 	}
-	
-	public boolean isType(PersonalityType personalityType){
+
+	public boolean isType(PersonalityType personalityType) {
 		return this.type == personalityType;
 	}
-	
-	public int getMaxProposals(){
+
+	public int getMaxProposals() {
 		return this.maxNumProposals;
 	}
-	
-	public double getTrustVal(String powerName){
+
+	public double getTrustVal(String powerName) {
 		return this.trustDict.get(powerName);
 	}
-	
-	public double getLikeabilityVal(String powerName){
+
+	public double getLikeabilityVal(String powerName) {
 		return this.likeabilityDict.get(powerName);
 	}
-	
-	public boolean getTrustworthiness(){
+
+	public boolean getTrustworthiness() {
 		return this.trustworthiness;
 	}
-	
-	public boolean getAggressiveness(){
+
+	public boolean getAggressiveness() {
 		return this.aggressiveness;
 	}
 
-//	public double getTrustThreshold() {
-//		return trustThreshold;
-//	}
-	
+	// public double getTrustThreshold() {
+	// return trustThreshold;
+	// }
+
 }

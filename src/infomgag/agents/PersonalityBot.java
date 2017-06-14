@@ -62,6 +62,7 @@ public class PersonalityBot extends Player{
 		
 		
 		//set the default name, game server port, and log path for the agent. 
+		boolean useMCTS = false;
 		String name = "D-Brane Tactics Example Agent";
 		String logPath = "log/";
 		int gameServerPort = DEFAULT_GAME_SERVER_PORT;
@@ -122,6 +123,13 @@ public class PersonalityBot extends Player{
 					System.out.println("main() The Personality type does not excist") ;
 				}
 			}
+			if(args[i].equals("-mcts")){
+				if(args[i+1].equals("TRUE")){
+					useMCTS = true;
+				}else{
+					useMCTS = false;
+				}
+			}
 			
 		}
 		
@@ -129,7 +137,7 @@ public class PersonalityBot extends Player{
 		File logFolder = new File(logPath);
 		logFolder.mkdirs();
 		
-		PersonalityBot exampleAgent = new PersonalityBot(name, finalYear, logPath, gameServerPort, negoPort, ps);
+		PersonalityBot exampleAgent = new PersonalityBot(name, finalYear, logPath, gameServerPort, negoPort, ps, useMCTS);
 		
 		//Connect to the game server.
 		try{
@@ -143,6 +151,7 @@ public class PersonalityBot extends Player{
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 	        public void run() {
 	        	exAgent.logger.writeToFile();
+	        	exAgent.personalityLogger.writeToFile();
 	        }
 	    }));
 	}
@@ -150,6 +159,7 @@ public class PersonalityBot extends Player{
 	//FIELDS
 	DecisionMaker decisionMaker;
 	PersonalityType ps;
+	boolean useMCTS;
 	/** If needed, we will force the thread to sleep during the negotiation phase to yield CPU time to other bots. */
 	private boolean forceNegoSleep;
 	/** This value determines when the forced sleep kicks in. It is assigned to in the constructor, we may want to add a command line argument at some point.*/
@@ -186,19 +196,20 @@ public class PersonalityBot extends Player{
 	 * 
 	 * */
 	private Logger logger = new Logger();
+	private Logger personalityLogger = new Logger();
 	
 	/**A list to store all deals that we are committed to.*/
 	ArrayList<BasicDeal> confirmedDeals = new ArrayList<BasicDeal>();
 	
-	PersonalityBot(String name, int finalYear, String logPath, int gameServerPort, int negoServerPort, PersonalityType ps){
+	PersonalityBot(String name, int finalYear, String logPath, int gameServerPort, int negoServerPort, PersonalityType ps, boolean useMCTS){
 		super(logPath);
-		
+		this.useMCTS = useMCTS;
 		this.name = name;
 		this.finalYear = finalYear;
 		this.ps = ps;
 		
 		// Will force thread sleep if negotiation calculation was faster than minNegoSleep milliseconds, will then force wait for 2 * minNegoCycle.
-		this.minNegoCycle = 500;
+		this.minNegoCycle = 5000;
 		
 		//Initialize the clients
 		try {
@@ -231,6 +242,7 @@ public class PersonalityBot extends Player{
 		
 		//enable logging at the specified path.
 		logger.enable(logPath, this.me.getName() + ".log");
+		personalityLogger.enable(logPath, this.me.getName() + "Personality.log");
 		
 		//write our name and the power we are playing to the log file.
 		logger.logln(this.name + " playing as " + this.me.getName() +" | PS: " + this.ps, true);
@@ -249,7 +261,7 @@ public class PersonalityBot extends Player{
 		}
 		logger.writeToFile();
 		List<String> negotiatingPowers = negoClient.getRegisteredNames();
-		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me, this.confirmedDeals, negotiatingPowers, logger);
+		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me, this.confirmedDeals, negotiatingPowers, logger, personalityLogger, useMCTS);
 		
 	
 	}
@@ -405,7 +417,7 @@ public class PersonalityBot extends Player{
 	}
 	
 	
-	List<Power> getAllies(Game game){
+	public List<Power> getAllies(Game game){
 		
 		ArrayList<Power> allies = new ArrayList<>(1);
 		allies.add(me);
@@ -434,7 +446,7 @@ public class PersonalityBot extends Player{
 	 * @param negotiationDeadline
 	 * A future discrete point in time in milliseconds. (It is phase start + phase duration, not just duration).
 	 */
-	public void negotiate(List<Power> myAllies, long negotiationDeadline) {
+public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 		
 		// How many proposals our agents make per turn is determined by its personality.
 		int maxNumProposals = decisionMaker.getNumProposals();
@@ -539,8 +551,6 @@ public class PersonalityBot extends Player{
 	public void phaseEnd(GameState gameState) {
 		
 		decisionMaker.update(this.submittedOrders);
-		
-		logger.logln(decisionMaker.getPersonalityValues(), true);
 		//List<Power> recievers = game.getPowers();
 		//this.negoClient.sendInformalMessage(recievers,decisionMaker.getPersonalityValues());
 		//To prevent games from taking too long, we automatically propose a draw after

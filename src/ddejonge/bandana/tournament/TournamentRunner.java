@@ -14,7 +14,7 @@ public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	private final static String DEFAULT_LAST_YEAR = "1903";
+	private final static String DEFAULT_LAST_YEAR = "1902";
 	
 	private final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", DEFAULT_LAST_YEAR};
 	private final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", DEFAULT_LAST_YEAR};
@@ -53,11 +53,11 @@ public class TournamentRunner {
 		DBRANE_1_1("D-Brane", dbrane_1_1_Command),
 		DBRANE_EXAMPLE("D-BraneExampleBot", dbraneExampleBotCommand),
 		ANAC_EXAMPLE("AnacExampleBot", anacExampleBotCommand),
-		PERSONALITY_MELANCHOLIC("Personality MELANCHOLIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "MELANCHOLICPersonalityBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC"}),
-		PERSONALITY_SANGUINE("Personality SANGUINE", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "SANGUINEPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE"}),
-		PERSONALITY_PHLEGMATIC("Personality PHLEGMATIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "PHLEGMATICPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC"}),
-		PERSONALITY_CHOLERIC("Personality CHOLERIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "CHOLERICPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC"}),
-		PERSONALITY_NEUTRAL("Personality NEUTRAL", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "NEUTRALPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "NEUTRAL"});
+		PERSONALITY_MELANCHOLIC("Personality MELANCHOLIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "MELANCHOLICPersonalityBot", "-fy", DEFAULT_LAST_YEAR, "-ps","MELANCHOLIC" ,"-mcts", "TRUE"}),
+		PERSONALITY_SANGUINE("Personality SANGUINE", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "SANGUINEPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "SANGUINE","-mcts", "FALSE"}),
+		PERSONALITY_PHLEGMATIC("Personality PHLEGMATIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "PHLEGMATICPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "PHLEGMATIC","-mcts", "FALSE"}),
+		PERSONALITY_CHOLERIC("Personality CHOLERIC", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "CHOLERICPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "CHOLERIC","-mcts", "FALSE"}),
+		PERSONALITY_NEUTRAL("Personality NEUTRAL", new String[] {"java", "-jar", "agents/Personality.jar", "-log", "log", "-name", "NEUTRALPersonalityBot", "-fy", DEFAULT_LAST_YEAR,"-ps", "NEUTRAL","-mcts", "FALSE"});
 
 		private String name;
 		private String[] command;
@@ -81,7 +81,7 @@ public class TournamentRunner {
 		
 		boolean displayInterface = true;		// if we're sure stuff runs well and just want logs, this will cut down on overhead.
 				
-		int numberOfGames = 5;				//The number of games this tournament consists of.
+		int numberOfGames = 1;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 30; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 10;  //30 seconds for each SUM and AUT phases
