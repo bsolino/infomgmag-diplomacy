@@ -14,7 +14,7 @@ public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	private final static String DEFAULT_LAST_YEAR = "1902";
+	private final static String DEFAULT_LAST_YEAR = "1905";
 	
 	private final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", DEFAULT_LAST_YEAR};
 	private final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", DEFAULT_LAST_YEAR};
@@ -83,9 +83,9 @@ public class TournamentRunner {
 				
 		int numberOfGames = 1;				//The number of games this tournament consists of.
 		
-		int deadlineForMovePhases = 30; 	//60 seconds for each SPR and FAL phases
-		int deadlineForRetreatPhases = 10;  //30 seconds for each SUM and AUT phases
-		int deadlineForBuildPhases = 10;  	//30 seconds for each WIN phase
+		int deadlineForMovePhases = 60; 	//60 seconds for each SPR and FAL phases
+		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases
+		int deadlineForBuildPhases = 30;  	//30 seconds for each WIN phase
 		
 		int finalYear = Integer.parseInt(DEFAULT_LAST_YEAR); 	//The year after which the agents in each game are supposed to propose a draw to each other. 
 		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 

@@ -209,7 +209,8 @@ public class PersonalityBot extends Player{
 		this.ps = ps;
 		
 		// Will force thread sleep if negotiation calculation was faster than minNegoSleep milliseconds, will then force wait for 2 * minNegoCycle.
-		this.minNegoCycle = 5000;
+		// Don't set this too high, or you'll sleep through a phase.
+		this.minNegoCycle = 1000;
 		
 		//Initialize the clients
 		try {
@@ -420,7 +421,15 @@ public class PersonalityBot extends Player{
 	public List<Power> getAllies(Game game){
 		
 		ArrayList<Power> allies = new ArrayList<>(1);
+		
 		allies.add(me);
+		
+		for (Power p : game.getNonDeadPowers()){
+			if (p != me){
+				allies.add(p);
+				if (allies.size()>2) break;
+			}
+		}
 		
 		//A real agent would use some algotithm to determine its allies. 
 		//Here however, we just fill the list with 'me'.
@@ -451,33 +460,15 @@ public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 		// How many proposals our agents make per turn is determined by its personality.
 		int maxNumProposals = decisionMaker.getNumProposals();
 		
-		// 
+		// Start by checking messaages - at this point, the Queue likely contains messages from a previous round.
+		this.checkMessageQueue(myAllies);
+		
 		while(this.checkNegotiationDeadline(negotiationDeadline)){
-
-			// First performa cycle handling all messages.
-			while(negoClient.hasMessage()){
-				
-				//removes the message from the message que
-				Message receivedMessage = negoClient.removeMessageFromQueue();
-				//Asks for a string back for logging. 
-				String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage, myAllies);
-				
-				//THIS IS A COMPLETELY STUPID WAY TO HANDLE IT, BUT IT SHOULD WORK. MAYBE FIX THIS IN A LATER UPDATE. 
-				if(handledMessageString.equals("Personalitybot.negotiate() Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
-					this.negoClient.acceptProposal( ((DiplomacyProposal) receivedMessage.getContent()).getId());
-				} //There is going to be needed a consisty check here if the notary consistancy check will be turned off. 
-				
-				this.logger.logln("Personalitybot.negotiate() Message handled by DecisionMaker: "+handledMessageString); 	//Logs the results of the handling of the message. 
-			}
-			
-			// Deadline was checked before we handle incoming messages by the encapsulating while statement.
-			// Check deadline again before we calculate a proposal.
-			if (this.checkNegotiationDeadline(negotiationDeadline)) break;
 			
 			// Contrary to the original implementation in the D-Brane-examplebot, we allow for multiple deals to be made.
 			// This is dependent on the value of maxNumProposals.
 			if (maxNumProposals > 0){
-				
+				this.logger.logln("Making proposal.");
 				BasicDeal newDealToPropose = decisionMaker.searchForADealToPropose(myAllies);
 				//newDealToPropose = searchForNewDealToPropose(myAllies);
 				if(newDealToPropose != null){
@@ -489,16 +480,17 @@ public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}else{
-				this.logger.logln("Personalitybot.negotiate() No deals to propose");	
 				}
 				
 				maxNumProposals--;
+			}else{
+				this.logger.logln("Personalitybot.negotiate() No deals to propose");	
 			}
 			
+			// After we spent some time proposing, we check if new messages came in in the meantime.
+			this.checkMessageQueue(myAllies);
 		}
 	}
-	
 	
 	/**
 	 * This method is used to determine whether the negotiation deadline has been passed. It also ensures that we yield sufficient cpu time to other bots.
@@ -534,10 +526,30 @@ public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 			
 			// Save current time as last cycle start.
 			this.lastNegoCycle = now;
-			
 			return true;
+		}	
+		return false;
+	}
+	
+	/**
+	 * This method checks for and receives messages.
+	 */
+	private void checkMessageQueue(List<Power> myAllies){
+		while(negoClient.hasMessage()){
+			this.logger.logln("Checking for messages!");
+			
+			//removes the message from the message que
+			Message receivedMessage = negoClient.removeMessageFromQueue();
+			//Asks for a string back for logging. 
+			String handledMessageString = decisionMaker.handleIncomingMessages(receivedMessage, myAllies);
+			
+			//THIS IS A COMPLETELY STUPID WAY TO HANDLE IT, BUT IT SHOULD WORK. MAYBE FIX THIS IN A LATER UPDATE. 
+			if(handledMessageString.equals("Accepting proposal:" + receivedMessage.getMessageId())){	//This means that the deal has been accepted, and the deal should be sent to the Notary. 
+				this.negoClient.acceptProposal( ((DiplomacyProposal) receivedMessage.getContent()).getId());
+			} //There is going to be needed a consisty check here if the notary consistancy check will be turned off. 
+			
+			this.logger.logln("Message handled by DecisionMaker: "+handledMessageString); 	//Logs the results of the handling of the message. 
 		}
-		else return false;
 	}
 	
 	/**
