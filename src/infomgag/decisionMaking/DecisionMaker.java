@@ -92,6 +92,7 @@ public class DecisionMaker{
 		// meaning, we check whether the player issued an order to move from that region, rather 
 		// than another player forcing it out of that region
 		ArrayList<Region> regionsILeft = new ArrayList<Region>();
+		ArrayList<Province> provincesILeft = new ArrayList<Province>();
 		ArrayList<Power> alreadyUpdatedPowersTrust = new ArrayList<Power>();
 		ArrayList<Power> alreadyUpdatedPowersLike = new ArrayList<Power>();
 		
@@ -103,6 +104,7 @@ public class DecisionMaker{
 						for (Region region : this.me.getControlledRegions()){
 							if (moveOrder.getLocation().equals(region)){
 								regionsILeft.add(region);
+								provincesILeft.add(region.getProvince());
 							}
 						}
 					}
@@ -134,13 +136,13 @@ public class DecisionMaker{
 						
 					}
 					
-					// If someone forced us out of a region (we check whether the player has left the region on its own accord using regionsILeft)
+					// If someone forced us out of a province (we check whether the player has left the province on its own accord using provincesILeft)
 					// Then we like them less (i.e. NEGATIVE like update)
 					if (order instanceof MTOOrder){
 						MTOOrder moveOrder = (MTOOrder) order;
 						// check whether the move order causes us to lose territory
 						for (Region region : this.me.getControlledRegions()){
-							if (moveOrder.getDestination().equals(region) && !(regionsILeft.contains(region)) && !(alreadyUpdatedPowersLike.contains(order.getPower()))  ){
+							if (moveOrder.getDestination().getProvince().equals(region.getProvince()) && !(provincesILeft.contains(region.getProvince())) && !(alreadyUpdatedPowersLike.contains(order.getPower()))  ){
 								personality.updateLikeability(order.getPower().getName(), Effect.NEGATIVE);
 								alreadyUpdatedPowersLike.add(order.getPower());
 							}
@@ -187,13 +189,17 @@ public class DecisionMaker{
 									if(order instanceof MTOOrder){
 										MTOOrder tempOrder = (MTOOrder) order;
 										for(Province province : dmz.getProvinces()){
-											for(Region region : province.getRegions()){
-												// If a power violated the DMZ and moved a unit into it, we trust it less
-												if (tempOrder.getDestination().equals(region) && !(alreadyUpdatedPowersTrust.contains(order.getPower()))){
-													personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
-													alreadyUpdatedPowersTrust.add(order.getPower());
-												}
+											if (tempOrder.getDestination().getProvince().equals(province) && !(alreadyUpdatedPowersTrust.contains(order.getPower()))){
+												personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+												alreadyUpdatedPowersTrust.add(order.getPower());
 											}
+//											for(Region region : province.getRegions()){
+//												// If a power violated the DMZ and moved a unit into it, we trust it less
+//												if (tempOrder.getDestination().equals(region) && !(alreadyUpdatedPowersTrust.contains(order.getPower()))){
+//													personality.updateTrust(order.getPower().getName(), Effect.NEGATIVE);
+//													alreadyUpdatedPowersTrust.add(order.getPower());
+//												}
+//											}
 										}	
 									}
 								}
@@ -538,7 +544,7 @@ public class DecisionMaker{
 		
 		for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
 			Order order = orderCommitment.getOrder();
-			
+			//this.logger.logln("SEARCH FOR ORDER:  " + order.toString());
 			if (order instanceof SUPOrder || order instanceof SUPMTOOrder){
 				if (order instanceof SUPOrder){
 					SUPOrder supOrder = (SUPOrder) order;
@@ -572,21 +578,21 @@ public class DecisionMaker{
 				MTOOrder moveOrder = (MTOOrder) order;
 				// check whether the move order causes us, a friend, or an enemy to lose territory
 				for (Region region : this.me.getControlledRegions()){
-					if (moveOrder.getDestination().equals(region)  && !(moveOrder.getPower().equals(me))){
+					if (moveOrder.getDestination().getProvince().equals(region.getProvince())  && !(moveOrder.getPower().equals(me))){
 						negativeCount += 2;
 					}
 				}
 				
 				for (Power power : this.listOfFoes){
 					for (Region region : power.getControlledRegions()){
-						if (moveOrder.getDestination().equals(region)  && !(moveOrder.getPower().equals(power))){
+						if (moveOrder.getDestination().getProvince().equals(region.getProvince())  && !(moveOrder.getPower().equals(power))){
 							positiveCount += 1;
 						}
 					}
 				}
 				for (Power power : this.listOfFriends){
 					for (Region region : power.getControlledRegions()){
-						if (moveOrder.getDestination().equals(region) &&  !(moveOrder.getPower().equals(power))){
+						if (moveOrder.getDestination().getProvince().equals(region.getProvince()) &&  !(moveOrder.getPower().equals(power))){
 							negativeCount += 1;
 						}
 					}
@@ -711,7 +717,7 @@ public class DecisionMaker{
 	
 	public BasicDeal generateRandomDeal(){
 	
-	
+	// TODO WORK on random deal generator, create better deals
 	//Get the names of all the powers that are connected to the negotiation server (some players may be non-negotiating agents, so they are not connected.)
 	
 	//Make a copy of this list that only contains powers that are still alive.
@@ -837,7 +843,7 @@ public class DecisionMaker{
 				randomOrder = new MTOOrder(power, randomUnit, randomDestination);
 			}
 			// Of course we could also propose random support orders, but we don't do that here.
-			
+			//TODO PROPOSE support orders
 			
 			//We only generate deals for the current year and phase. 
 			// However, you can pick any year and phase here, as long as they do not lie in the past.

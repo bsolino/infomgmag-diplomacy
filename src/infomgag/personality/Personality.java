@@ -191,7 +191,7 @@ public class Personality {
 	}
 
 	public boolean hasLikeIssues(Power power) {
-		if (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) > this.likeThreshold) {
+		if (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) < this.likeThreshold) {
 			return true;
 		} else {
 			return false;
