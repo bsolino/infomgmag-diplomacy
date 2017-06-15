@@ -420,29 +420,16 @@ public class PersonalityBot extends Player{
 	
 	public List<Power> getAllies(Game game){
 		
-		ArrayList<Power> allies = new ArrayList<>(1);
-		
-		allies.add(me);
-		
-		for (Power p : game.getNonDeadPowers()){
-			if (p != me){
-				allies.add(p);
-				if (allies.size()>2) break;
-			}
-		}
-		
-		//A real agent would use some algotithm to determine its allies. 
-		//Here however, we just fill the list with 'me'.
+		// Dead people don't make great allies.
+		List<Power> allies = game.getNonDeadPowers();
+	
+		// Decisionmaker is used to test who is a valid allies.
+		allies = this.decisionMaker.testAllies(allies);
 		
 		return allies;
 		
 	}
 	
-	
-	
-	
-
-
 	/**
 	 * This loop runs the entire duration of the negotiation phase. It is where negotiation happens in all its glory (or lack thereof).
 	 * Recoded the below, because there is a risk of being slow on either step 1 or step 2 - or on both - when we implement MCTS.

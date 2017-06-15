@@ -174,11 +174,7 @@ public class Personality {
 
 	public boolean hasTrustIssuesWith(Power power) {
 		// try{
-		if ((!(power.equals(this.myPower))) && (this.trustDict.get(power.getName()) < this.trustThreshold)) {
-			return true;
-		} else {
-			return false;
-		}
+		return ((!(power.equals(this.myPower))) && (this.trustDict.get(power.getName()) < this.trustThreshold));
 		// }}catch(NullPointerException e){
 		// for (String key : trustDict.keySet()) {
 		// System.out.println(key + " : " + trustDict.get(key));
@@ -191,11 +187,7 @@ public class Personality {
 	}
 
 	public boolean hasLikeIssues(Power power) {
-		if (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) < this.likeThreshold) {
-			return true;
-		} else {
-			return false;
-		}
+		return (!(power.equals(this.myPower)) && this.likeabilityDict.get(power.getName()) < this.likeThreshold);
 	}
 
 	public void setMyPower(Power me) {

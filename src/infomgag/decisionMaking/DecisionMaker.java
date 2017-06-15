@@ -639,6 +639,25 @@ public class DecisionMaker{
 		}
 	}
 	
+	public List<Power> testAllies(List<Power> nondeadpowers){
+		
+		List<Power> allies = new ArrayList<Power>();
+		String debugoutput = "Allies: | ";
+		
+		// For every living power, test whether we trust and like them. If so, they stay in the list.
+		for (Power p : nondeadpowers){
+			// Test whether trust and like are both OK.
+			if (!personality.hasLikeIssues(p) && !personality.hasTrustIssuesWith(p)){
+				if (p != me) debugoutput += (p.getName() + "-YES(" + personality.getTrustVal(p.getName()) + "," + personality.getLikeabilityVal(p.getName()) + ") | ");
+				allies.add(p);
+			}
+			else if (p != me) debugoutput += (p.getName() + "-NO(" + personality.getTrustVal(p.getName()) + "," + personality.getLikeabilityVal(p.getName()) + ") | ");
+		}
+		
+		this.logger.logln(debugoutput);
+		return allies;
+	}
+	
 	public Plan determineBestPlan(List<Power> myAllies){
 		if (!personality.getTrustworthiness()){
 			if(random.nextInt(2) == 0){ // accept with 50% probability.
