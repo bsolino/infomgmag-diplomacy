@@ -366,7 +366,7 @@ public class DecisionMaker{
 		
 		if((!outDated) && (consistencyReport == null) && (dealVal > this.dealAcceptanceThreshold)){
 			this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * this.dealAcceptanceModifier;
-			this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
+			//this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
 			return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
 			//if(random.nextInt(2) == 0){ // accept with 50% probability.
@@ -374,7 +374,7 @@ public class DecisionMaker{
 			//}
 		}
 		this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * this.dealRejectionModifier;
-		this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
+		//this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
 		return false;
 	}
 
@@ -531,8 +531,8 @@ public class DecisionMaker{
 		// weigh the helping of an enemy more heavily ?
 		
 		double dealModifier = 1;
-		int negativeCount = 0;
-		int positiveCount = 0;
+		double negativeCount = 1;
+		double positiveCount = 1;
 		
 		for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
 			Order order = orderCommitment.getOrder();
@@ -595,7 +595,9 @@ public class DecisionMaker{
 			
 		}
 		
+		
 		dealModifier = positiveCount / negativeCount;
+		//this.logger.logln("positive: " + positiveCount);
 		
 		return dealModifier;
 	}
