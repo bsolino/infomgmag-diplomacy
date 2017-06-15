@@ -292,7 +292,7 @@ public class PersonalityBot extends Player{
 		// and will assume that none of these powers will attack any supply center owned by us.
 		//In this example we just create a fixed coalition structure. When implementing a real player you should of course come up with some smarter algorithm that
 		// determines the coalition structure based on agreements made and supports given in previous rounds.  
-		List<Power> myAllies = getAllies(game);
+		List<Power> myAllies = this.decisionMaker.testAllies(game.getNonDeadPowers());
 		
 		
 		//Test whether any of the deals we are committed to have become in valid.
@@ -415,19 +415,6 @@ public class PersonalityBot extends Player{
 	@Override
 	public void receivedOrder(Order order) {
 		this.submittedOrders.add(order);
-	}
-	
-	
-	public List<Power> getAllies(Game game){
-		
-		// Dead people don't make great allies.
-		List<Power> allies = game.getNonDeadPowers();
-	
-		// Decisionmaker is used to test who is a valid allies.
-		allies = this.decisionMaker.testAllies(allies);
-		
-		return allies;
-		
 	}
 	
 	/**

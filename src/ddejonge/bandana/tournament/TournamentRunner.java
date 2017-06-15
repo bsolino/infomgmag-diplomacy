@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ddejonge.bandana.tools.Logger;
 import ddejonge.bandana.tools.ProcessRunner;
@@ -46,6 +47,9 @@ public class TournamentRunner {
 	// where the results of the tournament will be logged.
 	final static String LOG_FOLDER = "log";
 	
+	// required for fisher-yates.
+	private final static Random random = new Random();
+	
 	private enum TournamentPlayer{
 		
 		RANDOM_NEGOTIATOR("RandomNegotiator", randomNegotiatorCommand),
@@ -79,7 +83,8 @@ public class TournamentRunner {
 	public static void main(String[] args) throws IOException {
 		
 		
-		boolean displayInterface = true;		// if we're sure stuff runs well and just want logs, this will cut down on overhead.
+		boolean displayInterface = true;		// False = Interface off; If we're sure stuff runs well and just want logs, this will cut down on overhead.
+		boolean fixedPlayers = true;			// False = Randomize players; When we want to run a lot of games sequentially, we can use this to generate a somewhat randomized player pool.
 				
 		int numberOfGames = 1;				//The number of games this tournament consists of.
 		
@@ -90,7 +95,7 @@ public class TournamentRunner {
 		int finalYear = Integer.parseInt(DEFAULT_LAST_YEAR); 	//The year after which the agents in each game are supposed to propose a draw to each other. 
 		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 
 		
-		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear, displayInterface);
+		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear, displayInterface, fixedPlayers);
 		
 		
 		
@@ -110,10 +115,9 @@ public class TournamentRunner {
 		
 	}
 	
-	
 	static List<Process> players = new ArrayList<Process>();
 	
-	public static void run(int numberOfGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit, int finalYear, boolean displayInterface) throws IOException{
+	public static void run(int numberOfGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit, int finalYear, boolean displayInterface, boolean fixedPlayers) throws IOException{
 		
 		//Create a folder to store all the results of the tournament. 
 		// This folder will be placed inside the LOG_FOLDER and will have the current date and time as its name.
@@ -121,7 +125,7 @@ public class TournamentRunner {
 		String tournamentLogFolderPath = LOG_FOLDER + File.separator + Logger.getDateString();
 		File logFile = new File(tournamentLogFolderPath);
 		logFile.mkdirs();
-		
+		List<TournamentPlayer> tournamentPool = new ArrayList<TournamentPlayer>();
 		
  		//1. Run the Parlance game server.
 		ParlanceRunner.runParlanceServer(numberOfGames, moveTimeLimit, retreatTimeLimit, buildTimeLimit);
@@ -146,10 +150,14 @@ public class TournamentRunner {
 			
 			NegoServerRunner.notifyNewGame(gameNumber);
 			
+			if (!fixedPlayers) tournamentPool = getPlayerPool();
+			
 			//4. Start the players:
 			for(int i=0; i<7; i++){
 				
-				TournamentPlayer tournamentPlayer = TOURNAMENT_PLAYERS[i];
+				TournamentPlayer tournamentPlayer;
+				if (fixedPlayers) tournamentPlayer = TOURNAMENT_PLAYERS[i];
+				else tournamentPlayer = tournamentPool.get(i);
 
 				//make sure that each player has a different name
 				String name = tournamentPlayer.getName() + " " + i;
@@ -221,6 +229,40 @@ public class TournamentRunner {
 		tournamentObserver.exit();
 		ParlanceRunner.stop();
 		NegoServerRunner.stop();
+	}
+	
+	// Add a random field.
+	
+	private static List<TournamentPlayer> getPlayerPool(){
+		
+		// This is our main list.
+		List<TournamentPlayer> pool = new ArrayList<TournamentPlayer>();
+		
+		// We start from a fixed pool. (To enforce diversity.)
+		pool.add(TournamentPlayer.PERSONALITY_CHOLERIC);
+		pool.add(TournamentPlayer.PERSONALITY_PHLEGMATIC);
+		pool.add(TournamentPlayer.PERSONALITY_SANGUINE);
+		pool.add(TournamentPlayer.PERSONALITY_MELANCHOLIC);
+		pool.add(TournamentPlayer.PERSONALITY_CHOLERIC);
+		pool.add(TournamentPlayer.PERSONALITY_PHLEGMATIC);
+		pool.add(TournamentPlayer.PERSONALITY_SANGUINE);
+		pool.add(TournamentPlayer.PERSONALITY_MELANCHOLIC);
+		
+		// Then we shuffle (Do the fisher-yates!)
+		int j;				// Extra counter / index
+		TournamentPlayer t; // Temporary player var.
+        for (int i = pool.size() - 1; i > 1; i--)
+        {
+            j = random.nextInt(i+1);		// Random bound is exclusive. So i+1 generates a random number of max i.
+            t = pool.get(i);				// So now we save the element at index i.
+            pool.set(i, pool.get(j));		// And replace it with the element at index j.
+            pool.set(j, t);					// Which is, in turn, replaced with the element previously at index i.
+        }
+		
+		// And eliminate the last one (effectively a random elimination).
+		pool.remove(pool.size()-1);
+		
+		return pool;
 	}
 	
 }
