@@ -208,6 +208,8 @@ public class DecisionMaker{
 
 		
 	private void updateFriendsAndFoes() {
+		this.listOfFoes.clear();
+		this.listOfFriends.clear();
 		for (Power power : game.getPowers()){
 			if (! (power.equals(me)) ){
 				if (personality.hasLikeIssues(power)  && personality.hasTrustIssuesWith(power) ){
@@ -570,21 +572,21 @@ public class DecisionMaker{
 				MTOOrder moveOrder = (MTOOrder) order;
 				// check whether the move order causes us, a friend, or an enemy to lose territory
 				for (Region region : this.me.getControlledRegions()){
-					if (moveOrder.getDestination().equals(region)  ){
+					if (moveOrder.getDestination().equals(region)  && !(moveOrder.getPower().equals(me))){
 						negativeCount += 2;
 					}
 				}
 				
 				for (Power power : this.listOfFoes){
 					for (Region region : power.getControlledRegions()){
-						if (moveOrder.getDestination().equals(region)  ){
+						if (moveOrder.getDestination().equals(region)  && !(moveOrder.getPower().equals(power))){
 							positiveCount += 1;
 						}
 					}
 				}
 				for (Power power : this.listOfFriends){
 					for (Region region : power.getControlledRegions()){
-						if (moveOrder.getDestination().equals(region)  ){
+						if (moveOrder.getDestination().equals(region) &&  !(moveOrder.getPower().equals(power))){
 							negativeCount += 1;
 						}
 					}
@@ -598,6 +600,7 @@ public class DecisionMaker{
 		
 		dealModifier = positiveCount / negativeCount;
 		//this.logger.logln("positive: " + positiveCount);
+		//this.logger.logln("negative: " + negativeCount);
 		
 		return dealModifier;
 	}
