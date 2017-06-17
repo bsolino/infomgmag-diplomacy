@@ -37,9 +37,11 @@ public class Personality {
 
 	public enum PersonalityType {
 
-		CHOLERIC(0.5, 0.9, 0.9, 0.9, 2, 2, true, false, 5), SANGUINE(0.9, 0.05, 0.9, 0.1, 2, 2, false, true,
-				6), MELANCHOLIC(0.05, 0.8, 0.1, 0.8, 0.3, 0.3, false, false, 1), PHLEGMATIC(0.3, 0.5, 0.2, 0.2, 1, 1,
-						false, true, 2), NEUTRAL(0, 0, 0, 0, 1, 1, true, true, 0);
+		CHOLERIC(0.5, 0.9, 0.9, 0.9, 2, 2, true, false, 5), 
+		SANGUINE(0.9, 0.05, 0.9, 0.1, 2, 2, false, true,6), 
+		MELANCHOLIC(0.05, 0.8, 0.1, 0.8, 0.3, 0.3, false, false, 1), 
+		PHLEGMATIC(0.3, 0.5, 0.2, 0.2, 1, 1,false, true, 2), 
+		NEUTRAL(0, 0, 0, 0, 1, 1, true, true, 0);
 
 		private final double trustIncreaseFactor;
 		private final double trustDecreaseFactor;
@@ -206,6 +208,10 @@ public class Personality {
 
 	}
 
+	public String getPersonalityType(){
+		return type.toString();
+	}
+	
 	public String getPersonalityValuesString() {
 		String retStringValueLike = "";
 		String retStringValueTrust = "";
@@ -215,11 +221,11 @@ public class Personality {
 			retStringValueTrust += trustDict.get(power.getName());
 			count++;
 			if (count != allPowers.size()) {
-				retStringValueTrust += "\t , \t";
-				retStringValueLike += "\t , \t";
+				retStringValueTrust += " , ";
+				retStringValueLike += ", ";
 			}
 		}
-		return retStringValueLike + "\t : " + retStringValueTrust;
+		return retStringValueLike + ", " + retStringValueTrust;
 	}
 
 	public boolean isType(PersonalityType personalityType) {

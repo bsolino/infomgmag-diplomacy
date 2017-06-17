@@ -13,6 +13,7 @@ import es.csic.iiia.fabregues.dip.orders.RTOOrder;
 import es.csic.iiia.fabregues.dip.orders.SUPMTOOrder;
 import es.csic.iiia.fabregues.dip.orders.SUPOrder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,19 @@ public class DecisionMaker{
 	private boolean useMCTS;
 	List<Power> listOfFriends;
 	List<Power> listOfFoes;
+	//Metric variables
+	List<BasicDeal> myProposedDeals;
+	List<BasicDeal> myConfirmedDeals;
+	int n_prop_accepted;
+	int n_my_prop_accepted;
+	int n_prop_confirmed;
+	int n_prop_violated;
+	int n_prop_made;
+	int n_prop_recieved;
+	String gameNr;
+	String timeStamp;
+	String country; 
+	
 	
 	//Constructor: Takes in a personality and a game object. 
 	public DecisionMaker(Personality personality, Game game, Power me, ArrayList<BasicDeal> confirmedDeals, List<String> negotiatingPowers, Logger logger, Logger personalityLogger, boolean useMCTS){
@@ -68,16 +82,53 @@ public class DecisionMaker{
 		personality.setPowers(game.getPowers());
 		this.logger = logger;
 		this.firstIncomingDeal = true;
-		personalityLogger.logln(this.negotiatingPowers.size()+ ":");
+		
+		//Metric variables
+		n_prop_accepted = 0;
+		n_prop_made = 0;
+		n_prop_confirmed= 0;
+		n_prop_violated = 0;
+		n_prop_recieved = 0;
+		n_my_prop_accepted = 0;
+		myConfirmedDeals= new ArrayList<BasicDeal>();
+		myProposedDeals = new ArrayList<BasicDeal>();
+		
 		personalityLogger.logln(this.getAllNegotiatingPowers() + ":");
 		personalityLogger.writeToFile();
+		setLogginInfo();
 	}
 	
+	private void setLogginInfo() {
+		String s = personalityLogger.getLogFolderPath();
+		String[] tokens = s.split("\\\\");
+		timeStamp = tokens[1];
+		gameNr = tokens[3].split(" ")[1];
+		country = logger.getLogFileName().substring(0,3);
+	}
+
 	public String getPersonalityValues(){
 		return personality.getPersonalityValuesString();
 	}
 	
+	private boolean amIAlive(){
+		
+		
+		for(Power power: game.getNonDeadPowers()){
+			if(power == me){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public void update(ArrayList<Order> submittedOrders){
+		//Metric variables
+		
+		if(amIAlive()){
+			
+		
+		int n_supply_centers = me.getOwnedSCs().size();
 		// At the end of the phase, we check the submitted orders by all powers and determine whether 
 		// we should update the trust and like values 
 		// We only update like/trust values ONCE for each power, per phase
@@ -166,6 +217,17 @@ public class DecisionMaker{
 									if (orderCommitment.getOrder().equals(order) && !(alreadyUpdatedPowersTrust.contains(orderCommitment.getOrder().getPower()))){
 										personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.POSITIVE);		//Updates the personality dependant on if you were screwed over or not in the last round.
 										alreadyUpdatedPowersTrust.add(orderCommitment.getOrder().getPower());
+										
+										if(myConfirmedDeals.size() > 0){
+										for(BasicDeal myDeal :  myConfirmedDeals ){
+											if(myDeal.toString().equals(confirmedDeal.toString())){
+												n_prop_confirmed++;
+												logger.logln("Deal held", true);
+												//myConfirmedDeals.remove(myDeal);
+												break;
+											}
+									}
+								   }
 										break;
 									}
 								}
@@ -174,7 +236,19 @@ public class DecisionMaker{
 							if (!(orderCommitment.getOrder().getPower().equals(me))  && !(alreadyUpdatedPowersTrust.contains(orderCommitment.getOrder().getPower()))){
 								personality.updateTrust(orderCommitment.getOrder().getPower().getName(), Effect.NEGATIVE);
 								alreadyUpdatedPowersTrust.add(orderCommitment.getOrder().getPower());
+								
+								if(myConfirmedDeals.size() > 0){
+								for(BasicDeal myDeal :  myConfirmedDeals ){
+									if(myDeal.toString().equals(confirmedDeal.toString())){
+										
+										n_prop_violated++;
+										logger.logln("Deal violated", true);
+										//myConfirmedDeals.remove(myDeal);
+										break;
+									}
+								}
 							}
+						  }
 						}
 					}
 				}
@@ -209,9 +283,15 @@ public class DecisionMaker{
 				}
 			} 
 		}
-		updateFriendsAndFoes();
+		updateFriendsAndFoes(); 
+		String ID =timeStamp + "," + gameNr + ", " + country +", " + personality.getPersonalityType();
+		String phaseID = game.getYear() + "."+game.getPhase().toString();
+		getPersonalityValues();
+		String analytics = "," + n_prop_made + "," + n_my_prop_accepted + ", " + n_prop_violated + ", " + n_prop_recieved + ", " + n_prop_accepted + ", " + n_supply_centers ;
+		
+		this.personalityLogger.logln(ID + ", " + phaseID + ", " + getPersonalityValues() + ", " + analytics  + ":");
+		}
 	}
-
 		
 	private void updateFriendsAndFoes() {
 		this.listOfFoes.clear();
@@ -231,12 +311,14 @@ public class DecisionMaker{
 	//Handles an incomming message, this could be a reject, accept, confirm or propose message from another player
 	public String handleIncomingMessages(Message receivedMessage, List<Power> myAllies){
 		//Check if deal is outdated
+		if(amIAlive()){
 		DiplomacyProposal proposal;
 		//Then handle the various possible messages: PROPOSE, ACCEPT, REJECT and CONFIRM
 		
 		switch(receivedMessage.getPerformative()){
 		
-		case DiplomacyNegoClient.PROPOSE:			//A player has proposed a deal to you
+		case DiplomacyNegoClient.PROPOSE:	
+			//A player has proposed a deal to you
 			proposal  = (DiplomacyProposal)receivedMessage.getContent();	
 			BasicDeal deal = (BasicDeal)proposal.getProposedDeal();
 			if(handleProposal(deal, myAllies)){		//If you choose to accept the deal. Then handleProposal should be TRUE, else FALSE
@@ -259,11 +341,28 @@ public class DecisionMaker{
 		default:
 			return "UNKOWN INCOMING MESSAGE";
 		}
+		}else{
+			return "IGNORING MESSAGE,  I AM DEAD";
+		}
 	}	
 	
 	//If a confirmation message is sent to the agent, then it is being handled here. 
 	private void handleConfirmation(BasicDeal deal) {
 		confirmedDeals.add(deal);
+		if(myProposedDeals.size() >0 && deal != null){
+		for(BasicDeal myDeal :  myProposedDeals ){
+			if(myDeal.toString().equals(deal.toString())){
+				myConfirmedDeals.add(deal);
+				myProposedDeals.remove(deal);
+				for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
+					if(orderCommitment.getOrder().getPower() !=me){
+						n_my_prop_accepted++;
+					}
+				}
+				break;
+			}
+		}
+		}
 		//Incase of the notary consisty check is turned off, 
 		//then we need to check consistancy with other proposed deals at the same time. 
 		//There is code to do so in the exampled bots. but it is a bit cloncky. 
@@ -274,9 +373,6 @@ public class DecisionMaker{
 		boolean outDated = false;
 		boolean trustIssues = false;
 		Map<String, Integer> dealPowerCountDict = new HashMap<>();
-		
-		
-			
 		
 		for(DMZ dmz : deal.getDemilitarizedZones()){
 			
@@ -375,6 +471,8 @@ public class DecisionMaker{
 		if((!outDated) && (consistencyReport == null) && (dealVal > this.dealAcceptanceThreshold)){
 			this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * this.dealAcceptanceModifier;
 			//this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
+			n_prop_accepted++;
+			n_prop_recieved++;
 			return true;
 			// This agent simply flips a coin to determine whether to accept the proposal or not.
 			//if(random.nextInt(2) == 0){ // accept with 50% probability.
@@ -383,6 +481,7 @@ public class DecisionMaker{
 		}
 		this.dealAcceptanceThreshold = this.dealAcceptanceThreshold * this.dealRejectionModifier;
 		//this.logger.logln("THRESHOLD: " + this.dealAcceptanceThreshold);
+		n_prop_recieved++;
 		return false;
 	}
 
@@ -437,14 +536,7 @@ public class DecisionMaker{
 		return false;
 	}
 	//Should you accept a deal or not, returns TRUE if you want to accept this deal. FALSE if not. 
-	public boolean acceptDeal(BasicDeal deal){
-		boolean acceptDeal = false;
-		
-		//DO SOME STUFF TO CALCULATE IF THE DEAL IS RECJECTED OR ACCEPTED.
-		
-		
-		return acceptDeal;
-	}
+
 	
 	//Montecarlo stuff to search for a deal to propose. 
 	public BasicDeal searchForADealToPropose(List<Power> myAllies){
@@ -519,10 +611,15 @@ public class DecisionMaker{
 			// You can call plan.getMyOrders() to retrieve the complete list of orders that D-Brane has chosen for you under the given commitments. 
 			
 		}
-		
-		
+		if(bestDeal != null){
+		myProposedDeals.add(bestDeal);
+		for(OrderCommitment orderCommitment : bestDeal.getOrderCommitments()){
+			if(orderCommitment.getOrder().getPower() !=me){
+				n_prop_made++;
+			}
+		}
+		}
 		return bestDeal;
-		
 	}
 	
 	

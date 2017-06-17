@@ -379,6 +379,7 @@ public class PersonalityBot extends Player{
 			
 			logger.logln("I am submitting: " + myOrders);
 			logger.writeToFile();
+			this.personalityLogger.writeToFile();
 			
 			return myOrders;
 			
@@ -386,12 +387,14 @@ public class PersonalityBot extends Player{
 			
 			//RETREAT PHASE
 			logger.writeToFile();
+			this.personalityLogger.writeToFile();
 			return decisionMaker.generateRandomRetreats();
 			
 		}else{
 			
 			//BUILD PHASE 
 			logger.writeToFile();
+			this.personalityLogger.writeToFile();
 			return decisionMaker.getWinterOrders(myAllies);
 		}
 		
@@ -444,7 +447,6 @@ public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 			if (maxNumProposals > 0){
 				this.logger.logln("Making proposal.");
 				BasicDeal newDealToPropose = decisionMaker.searchForADealToPropose(myAllies);
-				//newDealToPropose = searchForNewDealToPropose(myAllies);
 				if(newDealToPropose != null){
 					
 					try {
@@ -578,6 +580,7 @@ public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 		
 		//write the log file.
 		this.logger.writeToFile();
+		this.personalityLogger.writeToFile();
 		
 		//disconnect from the game server.
 		this.comm.stop();
