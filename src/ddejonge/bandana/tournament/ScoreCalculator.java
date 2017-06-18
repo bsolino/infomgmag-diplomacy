@@ -1,13 +1,15 @@
 package ddejonge.bandana.tournament;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class ScoreCalculator {
 
 	boolean higherIsBetter;
 	
-	private HashMap<String, Integer> names2numGamesPlayed = new HashMap<String, Integer>();
-	private HashMap<String, Double> names2totalScore = new HashMap<String, Double>();
+	protected HashMap<String, Integer> names2numGamesPlayed = new HashMap<String, Integer>();
+	protected HashMap<String, ArrayList<Double>> names2totalScore = new HashMap<String, ArrayList<Double>>();
 	
 	/**
 	 * 
@@ -27,7 +29,7 @@ public abstract class ScoreCalculator {
 	 * 
 	 * @param newResult
 	 */
-	void addResult(GameResult newResult){
+	public void addResult(GameResult newResult){
 		
 		for(String playerName : newResult.getNames()){
 			
@@ -55,13 +57,18 @@ public abstract class ScoreCalculator {
 	private void addScoreToTotal(String playerName, double score){
 		
 		//get the old value from the table
-		Double totalScore = getTotalScore(playerName);
+		ArrayList<Double> playerScores = names2totalScore.get(playerName);
 		
-		//increment the value.
-		totalScore += score;
+		// handle init.
+		if (playerScores == null){
+			playerScores = new ArrayList<Double>();
+		}
+		
+		//add the newest score
+		playerScores.add(score);
 		
 		//store the new value in the table.
-		names2totalScore.put(playerName, totalScore);
+		names2totalScore.put(playerName, playerScores);
 	}
 	
 	
@@ -81,13 +88,19 @@ public abstract class ScoreCalculator {
 	
 	public double getTotalScore(String playerName){
 		
-		//get the old value from the table
-		Double totalScore = names2totalScore.get(playerName);
+		//get the value from the table
+		ArrayList<Double> playerScores = names2totalScore.get(playerName);
 		
 		//if it wasn't in the table then return 0.0
-		if(totalScore == null){
-			totalScore = 0.0;
+		if(playerScores == null){
+			return 0.0;
 		}
+		
+		// Otherwise, compute the total.
+		double totalScore = 0;
+		
+		for(double score : playerScores)
+			totalScore += score;
 		
 		return totalScore;
 	}
@@ -96,11 +109,45 @@ public abstract class ScoreCalculator {
 		
 		double totalScore = getTotalScore(playerName);
 		int numGamesPlayed = getNumberOfGamesPlayed(playerName);
-		if(numGamesPlayed == 0){
+		if(numGamesPlayed == 0)
 			return 0;
-		}
 		
 		return totalScore / (double)numGamesPlayed;
+		
+	}
+	
+	public double getSDForScore(String playerName){
+		
+		int numGamesPlayed = getNumberOfGamesPlayed(playerName);
+		
+		// Catch errored games.
+		if(numGamesPlayed == 0)
+			return 0;
+		
+		ArrayList<Double> playerScores = names2totalScore.get(playerName);
+		
+		// Get mean
+		double mean = getAverageScore(playerName);
+		
+		// Calculate sum of squares
+		double ssq = 0;
+		
+		for (double score : playerScores){
+			// Substracts mean from number, square the result.
+			//
+			ssq += ((score - mean) * (score - mean));
+		}
+		
+		// turn ssq into variance
+		ssq = ssq / (numGamesPlayed - 1);
+		
+		// take square root for sd.
+		return Math.sqrt(ssq);
+	}
+	
+	public List<Double> getScoreArray(String playerName){
+		
+		return names2totalScore.get(playerName);
 		
 	}
 	

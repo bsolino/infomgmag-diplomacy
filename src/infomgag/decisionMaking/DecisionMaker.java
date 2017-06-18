@@ -93,7 +93,24 @@ public class DecisionMaker{
 		myConfirmedDeals= new ArrayList<BasicDeal>();
 		myProposedDeals = new ArrayList<BasicDeal>();
 		
-		personalityLogger.logln(this.getAllNegotiatingPowers() + ":");
+		// Log the very first line, the title line
+		String title = "timeStamp" + ","
+				+ "gameNR" + ","
+				+ "currentPower" + ","
+				+ "personalityType" + ","
+				+ "gamePhase" + ","
+				+ getAllNegotiatingPowers("l")
+				+ getAllNegotiatingPowers("t")
+				+ "n_prop_made" + ","
+				+ "n_my_prop_accepted" + ","
+				+ "n_prop_violated" + ","
+				+ "n_prop_recieved" + ","
+				+ "n_prop_accepted" + ","
+				+ "n_supply_centers" + ";";
+		personalityLogger.logln(title + System.lineSeparator());
+		
+		
+		
 		personalityLogger.writeToFile();
 		setLogginInfo();
 	}
@@ -289,7 +306,7 @@ public class DecisionMaker{
 		getPersonalityValues();
 		String analytics = "," + n_prop_made + "," + n_my_prop_accepted + ", " + n_prop_violated + ", " + n_prop_recieved + ", " + n_prop_accepted + ", " + n_supply_centers ;
 		
-		this.personalityLogger.logln(ID + ", " + phaseID + ", " + getPersonalityValues() + ", " + analytics  + ":");
+		this.personalityLogger.logln(ID + ", " + phaseID + ", " + getPersonalityValues() + analytics  + ";");
 		}
 	}
 		
@@ -1014,15 +1031,12 @@ public class DecisionMaker{
 	return orders;
 }
 	
-	public String getAllNegotiatingPowers(){
+	public String getAllNegotiatingPowers(String prePendWith){
 		String retString = "";
 		int count = 0;
 		for(Power power : this.game.getPowers()){
-			retString += power.getName();
+			retString += prePendWith + power.getName() + ",";
 			count++;
-			if(count != game.getPowers().size()){
-				retString += "\t , \t";
-			}
 		}
 		return retString;
 	}

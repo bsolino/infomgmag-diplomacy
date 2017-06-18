@@ -27,7 +27,7 @@ public class SoloVictoryCalculator extends ScoreCalculator{
 
 	@Override
 	public String getScoreSystemName() {
-		return "Solo Victories";
+		return "Solo_Victories";
 	}
 
 	@Override
@@ -35,8 +35,9 @@ public class SoloVictoryCalculator extends ScoreCalculator{
 		
 		long total = Math.round(this.getTotalScore(playerName));
 		double average = Utils.round(this.getAverageScore(playerName), 3);
+		double sd = Utils.round(this.getSDForScore(playerName), 3);
 		
-		return "" + total + " (av. = "+ average + ")";
+		return "" + total + " (av. = "+ average + " sd = " + sd + ")";
 		
 	}
 

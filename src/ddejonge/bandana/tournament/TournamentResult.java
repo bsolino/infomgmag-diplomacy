@@ -111,6 +111,50 @@ public class TournamentResult {
 		return s;
 	}
 	
+	public String toCSVContents(){
+		
+		ArrayList<String> sortedNames = sortNames(this.scoreCalculators);
+		
+		String s = "";
+		
+		// We print one score type at a time, for all names.
+		for(ScoreCalculator scoreCalculator : scoreCalculators){
+
+			if (scoreCalculator.getScoreSystemName() == "Country_Distribution"){
+				
+				// If we are about to start the country distribution table, we will insert a line header. It ain't pretty, but it works.
+				s += scoreCalculator.getScoreString("powers");
+				
+				// append line end.
+				s += ";" + System.lineSeparator();
+			}
+			
+			// Iterate over the names.
+			for(String name : sortedNames){
+				
+				// add score type and bot name.
+				s += scoreCalculator.getScoreSystemName() + "," + name;
+				
+				// append values.
+
+				if (scoreCalculator.getScoreArray(name) == null) {
+					System.out.println(name + " returns no score array ");
+					
+				}
+				
+				for (double score : scoreCalculator.getScoreArray(name)){
+					s += "," + score;
+				}
+				
+				// append line end.
+				s += ";" + System.lineSeparator();
+				
+			}
+		}
+
+		return s;
+	}
+	
 	public ArrayList<String> sortNames(ArrayList<ScoreCalculator> scoreCalculators){
 		
 		ArrayList<String> sortedNames = new ArrayList<String>(names);

@@ -24,7 +24,7 @@ public class SupplyCenterCalculator extends ScoreCalculator{
 
 	@Override
 	public String getScoreSystemName() {
-		return "Supply Centers";
+		return "Supply_Centers";
 	}
 
 	@Override
@@ -32,8 +32,9 @@ public class SupplyCenterCalculator extends ScoreCalculator{
 		
 		long total = Math.round(this.getTotalScore(playerName));
 		double average = Utils.round(this.getAverageScore(playerName), 3);
+		double sd = Utils.round(this.getSDForScore(playerName), 3);
 		
-		return "" + total + " (av. = "+ average + ")";
+		return "" + total + " (av. = "+ average + " sd = " + sd + ")";
 		
 	}
 

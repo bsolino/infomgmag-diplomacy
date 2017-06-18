@@ -261,7 +261,7 @@ public class TournamentObserver extends Observer implements Runnable{
 		
 		FileIO.appendToFile(this.gameResultsFile, "game " + this.gameNumber + ": " + System.lineSeparator() + gameResult.toString());
 		
-		FileIO.overwriteFile(this.tournamentResultsFile, this.tournamentResult.toString());
+		FileIO.overwriteFile(this.tournamentResultsFile, this.tournamentResult.toCSVContents());
 		
 		if (this.isInterfaceVisible){
 			this.diplomacyMonitor.setTournamentResult(this.tournamentResult);

@@ -25,14 +25,15 @@ public class RankCalculator extends ScoreCalculator{
 
 	@Override
 	public String getScoreSystemName() {
-		return "Average Rank";
+		return "Average_Rank";
 	}
 
 	@Override
 	public String getScoreString(String playerName) {
 		
 		double roundedScore = Utils.round(this.getTournamentScore(playerName), 3);
+		double sd = Utils.round(this.getSDForScore(playerName), 3);
 		
-		return "" + roundedScore;
+		return "" + roundedScore + " sd = " + sd;
 	}
 }

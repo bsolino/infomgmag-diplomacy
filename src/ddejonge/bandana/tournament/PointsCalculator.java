@@ -64,8 +64,9 @@ public class PointsCalculator extends ScoreCalculator {
 		
 		long total = Math.round(this.getTotalScore(playerName));
 		double average = Utils.round(this.getAverageScore(playerName), 3);
+		double sd = Utils.round(this.getSDForScore(playerName), 3);
 		
-		return "" + total + " (av. = "+ average + ")";
+		return "" + total + " (av. = "+ average + " sd = " + sd + ")";
 		
 	}
 
