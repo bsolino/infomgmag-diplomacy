@@ -84,7 +84,6 @@ public class TournamentResult {
 			
 			for(ScoreCalculator scoreCalculator : scoreCalculators){
 				
-				
 				s += scoreCalculator.getScoreSystemName() + ": " + scoreCalculator.getScoreString(name) + System.lineSeparator();
 				
 				
@@ -133,7 +132,7 @@ public class TournamentResult {
 			for(String name : sortedNames){
 				
 				// add score type and bot name.
-				s += scoreCalculator.getScoreSystemName() + "," + name;
+				s += scoreCalculator.getScoreSystemName() + ", " + name;
 				
 				// append values.
 
@@ -143,7 +142,7 @@ public class TournamentResult {
 				}
 				
 				for (double score : scoreCalculator.getScoreArray(name)){
-					s += "," + score;
+					s += ", " + score;
 				}
 				
 				// append line end.

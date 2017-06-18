@@ -221,7 +221,7 @@ public class Personality {
 			retStringValueTrust += trustDict.get(power.getName());
 			count++;
 			if (count != allPowers.size()) {
-				retStringValueTrust += " , ";
+				retStringValueTrust += ", ";
 				retStringValueLike += ", ";
 			}
 		}

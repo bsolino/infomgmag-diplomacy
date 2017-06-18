@@ -87,7 +87,7 @@ public class TournamentRunner {
 		boolean displayInterface = false;		// False = Interface off; If we're sure stuff runs well and just want logs, this will cut down on overhead.
 		boolean fixedPlayers = true;			// False = Randomize players; When we want to run a lot of games sequentially, we can use this to generate a somewhat randomized player pool.
 				
-		int numberOfGames = 1;				//The number of games this tournament consists of.
+		int numberOfGames = 2;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 60; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases

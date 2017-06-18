@@ -264,7 +264,6 @@ public class PersonalityBot extends Player{
 		List<String> negotiatingPowers = negoClient.getRegisteredNames();
 		this.decisionMaker = new DecisionMaker(new Personality(this.ps), game, this.me, this.confirmedDeals, negotiatingPowers, logger, personalityLogger, useMCTS);
 		
-	
 	}
 	
 	

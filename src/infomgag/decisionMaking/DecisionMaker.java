@@ -93,35 +93,34 @@ public class DecisionMaker{
 		myConfirmedDeals= new ArrayList<BasicDeal>();
 		myProposedDeals = new ArrayList<BasicDeal>();
 		
+		
 		// Log the very first line, the title line
-		String title = "timeStamp" + ","
-				+ "gameNR" + ","
-				+ "currentPower" + ","
-				+ "personalityType" + ","
-				+ "gamePhase" + ","
+		String title = "timeStamp" + ", "
+				+ "gameNR" + ", "
+				+ "currentPower" + ", "
+				+ "personalityType" + ", "
+				+ "gamePhase" + ", "
 				+ getAllNegotiatingPowers("l")
 				+ getAllNegotiatingPowers("t")
-				+ "n_prop_made" + ","
-				+ "n_my_prop_accepted" + ","
-				+ "n_prop_violated" + ","
-				+ "n_prop_recieved" + ","
-				+ "n_prop_accepted" + ","
+				+ "n_prop_made" + ", "
+				+ "n_my_prop_accepted" + ", "
+				+ "n_prop_violated" + ", "
+				+ "n_prop_recieved" + ", "
+				+ "n_prop_accepted" + ", "
 				+ "n_supply_centers" + ";";
 		personalityLogger.logln(title + System.lineSeparator());
-		
-		
 		
 		personalityLogger.writeToFile();
 		setLogginInfo();
 	}
-	
+			
 	private void setLogginInfo() {
 		String s = personalityLogger.getLogFolderPath();
 		String[] tokens = s.split("\\\\");
 		timeStamp = tokens[1];
 		gameNr = tokens[3].split(" ")[1];
 		country = logger.getLogFileName().substring(0,3);
-	}
+ 	}
 
 	public String getPersonalityValues(){
 		return personality.getPersonalityValuesString();
@@ -301,10 +300,10 @@ public class DecisionMaker{
 			} 
 		}
 		updateFriendsAndFoes(); 
-		String ID =timeStamp + "," + gameNr + ", " + country +", " + personality.getPersonalityType();
+		String ID =timeStamp + ", " + gameNr + ", " + country +", " + personality.getPersonalityType();
 		String phaseID = game.getYear() + "."+game.getPhase().toString();
 		getPersonalityValues();
-		String analytics = "," + n_prop_made + "," + n_my_prop_accepted + ", " + n_prop_violated + ", " + n_prop_recieved + ", " + n_prop_accepted + ", " + n_supply_centers ;
+		String analytics = ", " + n_prop_made + ", " + n_my_prop_accepted + ", " + n_prop_violated + ", " + n_prop_recieved + ", " + n_prop_accepted + ", " + n_supply_centers ;
 		
 		this.personalityLogger.logln(ID + ", " + phaseID + ", " + getPersonalityValues() + analytics  + ";");
 		}
@@ -1035,7 +1034,7 @@ public class DecisionMaker{
 		String retString = "";
 		int count = 0;
 		for(Power power : this.game.getPowers()){
-			retString += prePendWith + power.getName() + ",";
+			retString += prePendWith + power.getName() + ", ";
 			count++;
 		}
 		return retString;

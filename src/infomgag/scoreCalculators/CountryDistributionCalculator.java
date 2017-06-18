@@ -96,10 +96,10 @@ public class CountryDistributionCalculator extends ScoreCalculator{
 		
 		if (playerName == "powers"){
 			
-			s += "Country_Distribution,TitleLine";
+			s += "Country_Distribution, TitleLine";
 			
 			for (String power : getCountryOrderArray()){
-				s += "," + power;
+				s += ", " + power;
 			}
 					
 			return s;
