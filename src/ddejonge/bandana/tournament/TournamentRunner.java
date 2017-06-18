@@ -16,7 +16,7 @@ public class TournamentRunner {
 	
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	private final static String DEFAULT_LAST_YEAR = "1901";
+	private final static String DEFAULT_LAST_YEAR = "1950";
 	
 	private final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", DEFAULT_LAST_YEAR};
 	private final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", DEFAULT_LAST_YEAR};
@@ -87,7 +87,7 @@ public class TournamentRunner {
 		boolean displayInterface = false;		// False = Interface off; If we're sure stuff runs well and just want logs, this will cut down on overhead.
 		boolean fixedPlayers = true;			// False = Randomize players; When we want to run a lot of games sequentially, we can use this to generate a somewhat randomized player pool.
 				
-		int numberOfGames = 2;				//The number of games this tournament consists of.
+		int numberOfGames = 5;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 60; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases
