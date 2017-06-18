@@ -7,16 +7,28 @@ import java.util.Vector;
 import ddejonge.bandana.exampleAgents.RandomBot;
 import ddejonge.bandana.gameBuilder.DiplomacyGameBuilder;
 import ddejonge.bandana.internalAdjudicator.InternalAdjudicator;
+import ddejonge.bandana.tournament.TournamentObserver;
+import es.csic.iiia.fabregues.dip.Observer;
+import es.csic.iiia.fabregues.dip.Player;
 import es.csic.iiia.fabregues.dip.board.Dislodgement;
 import es.csic.iiia.fabregues.dip.board.Game;
+import es.csic.iiia.fabregues.dip.board.GameState;
 import es.csic.iiia.fabregues.dip.board.Phase;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
+import es.csic.iiia.fabregues.dip.board.State;
+import es.csic.iiia.fabregues.dip.comm.Comm;
+import es.csic.iiia.fabregues.dip.comm.CommException;
+import es.csic.iiia.fabregues.dip.comm.OrderParser;
+import es.csic.iiia.fabregues.dip.comm.Parser;
+import es.csic.iiia.fabregues.dip.comm.daide.DaideComm;
 import es.csic.iiia.fabregues.dip.orders.Order;
 import javafx.util.Pair;
 
 public class Gamestate {
+	public static DaideComm comm;
+	
 	int year;
 	String phase;
 	Vector<Pair<String, String>> units = new Vector<Pair<String, String>>(),
@@ -75,19 +87,27 @@ public class Gamestate {
 		return mygame;
 	}
 	
-	public Pair<TreeSet<String>, Gamestate> randomMove(InternalAdjudicator adjudicator)
+	public Pair<TreeSet<String>, Gamestate> randomMove()
 	{
 		Game g = buildGameFromGamestate();
 		RandomBot bot = new RandomBot(g);
 		List<Order> orders = bot.getRandomMovesForEachPower();
 		
 		TreeSet<String> morders = new TreeSet<String>();
-		for(Order o : orders) morders.add(o.toString());
+		for(Order o : orders) 
+			morders.add(o.toString());
 		
-		adjudicator.clear();
-		adjudicator.resolve(g, orders);
-		
-		return new Pair(morders, this); // TODO: generate new gamestate from orders
+		switch(phase)
+		{
+		case "SPR" :Parser.updateOwnedSCs(Parser.getSCO(g), g); break;
+		case "SUM" :Parser.updateControlledRegions(Parser.getNOW(g), g); break;
+		case "FAL" :Parser.updateOwnedSCs(Parser.getSCO(g), g); break;
+		case "AUT" :Parser.updateControlledRegions(Parser.getNOW(g), g); break;
+		case "WIN" :Parser.updateControlledRegions(Parser.getNOW(g), g); break;
+		}
+		//Parser.updateOwnedSCs(Parser.getSCO(g), g); // sco message
+		//Parser.updateControlledRegions(Parser.getNOW(g), g); // some other message
+		return new Pair<TreeSet<String>, Gamestate>(morders, new Gamestate(g)); // TODO: generate new gamestate from orders
 	}
 	
 	
@@ -95,5 +115,16 @@ public class Gamestate {
 		return "State:" + this.hashCode() + " Year:" + this.year + 
 				" Phase:" + this.phase + " Units:" + units.toString();
 	}
-
+	
+	private static void KillDeadPowers(Game game)
+	{
+		List<Power> nonDeadPowers = game.getNonDeadPowers();
+		for(int i= 0; i<nonDeadPowers.size(); i++){
+			Power power = nonDeadPowers.get(i);
+			if(power.getOwnedSCs().size()==0){
+				game.killPower(power);
+				i--;
+			}
+		}
+	}
 }
