@@ -24,7 +24,7 @@ public class Personality {
 	private double trustInitValue;
 	private double likeInitValue;
 
-	private double learningRate = 0.4;
+	private double learningRate = 0.5;
 
 	private Power myPower;
 	private List<Power> allPowers;
@@ -51,13 +51,14 @@ public class Personality {
 		 * 	MaxProp		Maximum number of proposals per negotiation cycle
 		 */
 		
-		// First set. This was our initial hunch, we combined it with a learning rate of 0.2.
+		/* First set. This was our initial hunch, we combined it with a learning rate of 0.2.
 		//			T-^		T-v		L-^		L-v		T-init	L-init	Agrr	TrustW	MaxProp
 		CHOLERIC(	0.5,	0.9, 	0.9, 	0.9, 	2, 		2, 		true, 	false, 	5), 
 		SANGUINE(	0.9, 	0.05, 	0.9, 	0.1, 	2, 		2, 		false, 	true,	6), 
 		MELANCHOLIC(0.05, 	0.8, 	0.1, 	0.8, 	0.3, 	0.3, 	false, 	false, 	1), 
 		PHLEGMATIC(	0.3, 	0.5, 	0.2, 	0.2, 	1, 		1,		false, 	true, 	2), 
 		NEUTRAL(	0, 		0, 		0, 		0, 		1, 		1, 		true, 	true, 	0);
+		*/
 		
 		/* Second set. Two changes: Less extreme increase/decrease values, no longer initialize personalities to certain high values. Combined with a Learning Rate of 0.4.
 		//			T-^		T-v		L-^		L-v		T-init	L-init	Agrr	TrustW	MaxProp
@@ -67,6 +68,15 @@ public class Personality {
 		PHLEGMATIC(	0.3, 	0.5, 	0.2, 	0.2, 	1, 		1,		false, 	true, 	2), 
 		NEUTRAL(	0, 		0, 		0, 		0, 		1, 		1, 		true, 	true, 	0);
 		*/
+		
+		// Third set, same premisse as the second. Further tweaked some values. Learning Rate 0.5
+		//			T-^		T-v		L-^		L-v		T-init	L-init	Agrr	TrustW	MaxProp
+		CHOLERIC(	0.5,	0.9, 	0.9, 	0.7, 	1.7, 	1.7, 	true, 	false, 	5), 
+		SANGUINE(	0.8, 	0.3, 	0.9, 	0.3, 	1.7, 	1.7, 	false, 	true,	6), 
+		MELANCHOLIC(0.3, 	0.8, 	0.4, 	0.8, 	0.6, 	0.6, 	false, 	false, 	1), 
+		PHLEGMATIC(	0.3, 	0.5, 	0.3, 	0.2, 	1, 		1,		false, 	true, 	2), 
+		NEUTRAL(	0, 		0, 		0, 		0, 		1, 		1, 		true, 	true, 	0);
+		
 
 		private final double trustIncreaseFactor;
 		private final double trustDecreaseFactor;
