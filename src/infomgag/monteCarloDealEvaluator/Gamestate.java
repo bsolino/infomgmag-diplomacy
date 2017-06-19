@@ -22,6 +22,7 @@ import es.csic.iiia.fabregues.dip.comm.Comm;
 import es.csic.iiia.fabregues.dip.comm.CommException;
 import es.csic.iiia.fabregues.dip.comm.OrderParser;
 import es.csic.iiia.fabregues.dip.comm.Parser;
+import es.csic.iiia.fabregues.dip.comm.StringA2Order;
 import es.csic.iiia.fabregues.dip.comm.daide.DaideComm;
 import es.csic.iiia.fabregues.dip.orders.Order;
 import javafx.util.Pair;
@@ -94,20 +95,18 @@ public class Gamestate {
 		List<Order> orders = bot.getRandomMovesForEachPower();
 		
 		TreeSet<String> morders = new TreeSet<String>();
-		for(Order o : orders) 
+		for(Order o : orders)
 			morders.add(o.toString());
 		
-		switch(phase)
-		{
-		case "SPR" :Parser.updateOwnedSCs(Parser.getSCO(g), g); break;
-		case "SUM" :Parser.updateControlledRegions(Parser.getNOW(g), g); break;
-		case "FAL" :Parser.updateOwnedSCs(Parser.getSCO(g), g); break;
-		case "AUT" :Parser.updateControlledRegions(Parser.getNOW(g), g); break;
-		case "WIN" :Parser.updateControlledRegions(Parser.getNOW(g), g); break;
-		}
+		StringA2Order orderParser = new StringA2Order(g);
+		orderParser.processOrders(Parser.formatOrders(orders), g);
+		
+		Parser.updateControlledRegions(Parser.getNOW(g), g);
+		
+		if(phase.equals("FAL"))Parser.updateOwnedSCs(Parser.getSCO(g), g);
 		//Parser.updateOwnedSCs(Parser.getSCO(g), g); // sco message
 		//Parser.updateControlledRegions(Parser.getNOW(g), g); // some other message
-		return new Pair<TreeSet<String>, Gamestate>(morders, new Gamestate(g)); // TODO: generate new gamestate from orders
+		return new Pair<TreeSet<String>, Gamestate>(morders, new Gamestate(g));
 	}
 	
 	
