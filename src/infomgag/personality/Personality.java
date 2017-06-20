@@ -252,8 +252,18 @@ public class Personality {
 		String retStringValueTrust = "";
 		int count = 0;
 		for (Power power : this.allPowers) {
-			retStringValueLike += likeabilityDict.get(power.getName());
-			retStringValueTrust += trustDict.get(power.getName());
+			Double temp = likeabilityDict.get(power.getName());
+			if (temp == null){
+				retStringValueLike += "NA";
+			} else {
+				retStringValueLike += temp;
+			}
+			temp = trustDict.get(power.getName());
+			if (temp == null){
+				retStringValueTrust += "NA";
+			} else {
+				retStringValueTrust += temp;
+			}
 			count++;
 			if (count != allPowers.size()) {
 				retStringValueTrust += ", ";
