@@ -578,6 +578,7 @@ public void negotiate(List<Power> myAllies, long negotiationDeadline) {
 	public void handleSMR(String[] message) {
 		
 		//write the log file.
+		decisionMaker.update(this.submittedOrders);
 		this.logger.writeToFile();
 		this.personalityLogger.writeToFile();
 		
