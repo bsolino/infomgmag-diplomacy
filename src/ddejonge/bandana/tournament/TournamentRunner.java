@@ -35,13 +35,14 @@ public class TournamentRunner {
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.RANDOM_NEGOTIATOR,
 //			TournamentPlayer.DUMB_BOT_1_4
-			TournamentPlayer.PERSONALITY_NEUTRAL,
+//			TournamentPlayer.PERSONALITY_NEUTRAL,
 			TournamentPlayer.PERSONALITY_MELANCHOLIC,
 			TournamentPlayer.PERSONALITY_SANGUINE,
 			TournamentPlayer.PERSONALITY_PHLEGMATIC,
 			TournamentPlayer.PERSONALITY_CHOLERIC,
 			TournamentPlayer.PERSONALITY_SANGUINE,
-			TournamentPlayer.PERSONALITY_PHLEGMATIC
+			TournamentPlayer.PERSONALITY_PHLEGMATIC,
+			TournamentPlayer.PERSONALITY_MELANCHOLIC,
 	};
 	
 	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
@@ -84,10 +85,10 @@ public class TournamentRunner {
 	public static void main(String[] args) throws IOException {
 		
 		
-		boolean displayInterface = false;		// False = Interface off; If we're sure stuff runs well and just want logs, this will cut down on overhead.
+		boolean displayInterface = true;		// False = Interface off; If we're sure stuff runs well and just want logs, this will cut down on overhead.
 		boolean fixedPlayers = true;			// False = Randomize players; When we want to run a lot of games sequentially, we can use this to generate a somewhat randomized player pool.
 				
-		int numberOfGames = 5;				//The number of games this tournament consists of.
+		int numberOfGames = 1;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 60; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases
